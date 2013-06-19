@@ -1,4 +1,4 @@
-package au.gov.nla.util;
+package org.vufind.util;
 
 public class BrowseEntry
 {

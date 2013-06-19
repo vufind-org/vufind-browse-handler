@@ -1,9 +1,6 @@
 
        Care and feeding of the VuFind Solr browse request handler
 
-			     Mark Triggs
-
-	       The National Library of Australia, 2009
 
 
 0.  Background
@@ -114,7 +111,7 @@
 
   Then configure your browse types in solrconfig.xml:
 
-    <requestHandler name="/browse" class="au.gov.nla.solr.handler.BrowseRequestHandler">
+    <requestHandler name="/browse" class="org.vufind.solr.handler.BrowseRequestHandler">
        <str name="authIndexPath">/path/to/your/authority.index</str>
        <str name="bibIndexPath">/path/to/your/bib/data/index</str>
 
@@ -150,8 +147,6 @@
 
 4.  Running updates
 
- At the time of writing we are updating our authority and browse
- indexes once per night at the same time we update our bib indexes.
  The browse request handler has been designed to automatically detect
  updates to these indexes and reloads them as required.  The steps are
  simple:

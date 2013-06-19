@@ -13,7 +13,7 @@ import org.apache.lucene.document.*;
 
 import java.sql.*;
 
-import au.gov.nla.util.BrowseEntry;
+import org.vufind.util.BrowseEntry;
 
 // Note that this version is coming from Solr!
 import org.apache.commons.codec.binary.Base64;

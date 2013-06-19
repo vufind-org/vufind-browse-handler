@@ -72,7 +72,6 @@
         <lst>
           <str name="q">science art business engineering history</str>
           <str name="facet.field">format</str>
-          <str name="fq">format:book</str>
         </lst>
       </arr>
     </listener>
@@ -93,7 +92,7 @@
     </lst>
   </requestHandler>
 
-  <requestHandler name="/browse" class="au.gov.nla.solr.handler.BrowseRequestHandler">
+  <requestHandler name="/browse" class="org.vufind.solr.handler.BrowseRequestHandler">
     <str name="authIndexPath">${solr.solr.home:./solr}/authority/index</str>
     <str name="bibIndexPath">${solr.solr.home:./solr}/biblio/index</str>
     <str name="preferredHeadingField">heading</str>

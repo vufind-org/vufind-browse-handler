@@ -1,5 +1,3 @@
-;; java -Dfile.encoding=UTF-8 -cp 'build/common:build/browse-indexing:build/browse-handler:libs/*:tmplibs/WEB-INF/lib/*' clojure.main tests/tests.clj 2>/dev/null
-
 (ns tests
   (:use [clojure.java.io :as jio]
         [clojure.test :as test])
@@ -159,10 +157,10 @@
 
       (.mkdir (file tmpdir "conf"))
 
-      (Files/copy (file "tests/solr/solrconfig.xml")
+      (Files/copy (file "solr/solrconfig.xml")
                   (file tmpdir "conf" "solrconfig.xml"))
 
-      (Files/copy (file "tests/solr/schema.xml")
+      (Files/copy (file "solr/schema.xml")
                   (file tmpdir "conf" "schema.xml"))
 
 

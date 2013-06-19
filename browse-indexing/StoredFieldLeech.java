@@ -7,8 +7,8 @@ import org.apache.lucene.store.*;
 import org.apache.lucene.index.*;
 import org.apache.lucene.document.*;
 
-import au.gov.nla.util.Utils;
-import au.gov.nla.util.BrowseEntry;
+import org.vufind.util.Utils;
+import org.vufind.util.BrowseEntry;
 
 public class StoredFieldLeech extends Leech
 {

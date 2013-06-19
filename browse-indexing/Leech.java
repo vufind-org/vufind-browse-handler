@@ -3,8 +3,8 @@ import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;
 import java.io.*;
 
-import au.gov.nla.util.Normaliser;
-import au.gov.nla.util.BrowseEntry;
+import org.vufind.util.Normaliser;
+import org.vufind.util.BrowseEntry;
 
 
 public class Leech

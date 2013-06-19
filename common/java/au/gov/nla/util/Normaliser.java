@@ -1,4 +1,4 @@
-package au.gov.nla.util;
+package org.vufind.util;
 
 //
 // Author: Mark Triggs <mark@dishevelled.net>
@@ -7,7 +7,7 @@ package au.gov.nla.util;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
-import au.gov.nla.util.*;
+import org.vufind.util.*;
 
 import com.ibm.icu.text.Collator;
 

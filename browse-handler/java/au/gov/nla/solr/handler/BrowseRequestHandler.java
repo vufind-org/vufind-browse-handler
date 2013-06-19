@@ -3,7 +3,7 @@
 //
 
 
-package au.gov.nla.solr.handler;
+package org.vufind.solr.handler;
 
 
 import org.apache.lucene.index.*;
@@ -17,14 +17,14 @@ import java.util.*;
 import java.net.URL;
 import java.sql.*;
 
-import au.gov.nla.util.*;
+import org.vufind.util.*;
 import org.apache.lucene.search.*;
 import org.apache.lucene.document.*;
 import java.util.logging.Logger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import au.gov.nla.util.Normaliser;
-import au.gov.nla.util.BrowseEntry;
+import org.vufind.util.Normaliser;
+import org.vufind.util.BrowseEntry;
 
 class Log
 {
