@@ -245,10 +245,10 @@ class LuceneDB
     private void openSearcher () throws Exception
     {
         if (searcher != null) {
-            searcher.close ();
+            searcher.getIndexReader().close ();
         }
 
-        IndexReader dbReader = IndexReader.open(FSDirectory.open (new File (dbpath)));
+        IndexReader dbReader = DirectoryReader.open(FSDirectory.open (new File (dbpath)));
         searcher = new IndexSearcher (dbReader);
         currentVersion = indexVersion ();
     }
@@ -463,8 +463,8 @@ class BibDB
 
                 }
 
-                public void setNextReader (IndexReader reader, int docBase) {
-                    this.docBase = docBase;
+                public void setNextReader (AtomicReaderContext context) {
+                    this.docBase = context.docBase;
                 }
             });
 

@@ -41,10 +41,10 @@ class IndexAuth
         MarcReader reader = new MarcStreamReader (in);
 
         StandardAnalyzer analyzer = (new StandardAnalyzer
-                                     (org.apache.lucene.util.Version.LUCENE_30));
+                                     (org.apache.lucene.util.Version.LUCENE_41));
 
         IndexWriter iw = new IndexWriter (FSDirectory.open (new File (indexDir)),
-                                          new IndexWriterConfig(org.apache.lucene.util.Version.LUCENE_30,
+                                          new IndexWriterConfig(org.apache.lucene.util.Version.LUCENE_41,
                                                                 analyzer));
 
         while (reader.hasNext ()) {
@@ -93,15 +93,13 @@ class IndexAuth
 
                     doc.add (new Field (field,
                                         clean (sb.toString ()),
-                                        Field.Store.YES,
-                                        Field.Index.NOT_ANALYZED));
+                                        StringField.TYPE_STORED));
                 }
             }
 
             doc.add (new Field ("collection",
                                 "Authority",
-                                Field.Store.NO,
-                                Field.Index.NOT_ANALYZED));
+                                StringField.TYPE_NOT_STORED));
 
             iw.addDocument (doc);
         }

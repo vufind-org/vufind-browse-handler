@@ -18,7 +18,7 @@ public class StoredFieldLeech extends Leech
     String sortField;
     String valueField;
 
-    private FieldSelector fieldSelector;
+    private Set<String> fieldSelection;
 
 
     public StoredFieldLeech (String indexPath, String field) throws Exception
@@ -34,21 +34,11 @@ public class StoredFieldLeech extends Leech
                                                 "variables must be set.");
         }
 
-        fieldSelector = new FieldSelector () {
-                static final long serialVersionUID = -3547604067655030732L;
+        fieldSelection = new HashSet<String>();
+        fieldSelection.add(sortField);
+        fieldSelection.add(valueField);
 
-                public FieldSelectorResult accept (String fieldName) {
-                    if (fieldName.equals (sortField) ||
-                        fieldName.equals (valueField)) {
-                        return FieldSelectorResult.LOAD;
-                    } else {
-                        return FieldSelectorResult.NO_LOAD;
-                    }
-                }
-            };
-
-
-        reader = IndexReader.open (FSDirectory.open (new File (indexPath)));
+        reader = DirectoryReader.open (FSDirectory.open (new File (indexPath)));
         buffer = new LinkedList<BrowseEntry> ();
     }
 
@@ -56,7 +46,7 @@ public class StoredFieldLeech extends Leech
     private void loadDocument (IndexReader reader, int docid)
         throws Exception
     {
-        Document doc = reader.document (currentDoc, fieldSelector);
+        Document doc = reader.document (currentDoc, fieldSelection);
 
         String[] sort_key = doc.getValues (sortField);
         String[] value = doc.getValues (valueField);
