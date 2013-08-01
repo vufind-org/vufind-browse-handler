@@ -1,4 +1,4 @@
-<project name="nla-browse-handler" default="build" basedir=".">
+<project name="vufind-browse-handler" default="build" basedir=".">
 
   <property name="builddir" location="build"/>
   <property name="build.sysclasspath" value="last"/>

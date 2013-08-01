@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
   <abortOnConfigurationError>${solr.abortOnConfigurationError:false}</abortOnConfigurationError>
-  <luceneMatchVersion>LUCENE_35</luceneMatchVersion>
+  <luceneMatchVersion>LUCENE_40</luceneMatchVersion>
   <dataDir>${solr.solr.home:./solr}/biblio</dataDir>
 
-  <indexDefaults>
-    <useCompoundFile>false</useCompoundFile>
-    <mergeFactor>10</mergeFactor>
-    <ramBufferSizeMB>32</ramBufferSizeMB>
-    <maxMergeDocs>2147483647</maxMergeDocs>
-    <maxFieldLength>10000</maxFieldLength>
-    <writeLockTimeout>1000</writeLockTimeout>
-    <commitLockTimeout>10000</commitLockTimeout>
-    <lockType>single</lockType>
-  </indexDefaults>
 
-  <mainIndex>
+  <indexConfig>
     <useCompoundFile>false</useCompoundFile>
     <ramBufferSizeMB>32</ramBufferSizeMB>
     <mergeFactor>10</mergeFactor>
@@ -26,7 +16,7 @@
       <str name="keepOptimizedOnly">false</str>
       <str name="maxCommitsToKeep">1</str>
     </deletionPolicy>
-  </mainIndex>
+  </indexConfig>
 
   <jmx />
 
