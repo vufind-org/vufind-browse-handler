@@ -32,7 +32,7 @@
 
   This step creates a Lucene index of the "see also" and "use
   instead" linkages from the authority data.  Note that if you're using VuFind
-  you can stil this step because VuFind has its own authority index we use
+  you can skip this step because VuFind has its own authority index we use
   instead.
 
     java -cp browse-indexing.jar IndexAuth /path/to/a/dump/of/your/authority-data.mrc authority-index
