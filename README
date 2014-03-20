@@ -28,17 +28,7 @@
 
 2.  Creating your browse indexes
 
- 2.1.  Index your authority data
-
-  This step creates a Lucene index of the "see also" and "use
-  instead" linkages from the authority data.  Note that if you're using VuFind
-  you can skip this step because VuFind has its own authority index we use
-  instead.
-
-    java -cp browse-indexing.jar IndexAuth /path/to/a/dump/of/your/authority-data.mrc authority-index
-
-
- 2.2.  Create lists of headings for browsing.
+ 2.1.  Create lists of headings for browsing.
 
   Now we produce a list of the headings we want to browse over.  We want to browse on:
 
@@ -78,7 +68,7 @@
 
 
 
- 2.3.  Creating the SQLite DB
+ 2.2.  Creating the SQLite DB
 
   The last step is to load all the headings into an SQLite database
   (which acts as the browse index, effectively).  CreateBrowseSQLite

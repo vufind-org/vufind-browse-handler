@@ -27,10 +27,10 @@ public class Leech
         searcher = new IndexSearcher (reader);
         this.field = field;
 
-        
+
         String normalizerClass = System.getProperty("browse.normalizer");
         if (normalizerClass == null) {
-            normalizer = NormalizerFactory.getNormalizer();        	
+            normalizer = NormalizerFactory.getNormalizer();
         } else {
             normalizer = NormalizerFactory.getNormalizer(normalizerClass);
         }
@@ -67,10 +67,10 @@ public class Leech
     public BrowseEntry next () throws Exception
     {
         if (tenum == null) {
-            AtomicReader ir = new SlowCompositeReaderWrapper(reader);
+            AtomicReader ir = SlowCompositeReaderWrapper.wrap(reader);
             Terms terms = ir.terms(this.field);
             if (terms == null) {
-            	  return null;
+                return null;
             }
             tenum = terms.iterator(null);
         }
