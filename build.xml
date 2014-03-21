@@ -94,9 +94,12 @@
   <target name="test" depends="build">
     <mkdir dir="${builddir}/tests"/>
     <javac fork="true" debug="on" srcdir="tests/" destdir="${builddir}/tests"
-           classpath="tests/lib/*:${toString:classpath}" />
+           classpath="tests/lib/*:${toString:classpath}">
+      <compilerarg line="-encoding UTF-8" />
+    </javac>
 
     <junit showoutput="yes" fork="true">
+      <jvmarg value="-Dfile.encoding=UTF-8" />
       <classpath>
         <pathelement location="tests/lib/junit-4.11.jar"/>
         <pathelement location="tests/lib/*"/>
