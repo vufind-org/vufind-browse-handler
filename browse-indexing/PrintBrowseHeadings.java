@@ -5,6 +5,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
+import java.nio.charset.*;
 
 import org.apache.lucene.store.*;
 import org.apache.lucene.search.*;
@@ -51,7 +52,7 @@ public class PrintBrowseHeadings
             if (sort_key != null) {
                 out.print (new String (Base64.encodeBase64 (sort_key)) +
                            KEY_SEPARATOR +
-                           heading +
+                           new String (Base64.encodeBase64 (heading.getBytes(Charset.forName("UTF-8")))) +
                            RECORD_SEPARATOR);
             }
         }

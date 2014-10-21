@@ -71,7 +71,7 @@ public class CreateBrowseSQLite
 
                 byte[] key = Base64.decodeBase64 (line.substring (0, sep).getBytes());
                 prep.setBytes (1, key);
-                prep.setString (2, line.substring (sep + 1));
+                prep.setBytes (2, Base64.decodeBase64 (line.substring (sep + 1)));
 
                 prep.addBatch ();
             }
