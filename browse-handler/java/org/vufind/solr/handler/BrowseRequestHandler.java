@@ -6,40 +6,49 @@
 package org.vufind.solr.handler;
 
 
-import org.apache.lucene.index.*;
-import org.apache.lucene.store.*;
-import org.apache.solr.handler.*;
-import org.apache.solr.request.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.AtomicReaderContext;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Collector;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Scorer;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TotalHitCountCollector;
+import org.apache.solr.request.SolrQueryRequest;
+import org.apache.solr.response.SolrQueryResponse;
 import org.apache.solr.search.SolrIndexSearcher;
 import org.apache.solr.util.RefCounted;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.CoreDescriptor;
 import org.apache.solr.core.SolrCore;
+import org.apache.solr.handler.RequestHandlerBase;
 
-import java.io.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
-
-import org.vufind.util.*;
-import org.apache.lucene.search.*;
-import org.apache.lucene.document.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Logger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
-import org.vufind.util.BrowseEntry;
 
 class Log
 {
@@ -262,21 +271,6 @@ class AuthDB
    }
 
 
-   /*
-    * Guarantee that a <code>Collection</code> is returned, not just <code>null</code>
-    */
-   private Collection<String> docValues(SolrDocument doc, String field)
-   {
-       Collection<String> values = new ArrayList<>();
-       for (Object val : doc.getFieldValues(field)) {
-           // What kind of objects are these?
-           Log.info(val.getClass().getName() + ": '" + val.toString() + "'");
-           values.add(val.toString());
-       }
-       return values;
-   }
-
-
    private List<String> docValues (Document doc, String field)
    {
        String values[] = doc.getValues (field);
@@ -286,12 +280,6 @@ class AuthDB
        }
 
        return Arrays.asList (values);
-   }
-
-   //TODO: remove this method
-   public void reopenIfUpdated () throws Exception
-   {
-       return;
    }
 
 
@@ -503,9 +491,8 @@ class BrowseItem
     public List<String> useInstead = new LinkedList<String> ();
     public String note = "";
     public String heading;
-    public List<String> ids;
+    private List<String> ids = new ArrayList<> ();
     public Map<String, List<Collection<String>>> extras = new HashMap<String, List<Collection<String>>> ();
-    int count;
 
 
     public BrowseItem (String heading)
@@ -516,13 +503,20 @@ class BrowseItem
     // ids are gathered into List<Collection<String>>, see bibinfo in
     // BibDB.matchingIDs() and populateItem().
     public void setIds (List<Collection<String>> idList) {
-    ids = new ArrayList<String> ();
-    for (Collection<String> idCol : idList ) {
-        ids.addAll (idCol);
-    }
-    this.ids = ids;
+        ids.clear();
+        for (Collection<String> idCol : idList ) {
+            ids.addAll (idCol);
+        }
     }
 
+    public List<String> getIds() {
+        return ids;
+    }
+    
+    public int count() {
+        return ids.size();
+    }
+    
     public Map<String, Object> asMap ()
     {
         Map<String, Object> result = new HashMap<String, Object> ();
@@ -531,7 +525,7 @@ class BrowseItem
         result.put ("seeAlso", seeAlso);
         result.put ("useInstead", useInstead);
         result.put ("note", note);
-        result.put ("count", new Integer (count));
+        result.put ("count", new Integer (this.count()));
         result.put ("ids", ids);
         result.put ("extras", extras);
 
@@ -565,7 +559,6 @@ class Browse
     public synchronized void reopenDatabasesIfUpdated () throws Exception
     {
         headingsDB.reopenIfUpdated ();
-        authDB.reopenIfUpdated ();
     }
 
 
@@ -578,10 +571,8 @@ class Browse
     private void populateItem (BrowseItem item, String extras) throws Exception
     {
         Map<String, List<Collection<String>>> bibinfo = bibDB.matchingIDs (item.heading, extras);
-        //item.ids = bibinfo.get ("ids");
-    item.setIds (bibinfo.get ("ids"));
+        item.setIds (bibinfo.get ("ids"));
         bibinfo.remove ("ids");
-        item.count = item.ids.size ();
 
         item.extras = bibinfo;
 
@@ -671,30 +662,11 @@ class BrowseSource
  */
 public class BrowseRequestHandler extends RequestHandlerBase
 {
-    private String DFLT_AUTH_CORE_NAME = "authority";
-    private String authCoreName = null;
-
-    //private String authPath = null;
-    //private String bibPath = null;
-    //private String authURL = null;
-    //private String bibURL = null;
+    public static final String DFLT_AUTH_CORE_NAME = "authority";
+    protected String authCoreName = null;
 
     private Map<String,BrowseSource> sources = new HashMap<String,BrowseSource> ();
-
     private SolrParams solrParams;
-
-    // Obsolete
-    private String asAbsFile (String s)
-    {
-        File f = new File (s);
-
-        if (!f.isAbsolute ()) {
-            return (new File (new File (System.getenv ("BROWSE_HOME")),
-                             f.getPath ()).getPath ());
-        } else {
-            return f.getPath ();
-        }
-    }
 
 
     /*
@@ -734,7 +706,6 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
     private int asInt (String s)
     {
-        int value;
         try {
             return new Integer (s).intValue ();
         } catch (NumberFormatException e) {
@@ -744,8 +715,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
 
     @Override
-    public void handleRequestBody (org.apache.solr.request.SolrQueryRequest req,
-                                   org.apache.solr.response.SolrQueryResponse rsp)
+    public void handleRequestBody (SolrQueryRequest req, SolrQueryResponse rsp)
         throws Exception
     {
         SolrParams p = req.getParams ();
