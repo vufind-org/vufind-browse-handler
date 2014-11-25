@@ -69,9 +69,11 @@ public class CreateBrowseSQLite
             int sep = line.indexOf (KEY_SEPARATOR.charAt (0));
             if (sep >= 0) {
 
+                // If we found the separator character, we have a key/value pair of
+                // Base64-encoded strings to decode and push into the batch:
                 byte[] key = Base64.decodeBase64 (line.substring (0, sep).getBytes());
                 prep.setBytes (1, key);
-                prep.setString (2, line.substring (sep + 1));
+                prep.setBytes (2, Base64.decodeBase64 (line.substring (sep + 1)));
 
                 prep.addBatch ();
             }

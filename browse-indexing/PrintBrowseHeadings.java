@@ -5,6 +5,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
+import java.nio.charset.*;
 
 import org.apache.lucene.store.*;
 import org.apache.lucene.search.*;
@@ -33,6 +34,13 @@ public class PrintBrowseHeadings
     private String KEY_SEPARATOR = "\1";
     private String RECORD_SEPARATOR = "\r\n";
 
+    /**
+     * Load headings from the index into a file.
+     *
+     * @param leech     Leech for pulling in headings
+     * @param out       Output target
+     * @param predicate Optional Predicate for filtering headings
+     */
     private void loadHeadings (Leech leech,
                                PrintWriter out,
                                Predicate predicate)
@@ -40,6 +48,10 @@ public class PrintBrowseHeadings
     {
         BrowseEntry h;
         while ((h = leech.next ()) != null) {
+            // We use a byte array for the sort key instead of a string to ensure
+            // consistent sorting even if the index tool and browse handler are running
+            // with different locale settings. Using strings results in less predictable
+            // behavior.
             byte[] sort_key = h.key;
             String heading = h.value;
 
@@ -49,9 +61,12 @@ public class PrintBrowseHeadings
             }
 
             if (sort_key != null) {
+                // Output a delimited key/value pair, base64-encoding both strings
+                // to ensure that no characters overlap with the delimiter or introduce
+                // \n's that could interfere with line-based sorting of the file.
                 out.print (new String (Base64.encodeBase64 (sort_key)) +
                            KEY_SEPARATOR +
-                           heading +
+                           new String (Base64.encodeBase64 (heading.getBytes(Charset.forName("UTF-8")))) +
                            RECORD_SEPARATOR);
             }
         }
