@@ -25,7 +25,9 @@
   </target>
 
   <target name="setup-solr-war" if="solr.war">
-    <unwar src="${solr.war}" dest="${builddir}/deps/"/>
+    <copy todir="${builddir}/deps/">
+      <fileset dir="${solr.war}"/>
+    </copy>
   </target>
 
 
