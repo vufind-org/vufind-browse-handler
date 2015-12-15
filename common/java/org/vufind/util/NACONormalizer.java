@@ -54,12 +54,12 @@ public class NACONormalizer implements Normalizer {
     /**
      * Characters that will be deleted during normalization.
      */
-    static private String deleteChars = "['\\[\\]\u02BA\u02BB\u02BC\u02B9\u02BF]";
+    static private String deleteChars = "['\\[\\]‘’\u02BA\u02BB\u02BC\u02B9\u02BF]";
 
     /**
      * Characters that will be converted to spaces during normalization.
      */
-    static private String spaceChars = "[\\p{Punct}¿¡‘’“”«»±⁺⁻℗®©°·]";
+    static private String spaceChars = "[\\p{Punct}¿¡“”«»±⁺⁻℗®©°·]";
 
     /**
      * Pattern to match characters that will be deleted during normalization.

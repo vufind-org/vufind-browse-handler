@@ -249,12 +249,20 @@ public class NACONormalizerTest
         // comma   Comma or blank  The first comma in $a is retained; all other converted to blank
         // NOTE: first comma is too fussy right now, all commas will go to blank.
         assertArrayEquals (nacoNormalizer.normalize ("comma,comma,comma"), nacoNormalizer.normalize ("comma comma comma"));
+    }
 
-        // non-NACO extras
-        // LEFT SINGLE QUOTATION MARK      Blank
-        assertArrayEquals (nacoNormalizer.normalize ("left‘quote"), nacoNormalizer.normalize ("left quote"));
-        // RIGHT SINGLE QUOTATION MARK     Blank
-        assertArrayEquals (nacoNormalizer.normalize ("l’enfant"), nacoNormalizer.normalize ("l enfant"));
+    // non-NACO extras
+    // Treat left & right single quotes same as ASCII single quote: delete
+    @Test
+    public void punctuationLeftRightSingleQuotes () {
+        // LEFT SINGLE QUOTATION MARK      Delete
+        assertArrayEquals (nacoNormalizer.normalize ("left‘quote"), nacoNormalizer.normalize ("leftquote"));
+        // RIGHT SINGLE QUOTATION MARK     Delete
+        assertArrayEquals (nacoNormalizer.normalize ("l’enfant"), nacoNormalizer.normalize ("lenfant"));
+    }
+
+    @Test
+    public void punctuationLeftRightDoubleQuotes () {
         // LEFT DOUBLE QUOTATION MARK      Blank
         assertArrayEquals (nacoNormalizer.normalize ("left“quote"), nacoNormalizer.normalize ("left quote"));
         // RIGHT DOUBLE QUOTATION MARK     Blank
@@ -346,7 +354,21 @@ public class NACONormalizerTest
                               "Abd al-Fattāḥ, Khālid Salīm")));
     }
 
+    @Test
+    public void normalizeRussianTitles () {
+        assertArrayEquals(nacoNormalizer.normalize("Mif v folʹklornykh tradit͡sii͡akh i kulʹture noveĭshego vremeni"),
+                nacoNormalizer.normalize("Mif v fol'klornykh tradit͡sii͡akh i kul'ture noveĭshego vremeni"));
+        assertArrayEquals(nacoNormalizer.normalize("Mif v folʹklornykh tradit͡sii͡akh i kulʹture noveĭshego vremeni"),
+                nacoNormalizer.normalize("Mif v folklornykh traditsiiakh i kulture noveĭshego vremeni"));
+    }
 
+    @Test
+    public void singleQuoteLeftRightSingleQuoteEquivalence () {
+        assertArrayEquals(nacoNormalizer.normalize("L'enfant"),
+                nacoNormalizer.normalize("L’enfant"));
+        assertArrayEquals (nacoNormalizer.normalize ("left‘quote"), nacoNormalizer.normalize ("left'quote"));
+        assertArrayEquals (nacoNormalizer.normalize ("l’enfant"), nacoNormalizer.normalize ("l'enfant"));
+    }
     //
     // Helpers
     //
