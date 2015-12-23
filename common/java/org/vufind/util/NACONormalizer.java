@@ -13,7 +13,7 @@ import com.ibm.icu.text.Collator;
  * Additional normalization:
  * <ol>
  * <li>
- * left and right single and double quotes
+ * single quotes and left and right single and double quotes
  * </li>
  * <li>
  * European-style quotes, «»:<br>
@@ -32,9 +32,6 @@ import com.ibm.icu.text.Collator;
  * </li>
  * <li>
  * eszedt, and thorn are not normalized to their two-character equivalents
- * </li>
- * <li>
- * Inverted question mark is not normalized
  * </li>
  * <li>
  * </li>
