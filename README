@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/vufind-org/vufind-browse-handler.svg?branch=master)](https://travis-ci.org/vufind-org/vufind-browse-handler)
 
        Care and feeding of the VuFind Solr browse request handler
 
