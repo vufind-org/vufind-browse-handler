@@ -2,6 +2,7 @@ import org.apache.lucene.store.*;
 import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;
 import java.io.*;
+import java.util.*;
 
 import org.vufind.util.BrowseEntry;
 import org.vufind.util.Normalizer;
@@ -13,6 +14,8 @@ public class Leech
     protected CompositeReader reader;
     protected IndexSearcher searcher;
 
+    protected List<LeafReaderContext> leafReaders;
+
     private String field;
     private Normalizer normalizer;
 
@@ -22,10 +25,19 @@ public class Leech
     public Leech (String indexPath,
                   String field) throws Exception
     {
+        // Open our composite reader (a top-level DirectoryReader that
+        // contains one reader per segment in our index).
         reader = DirectoryReader.open (FSDirectory.open (new File (indexPath).toPath ()));
-        searcher = new IndexSearcher (reader);
-        this.field = field;
 
+        // Open the searcher that we'll use to verify that items are
+        // being used by a non-deleted document.
+        searcher = new IndexSearcher (reader);
+
+        // Extract the list of readers for our underlying segments.
+        // We'll work through these one at a time until we've consumed them all.
+        leafReaders = new ArrayList<>(reader.getContext().leaves());
+
+        this.field = field;
 
         String normalizerClass = System.getProperty("browse.normalizer");
         normalizer = NormalizerFactory.getNormalizer(normalizerClass);
@@ -62,11 +74,20 @@ public class Leech
     public BrowseEntry next () throws Exception
     {
         if (tenum == null) {
-            LeafReader ir = SlowCompositeReaderWrapper.wrap(reader);
-            Terms terms = ir.terms(this.field);
-            if (terms == null) {
+            if (leafReaders.isEmpty()) {
+                // Nothing left to do
                 return null;
             }
+
+            // Select our next LeafReader to work from
+            LeafReader ir = leafReaders.remove(0).reader();
+            Terms terms = ir.terms(this.field);
+
+            if (terms == null) {
+                // Try the next reader
+                return next();
+            }
+
             tenum = terms.iterator();
         }
 
@@ -79,6 +100,8 @@ public class Leech
                 return this.next();
             }
         } else {
+            // Exhausted this reader
+            tenum = null;
             return null;
         }
     }
