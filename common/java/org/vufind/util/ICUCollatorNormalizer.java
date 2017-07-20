@@ -7,9 +7,9 @@ import com.ibm.icu.text.Collator;
 
 /**
  * Normalizer class which uses the ICU <code>Collator<code> class to produce collation byte arrays.
- * The use of <code>Collator<code> takes into account diacritics and other Unicode features. 
- * This normalizer should be suitable for most text fields. 
- * 
+ * The use of <code>Collator<code> takes into account diacritics and other Unicode features.
+ * This normalizer should be suitable for most text fields.
+ *
  * @author Mark Triggs <mark@dishevelled.net>
  * @author Tod Olson <tod@uchicago.edu>
  *
@@ -20,7 +20,7 @@ public class ICUCollatorNormalizer implements Normalizer
     protected Collator collator;
 
     protected Pattern junkregexp =
-        Pattern.compile ("\\([^a-z0-9\\p{L} ]\\)");
+        Pattern.compile("\\([^a-z0-9\\p{L} ]\\)");
 
 
     public ICUCollatorNormalizer()
@@ -31,38 +31,38 @@ public class ICUCollatorNormalizer implements Normalizer
     }
 
     // TODO: remove getInstance when no longer needed
-    public static ICUCollatorNormalizer getInstance () throws Exception
+    public static ICUCollatorNormalizer getInstance() throws Exception
     {
         ICUCollatorNormalizer iCUCollatorNormalizer;
 
-        if (Utils.getEnvironment ("NORMALISER") != null) {
-            String normaliserClass = Utils.getEnvironment ("NORMALISER");
+        if (Utils.getEnvironment("NORMALISER") != null) {
+            String normaliserClass = Utils.getEnvironment("NORMALISER");
 
-            iCUCollatorNormalizer = (ICUCollatorNormalizer) (Class.forName (normaliserClass)
-                        .getConstructor ()
-                        .newInstance ());
+            iCUCollatorNormalizer = (ICUCollatorNormalizer)(Class.forName(normaliserClass)
+                                    .getConstructor()
+                                    .newInstance());
         } else {
-            iCUCollatorNormalizer = new ICUCollatorNormalizer ();
+            iCUCollatorNormalizer = new ICUCollatorNormalizer();
         }
 
         return iCUCollatorNormalizer;
     }
 
-    // Breaking out the CollationKey makes testing and debugging easier 
-    public CollationKey normalizeToKey (String s)
+    // Breaking out the CollationKey makes testing and debugging easier
+    public CollationKey normalizeToKey(String s)
     {
-        s = s.replaceAll ("-", "")
-            .replaceAll ("\\p{Punct}", " ")
-            .replaceAll (" +", " ")
-            .trim ();
+        s = s.replaceAll("-", "")
+            .replaceAll("\\p{Punct}", " ")
+            .replaceAll(" +", " ")
+            .trim();
 
-        s = junkregexp.matcher (s) .replaceAll ("");
+        s = junkregexp.matcher(s) .replaceAll("");
 
-        return collator.getCollationKey (s);
+        return collator.getCollationKey(s);
     }
 
-    public byte[] normalize (String s)
+    public byte[] normalize(String s)
     {
-        return normalizeToKey (s).toByteArray ();
+        return normalizeToKey(s).toByteArray();
     }
 }

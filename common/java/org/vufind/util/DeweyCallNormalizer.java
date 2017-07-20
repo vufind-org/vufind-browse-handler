@@ -3,7 +3,8 @@ package org.vufind.util;
 import org.solrmarc.callnum.DeweyCallNumber;
 import java.util.logging.Logger;
 
-public class DeweyCallNormalizer implements Normalizer {
+public class DeweyCallNormalizer implements Normalizer
+{
 
     @Override
     public byte[] normalize(String s)

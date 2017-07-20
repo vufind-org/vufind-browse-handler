@@ -20,44 +20,49 @@ public class ICUCollatorNormalizerTest
     private ICUCollatorNormalizer iCUCollatorNormalizer;
 
     @Before
-    public void setUp () {
-        iCUCollatorNormalizer = new ICUCollatorNormalizer ();
+    public void setUp()
+    {
+        iCUCollatorNormalizer = new ICUCollatorNormalizer();
     }
 
 
     @Test
-    public void sortsSimpleStrings () {
-        assertEquals (listOf ("apple", "banana", "cherry", "orange"),
-                      sort (listOf ("banana", "orange", "apple", "cherry")));
+    public void sortsSimpleStrings()
+    {
+        assertEquals(listOf("apple", "banana", "cherry", "orange"),
+                     sort(listOf("banana", "orange", "apple", "cherry")));
     }
 
 
     @Test
-    public void sortsDiacriticStrings () {
-        assertEquals (listOf ("AAA", "Äardvark", "Apple", "Banana", "grapefruit", "Orange"),
-                sort (listOf ("grapefruit", "Apple", "Orange", "AAA", "Äardvark", "Banana")));
+    public void sortsDiacriticStrings()
+    {
+        assertEquals(listOf("AAA", "Äardvark", "Apple", "Banana", "grapefruit", "Orange"),
+                     sort(listOf("grapefruit", "Apple", "Orange", "AAA", "Äardvark", "Banana")));
     }
 
 
     @Test
-    public void handlesHyphensQuotesAndWhitespace () {
-        assertEquals (listOf ("AAA", "Äardvark", "Apple", "Banana", "grapefruit",
-                              "\"Hyphenated-words and double quotes\"",
-                              "   inappropriate leading space",
-                              "Orange"),
-                      sort (listOf ("Orange",
-                                    "\"Hyphenated-words and double quotes\"",
-                                    "Banana", "grapefruit",
-                                    "   inappropriate leading space",
-                                    "Äardvark", "Apple", "AAA")));
+    public void handlesHyphensQuotesAndWhitespace()
+    {
+        assertEquals(listOf("AAA", "Äardvark", "Apple", "Banana", "grapefruit",
+                            "\"Hyphenated-words and double quotes\"",
+                            "   inappropriate leading space",
+                            "Orange"),
+                     sort(listOf("Orange",
+                                 "\"Hyphenated-words and double quotes\"",
+                                 "Banana", "grapefruit",
+                                 "   inappropriate leading space",
+                                 "Äardvark", "Apple", "AAA")));
 
     }
 
 
     @Test
-    public void ignoresPunctuationMixedWithSpaces () {
-        assertArrayEquals (iCUCollatorNormalizer.normalize ("wharton, edith"), iCUCollatorNormalizer.normalize ("wharton edith"));
-        assertArrayEquals (iCUCollatorNormalizer.normalize ("st. john"), iCUCollatorNormalizer.normalize ("st john"));
+    public void ignoresPunctuationMixedWithSpaces()
+    {
+        assertArrayEquals(iCUCollatorNormalizer.normalize("wharton, edith"), iCUCollatorNormalizer.normalize("wharton edith"));
+        assertArrayEquals(iCUCollatorNormalizer.normalize("st. john"), iCUCollatorNormalizer.normalize("st john"));
     }
 
 
@@ -65,10 +70,11 @@ public class ICUCollatorNormalizerTest
     // Helpers
     //
 
-    private List<String> listOf (String ... args) {
+    private List<String> listOf(String ... args)
+    {
         List<String> result = new ArrayList<String> ();
         for (String s : args) {
-            result.add (s);
+            result.add(s);
         }
 
         return result;
@@ -76,7 +82,8 @@ public class ICUCollatorNormalizerTest
 
 
     // http://stackoverflow.com/questions/5108091/java-comparator-for-byte-array-lexicographic
-    private int compareByteArrays (byte[] left, byte[] right) {
+    private int compareByteArrays(byte[] left, byte[] right)
+    {
         for (int i = 0, j = 0; i < left.length && j < right.length; i++, j++) {
             int a = (left[i] & 0xff);
             int b = (right[j] & 0xff);
@@ -88,16 +95,17 @@ public class ICUCollatorNormalizerTest
     }
 
 
-    private List<String> sort (List<String> list) {
+    private List<String> sort(List<String> list)
+    {
         List<String> result = new ArrayList<String> ();
-        result.addAll (list);
+        result.addAll(list);
 
-        Collections.sort (result, new Comparator<String> () {
-                public int compare (String s1, String s2) {
-                    return compareByteArrays (iCUCollatorNormalizer.normalize (s1),
-                                              iCUCollatorNormalizer.normalize (s2));
-                }
-            });
+        Collections.sort(result, new Comparator<String> () {
+            public int compare(String s1, String s2) {
+                return compareByteArrays(iCUCollatorNormalizer.normalize(s1),
+                                         iCUCollatorNormalizer.normalize(s2));
+            }
+        });
 
         return result;
     }

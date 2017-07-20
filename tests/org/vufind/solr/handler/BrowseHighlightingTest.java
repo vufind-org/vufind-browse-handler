@@ -18,51 +18,59 @@ import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
 
 
-public class BrowseHighlightingTest {
+public class BrowseHighlightingTest
+{
 
     @Test
-    public void simpleHeadOfString() throws Exception {
+    public void simpleHeadOfString() throws Exception
+    {
         assertEquals("HEAD_OF_STRING",
                      matchTypeFor(fakeBrowseResults("apple", "banana", "cherry"), "app", 1, 20, 0));
     }
 
 
     @Test
-    public void simpleExactMatch() throws Exception {
+    public void simpleExactMatch() throws Exception
+    {
         assertEquals("EXACT",
                      matchTypeFor(fakeBrowseResults("apple", "banana", "cherry"), "apple", 1, 20, 0));
     }
 
 
     @Test
-    public void simpleMismatch() throws Exception {
+    public void simpleMismatch() throws Exception
+    {
         assertEquals("NONE",
                      matchTypeFor(fakeBrowseResults("apple", "banana", "cherry"), "aardvark", 1, 20, 0));
     }
 
 
     @Test
-    public void noRowsMeansNoMatch() throws Exception {
+    public void noRowsMeansNoMatch() throws Exception
+    {
         assertEquals("NONE",
                      matchTypeFor(fakeBrowseResults("apple", "banana", "cherry"), "apple", 1, 0, 0));
     }
 
 
     @Test
-    public void emptyQueryMeansNoMatch() throws Exception {
+    public void emptyQueryMeansNoMatch() throws Exception
+    {
         assertEquals("NONE",
                      matchTypeFor(fakeBrowseResults("apple", "banana", "cherry"), "", 1, 20, 0));
     }
 
 
     @Test
-    public void emptyResultsMeansNoMatch() throws Exception {
+    public void emptyResultsMeansNoMatch() throws Exception
+    {
         assertEquals("NONE",
                      matchTypeFor(fakeBrowseResults(), "apple", 1, 20, 0));
     }
 
     @Test
-    public void onlyShowMatchTypeForFirstPage() throws Exception {
+    public void onlyShowMatchTypeForFirstPage() throws Exception
+    {
         // Forward a page (matched on "apple")
         assertEquals("NONE",
                      matchTypeFor(fakeBrowseResults("apple", "banana", "cherry", "dates"), "apple", 1, 2, 2));
@@ -79,7 +87,8 @@ public class BrowseHighlightingTest {
 
 
     @Test
-    public void negativeOffsetAtStartOfBrowseList() throws Exception {
+    public void negativeOffsetAtStartOfBrowseList() throws Exception
+    {
         // Offset of -2 is effectively ignored since we're at the start of the
         // browse list.  The heading is still visible, so we should show the
         // exact match.
@@ -92,7 +101,8 @@ public class BrowseHighlightingTest {
 
 
     @Test
-    public void offsetPastEndOfBrowseList() throws Exception {
+    public void offsetPastEndOfBrowseList() throws Exception
+    {
         // If our offset moves us past the end of the browse list, there are no
         // results and we show no match.
         assertEquals("NONE",
@@ -104,8 +114,9 @@ public class BrowseHighlightingTest {
     // Helpers
 
     private String matchTypeFor(BrowseList browseList, String query, int rowid, int rows, int offset)
-        throws Exception {
-        MatchTypeResponse mtr = new MatchTypeResponse (query, browseList, rowid, rows, offset, getNormalizer());
+    throws Exception
+    {
+        MatchTypeResponse mtr = new MatchTypeResponse(query, browseList, rowid, rows, offset, getNormalizer());
 
         Map<String, Object> solrResponse = fakeSolrResponse();
 
@@ -115,16 +126,19 @@ public class BrowseHighlightingTest {
     }
 
 
-    private Map<String, Object> fakeSolrResponse() {
+    private Map<String, Object> fakeSolrResponse()
+    {
         return new HashMap<String, Object>();
     }
 
-    private Normalizer getNormalizer() throws Exception {
+    private Normalizer getNormalizer() throws Exception
+    {
         return NormalizerFactory.getNormalizer("org.vufind.util.ICUCollatorNormalizer");
     }
 
 
-    private List<BrowseItem> fakeBrowseItems(String[] headings) {
+    private List<BrowseItem> fakeBrowseItems(String[] headings)
+    {
         List<BrowseItem> result = new ArrayList<BrowseItem>();
 
         for (String heading : headings) {
@@ -135,7 +149,8 @@ public class BrowseHighlightingTest {
     }
 
 
-    private BrowseList fakeBrowseResults(String ... headings) {
+    private BrowseList fakeBrowseResults(String ... headings)
+    {
         BrowseList result = new BrowseList();
         result.items = fakeBrowseItems(headings);
         return result;

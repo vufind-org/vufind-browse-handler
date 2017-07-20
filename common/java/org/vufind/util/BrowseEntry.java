@@ -6,7 +6,7 @@ public class BrowseEntry
     public String key_text;
     public String value;
 
-    public BrowseEntry (byte[] key, String key_text, String value)
+    public BrowseEntry(byte[] key, String key_text, String value)
     {
         this.key = key;
         this.key_text = key_text;

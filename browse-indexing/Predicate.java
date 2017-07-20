@@ -5,5 +5,5 @@
 
 public interface Predicate
 {
-    boolean isSatisfiedBy (Object obj);
+    boolean isSatisfiedBy(Object obj);
 }

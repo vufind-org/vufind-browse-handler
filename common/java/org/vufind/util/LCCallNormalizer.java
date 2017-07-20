@@ -3,7 +3,8 @@ package org.vufind.util;
 import org.solrmarc.callnum.LCCallNumber;
 import java.util.logging.Logger;
 
-public class LCCallNormalizer implements Normalizer {
+public class LCCallNormalizer implements Normalizer
+{
 
     @Override
     public byte[] normalize(String s)

@@ -20,12 +20,12 @@ public class CreateBrowseSQLite
     /*
      * Like BufferedReader#readLine(), but only returns lines ended by a \r\n.
      */
-    private String readCRLFLine (BufferedReader br) throws IOException
+    private String readCRLFLine(BufferedReader br) throws IOException
     {
         StringBuilder sb = new StringBuilder();
 
         while (true) {
-            int ch = br.read ();
+            int ch = br.read();
 
             if (ch >= 0) {
                 if (ch == '\r') {
@@ -33,7 +33,7 @@ public class CreateBrowseSQLite
                     // data (which we want to preserve) or the first part of the
                     // \r\n end of line marker.
 
-                    ch = br.read ();
+                    ch = br.read();
 
                     if (ch == '\n') {
                         // An end of line.  We're done.
@@ -53,105 +53,105 @@ public class CreateBrowseSQLite
     }
 
 
-    private void loadHeadings (BufferedReader br)
-        throws Exception
+    private void loadHeadings(BufferedReader br)
+    throws Exception
     {
         int count = 0;
 
-        outputDB.setAutoCommit (false);
+        outputDB.setAutoCommit(false);
 
-        PreparedStatement prep = outputDB.prepareStatement (
-            "insert or ignore into all_headings (key, key_text, heading) values (?, ?, ?)");
+        PreparedStatement prep = outputDB.prepareStatement(
+                                     "insert or ignore into all_headings (key, key_text, heading) values (?, ?, ?)");
 
         String line;
-        while ((line = readCRLFLine (br)) != null) {
-            String[] fields = line.split (KEY_SEPARATOR);
+        while ((line = readCRLFLine(br)) != null) {
+            String[] fields = line.split(KEY_SEPARATOR);
 
             if (fields.length == 3) {
                 // If we found the separator character, we have a key/value pair of
                 // Base64-encoded strings to decode and push into the batch:
-                prep.setBytes (1, Base64.decodeBase64 (fields[0].getBytes ()));
-                prep.setBytes (2, Base64.decodeBase64 (fields[1].getBytes ()));
-                prep.setBytes (3, Base64.decodeBase64 (fields[2].getBytes ()));
+                prep.setBytes(1, Base64.decodeBase64(fields[0].getBytes()));
+                prep.setBytes(2, Base64.decodeBase64(fields[1].getBytes()));
+                prep.setBytes(3, Base64.decodeBase64(fields[2].getBytes()));
 
-                prep.addBatch ();
+                prep.addBatch();
             }
 
             if ((count % 500000) == 0) {
-                prep.executeBatch ();
-                prep.clearBatch ();
+                prep.executeBatch();
+                prep.clearBatch();
             }
 
             count++;
         }
 
-        prep.executeBatch ();
-        prep.close ();
+        prep.executeBatch();
+        prep.close();
 
-        outputDB.commit ();
-        outputDB.setAutoCommit (true);
+        outputDB.commit();
+        outputDB.setAutoCommit(true);
     }
 
 
-    private void setupDatabase ()
-        throws Exception
+    private void setupDatabase()
+    throws Exception
     {
-        Statement stat = outputDB.createStatement ();
+        Statement stat = outputDB.createStatement();
 
-        stat.executeUpdate ("drop table if exists all_headings;");
-        stat.executeUpdate ("create table all_headings (key, key_text, heading);");
-        stat.executeUpdate ("PRAGMA synchronous = OFF;");
-        stat.execute ("PRAGMA journal_mode = OFF;");
+        stat.executeUpdate("drop table if exists all_headings;");
+        stat.executeUpdate("create table all_headings (key, key_text, heading);");
+        stat.executeUpdate("PRAGMA synchronous = OFF;");
+        stat.execute("PRAGMA journal_mode = OFF;");
 
-        stat.close ();
+        stat.close();
     }
 
 
-    private void buildOrderedTables ()
-        throws Exception
+    private void buildOrderedTables()
+    throws Exception
     {
-        Statement stat = outputDB.createStatement ();
+        Statement stat = outputDB.createStatement();
 
-        stat.executeUpdate ("drop table if exists headings;");
-        stat.executeUpdate ("create table headings " +
-                            "as select * from all_headings order by key;");
+        stat.executeUpdate("drop table if exists headings;");
+        stat.executeUpdate("create table headings " +
+                           "as select * from all_headings order by key;");
 
-        stat.executeUpdate ("create index keyindex on headings (key);");
+        stat.executeUpdate("create index keyindex on headings (key);");
 
-        stat.close ();
+        stat.close();
     }
 
 
-    public void create (String headingsFile, String outputPath)
-        throws Exception
+    public void create(String headingsFile, String outputPath)
+    throws Exception
     {
-        Class.forName ("org.sqlite.JDBC");
-        outputDB = DriverManager.getConnection ("jdbc:sqlite:" + outputPath);
+        Class.forName("org.sqlite.JDBC");
+        outputDB = DriverManager.getConnection("jdbc:sqlite:" + outputPath);
 
-        setupDatabase ();
+        setupDatabase();
 
         BufferedReader br = new BufferedReader
-            (new FileReader (headingsFile));
+        (new FileReader(headingsFile));
 
-        loadHeadings (br);
+        loadHeadings(br);
 
-        br.close ();
+        br.close();
 
-        buildOrderedTables ();
+        buildOrderedTables();
     }
 
 
-    public static void main (String args[])
-        throws Exception
+    public static void main(String args[])
+    throws Exception
     {
         if (args.length != 2) {
             System.err.println
-                ("Usage: CreateBrowseSQLite <headings file> <db file>");
-            System.exit (0);
+            ("Usage: CreateBrowseSQLite <headings file> <db file>");
+            System.exit(0);
         }
 
-        CreateBrowseSQLite self = new CreateBrowseSQLite ();
+        CreateBrowseSQLite self = new CreateBrowseSQLite();
 
-        self.create (args[0], args[1]);
+        self.create(args[0], args[1]);
     }
 }
