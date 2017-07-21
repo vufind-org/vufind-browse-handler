@@ -4,6 +4,15 @@ language: java
 jdk:
   - openjdk8
 
+# addons section is a workaround for a Travis issue with missing JUnit jars:
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - ant
+      - ant-optional
+
 before_script:
   - if [ ! -d downloads ]; then mkdir downloads; fi;
   - if [ ! -f downloads/vufind-4.0.zip ]; then wget http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
