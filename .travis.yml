@@ -5,8 +5,13 @@ jdk:
   - openjdk8
 
 before_script:
-  - wget https://github.com/vufind-org/vufind/archive/v3.1.3.zip
-  - unzip v3.1.3.zip
+  - if [ ! -d downloads ]; then mkdir downloads; fi;
+  - if [ ! -f downloads/vufind-4.0.zip ]; then wget http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
+  - unzip downloads/vufind-4.0.zip
 
 script:
-  - ant test -Dvufind.dir=vufind-3.1.3
+  - ant test -Dvufind.dir=vufind-4.0
+
+cache:
+  directories:
+    - downloads
