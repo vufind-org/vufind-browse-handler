@@ -28,6 +28,8 @@ import org.apache.solr.core.SolrCore;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.lang.Integer;
+import java.util.*;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -423,12 +425,18 @@ class BibDB
      * Includes functionality to retrieve additional info
      * like titles for call numbers, possibly ISBNs
      *
-     * @param heading  string of the heading to use for finding matching docs
-     * @param extras   colon-separated string of extra Solr fields to return
-     *                 for use in the browse display
+     * @param heading        string of the heading to use for finding matching
+     * @param extras         docs colon-separated string of extra Solr fields
+     *                       to return for use in the browse display
+     * @param retrieveBibId  do or do not retrive bib IDs that match the heading
+     * @param maxBibListSize maximum numbers of records to check for bib ids and
+     *                       extras
      * @return         return a map of Solr ids and extra bib info
      */
-    public Map<String, List<Collection<String>>> matchingIDs(String heading, String extras)
+    public Map<String, List<Collection<String>>> matchingIDs(String heading, 
+                                                             String extras,
+                                                             boolean retrieveBibId,
+                                                             int maxBibListSize)
     throws Exception
     {
         TermQuery q = new TermQuery(new Term(field, heading));
@@ -439,6 +447,7 @@ class BibDB
         final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
         bibinfo.put("ids", new ArrayList<Collection<String>> ());
         final String[] bibExtras = extras.split(":");
+        final boolean getBibIds = retrieveBibId;
         for (String bibField : bibExtras) {
             bibinfo.put(bibField, new ArrayList<Collection<String>> ());
         }
@@ -470,7 +479,9 @@ class BibDB
                     String[] vals = doc.getValues("id");
                     Collection<String> id = new HashSet<> ();
                     id.add(vals[0]);
-                    bibinfo.get("ids").add(id);
+                    if (getBibIds) {
+                        bibinfo.get("ids").add(id);
+                    }
                     for (String bibField : bibExtras) {
                         vals = doc.getValues(bibField);
                         if (vals.length > 0) {
@@ -504,23 +515,30 @@ class Browse
     private HeadingsDB headingsDB;
     private AuthDB authDB;
     private BibDB bibDB;
+    private boolean retrieveBibId;
+    private int maxBibListSize;
 
-    public Browse(HeadingsDB headings, BibDB bibdb, AuthDB auth)
+    public Browse(HeadingsDB headings, BibDB bibdb, AuthDB auth, boolean retrieveBibId, int maxBibListSize)
     {
-        headingsDB = headings;
-        authDB = auth;
-        bibDB = bibdb;
+        this.headingsDB = headings;
+        this.authDB = auth;
+        this.bibDB = bibdb;
+        this.retrieveBibId = retrieveBibId;
+        this.maxBibListSize = maxBibListSize;
     }
 
     private void populateItem(BrowseItem item, String extras) throws Exception
     {
-        Map<String, List<Collection<String>>> bibinfo = bibDB.matchingIDs(item.heading, extras);
-        //item.ids = bibinfo.get ("ids");
-        item.setIds(bibinfo.get("ids"));
-        bibinfo.remove("ids");
-        item.count = item.ids.size();
-
-        item.extras = bibinfo;
+        if (this.maxBibListSize != 0) { //TODO: implement full maxBibListSize semantics
+            Map<String, List<Collection<String>>> bibinfo = 
+                    bibDB.matchingIDs(item.heading, extras, retrieveBibId, maxBibListSize);
+            //item.ids = bibinfo.get ("ids");
+            item.setIds(bibinfo.get("ids"));
+            bibinfo.remove("ids");
+            item.count = item.ids.size();
+    
+            item.extras = bibinfo;
+        }
 
         Map<String, List<String>> fields = authDB.getFields(item.heading);
 
@@ -580,6 +598,8 @@ class BrowseSource
     public String field;
     public String dropChars;
     public String normalizer;
+    public boolean retrieveBibId;
+    public int maxBibListSize;
 
     private HeadingsDB headingsDB = null;
     private long loanCount = 0;
@@ -588,12 +608,16 @@ class BrowseSource
     public BrowseSource(String DBpath,
                         String field,
                         String dropChars,
-                        String normalizer)
+                        String normalizer,
+                        boolean retrieveBibId,
+                        int maxBibListSize)
     {
         this.DBpath = DBpath;
         this.field = field;
         this.dropChars = dropChars;
         this.normalizer = normalizer;
+        this.retrieveBibId = retrieveBibId;
+        this.maxBibListSize = maxBibListSize;
     }
 
     // Get a HeadingsDB instance.  Caller is expected to call `queryFinished` on
@@ -666,11 +690,21 @@ public class BrowseRequestHandler extends RequestHandlerBase
             @SuppressWarnings("unchecked")
             NamedList<String> entry = (NamedList<String>)args.get(source);
 
+            // TODO: what if maxBibListSize is not set?
+            int maxBibListSize = -1;
+            try {
+                maxBibListSize = Integer.parseInt(entry.get("maxBibListSize"));
+            } catch (NumberFormatException e) {
+                // badly formatted param, leave as default -1
+            }
             sources.put(source,
                         new BrowseSource(entry.get("DBpath"),
                                          entry.get("field"),
                                          entry.get("dropChars"),
-                                         entry.get("normalizer")));
+                                         entry.get("normalizer"),
+                                         // defaults to false if not set or malformed
+                                         Boolean.parseBoolean(entry.get("retrieveBibId")),
+                                         maxBibListSize));
         }
     }
 
@@ -760,8 +794,10 @@ public class BrowseRequestHandler extends RequestHandlerBase
                                         solrParams.get("preferredHeadingField"),
                                         solrParams.get("useInsteadHeadingField"),
                                         solrParams.get("seeAlsoHeadingField"),
-                                        solrParams.get("scopeNoteField")));
-
+                                        solrParams.get("scopeNoteField")),
+                                       source.retrieveBibId,
+                                       source.maxBibListSize);
+           Log.info("new browse source with HeadingsDB (" + source.DBpath + ", " + source.normalizer + ")");
 
             if (from != null) {
                 rowid = (browse.getId(from));

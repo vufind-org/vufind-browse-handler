@@ -13,7 +13,7 @@ class BrowseItem
     public String note = "";
     public String sort_key;
     public String heading;
-    public List<String> ids;
+    public List<String> ids = null;
     public Map<String, List<Collection<String>>> extras = new HashMap<> ();
     int count;
 
