@@ -445,10 +445,12 @@ class BibDB
         // may be multi-valued.
         // Note: it may be time for bibinfo to become a class...
         final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
-        bibinfo.put("ids", new ArrayList<Collection<String>> ());
-        final String[] bibExtras = extras.split(":");
+        // Forcing "ids" into list of bib fields is a transition to requiring
+        // that "ids" be listed explicitly in the extras string
+        final String[] bibFieldList = (extras != null || extras.length() == 0 ?
+                ("ids:" + extras) : "ids").split(":");
         final boolean getBibIds = retrieveBibId;
-        for (String bibField : bibExtras) {
+        for (String bibField : bibFieldList) {
             bibinfo.put(bibField, new ArrayList<Collection<String>> ());
         }
 
@@ -476,14 +478,8 @@ class BibDB
                 try {
                     Document doc = db.getIndexReader().document(docid);
 
-                    String[] vals = doc.getValues("id");
-                    Collection<String> id = new HashSet<> ();
-                    id.add(vals[0]);
-                    if (getBibIds) {
-                        bibinfo.get("ids").add(id);
-                    }
-                    for (String bibField : bibExtras) {
-                        vals = doc.getValues(bibField);
+                    for (String bibField : bibFieldList) {
+                        String[] vals = doc.getValues(bibField);
                         if (vals.length > 0) {
                             Collection<String> valSet = new LinkedHashSet<> ();
                             for (String val : vals) {
