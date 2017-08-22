@@ -3,18 +3,22 @@ package org.vufind.solr.handler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+
+//TODO: fix up ids structure
+
 class BrowseItem
 {
-    public List<String> seeAlso = new ArrayList<> ();
-    public List<String> useInstead = new ArrayList<> ();
+    public List<String> seeAlso = new LinkedList<String> ();
+    public List<String> useInstead = new LinkedList<String> ();
     public String note = "";
     public String sort_key;
     public String heading;
     public List<String> ids = null;
-    public Map<String, List<Collection<String>>> extras = new HashMap<> ();
+    public Map<String, List<Collection<String>>> fields = new HashMap<> ();
     int count;
 
 
@@ -24,8 +28,8 @@ class BrowseItem
         this.heading = heading;
     }
 
-    // ids are gathered into List<Collection<String>>, see bibinfo in
-    // BibDB.matchingIDs() and populateItem().
+// ids are gathered into List<Collection<String>>, see bibinfo in
+// BibDB.matchingIDs() and populateItem().
     public void setIds(List<Collection<String>> idList)
     {
         ids = new ArrayList<String> ();
@@ -46,7 +50,7 @@ class BrowseItem
         result.put("note", note);
         result.put("count", new Integer(count));
         result.put("ids", ids);
-        result.put("extras", extras);
+        result.put("fields", fields);
 
         return result;
     }

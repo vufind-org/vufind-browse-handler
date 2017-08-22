@@ -426,15 +426,14 @@ class BibDB
      * like titles for call numbers, possibly ISBNs
      *
      * @param heading        string of the heading to use for finding matching
-     * @param extras         docs colon-separated string of extra Solr fields
+     * @param fields         docs colon-separated string of Solr fields
      *                       to return for use in the browse display
      * @param retrieveBibId  do or do not retrive bib IDs that match the heading
-     * @param maxBibListSize maximum numbers of records to check for bib ids and
-     *                       extras
+     * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
      */
     public Map<String, List<Collection<String>>> matchingIDs(String heading, 
-                                                             String extras,
+                                                             String fields,
                                                              boolean retrieveBibId,
                                                              int maxBibListSize)
     throws Exception
@@ -447,8 +446,7 @@ class BibDB
         final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
         // Forcing "ids" into list of bib fields is a transition to requiring
         // that "ids" be listed explicitly in the extras string
-        final String[] bibFieldList = (extras != null || extras.length() == 0 ?
-                ("ids:" + extras) : "ids").split(":");
+        final String[] bibFieldList = fields.split(":");
         final boolean getBibIds = retrieveBibId;
         for (String bibField : bibFieldList) {
             bibinfo.put(bibField, new ArrayList<Collection<String>> ());
@@ -504,8 +502,6 @@ class BibDB
 
 
 
-
-
 class Browse
 {
     private HeadingsDB headingsDB;
@@ -523,34 +519,34 @@ class Browse
         this.maxBibListSize = maxBibListSize;
     }
 
-    private void populateItem(BrowseItem item, String extras) throws Exception
+    private void populateItem(BrowseItem item, String fields) throws Exception
     {
         if (this.maxBibListSize != 0) { //TODO: implement full maxBibListSize semantics
             Map<String, List<Collection<String>>> bibinfo = 
-                    bibDB.matchingIDs(item.heading, extras, retrieveBibId, maxBibListSize);
+                    bibDB.matchingIDs(item.heading, fields, retrieveBibId, maxBibListSize);
             //item.ids = bibinfo.get ("ids");
             item.setIds(bibinfo.get("ids"));
             bibinfo.remove("ids");
             item.count = item.ids.size();
     
-            item.extras = bibinfo;
+            item.fields = bibinfo;
         }
 
-        Map<String, List<String>> fields = authDB.getFields(item.heading);
+        Map<String, List<String>> authFields = authDB.getFields(item.heading);
 
-        for (String value : fields.get("seeAlso")) {
+        for (String value : authFields.get("seeAlso")) {
             if (bibDB.recordCount(value) > 0) {
                 item.seeAlso.add(value);
             }
         }
 
-        for (String value : fields.get("useInstead")) {
+        for (String value : authFields.get("useInstead")) {
             if (bibDB.recordCount(value) > 0) {
                 item.useInstead.add(value);
             }
         }
 
-        for (String value : fields.get("note")) {
+        for (String value : authFields.get("note")) {
             item.note = value;
         }
     }
@@ -562,7 +558,7 @@ class Browse
     }
 
 
-    public BrowseList getList(int rowid, int offset, int rows, String extras)
+    public BrowseList getList(int rowid, int offset, int rows, String fields)
     throws Exception
     {
         BrowseList result = new BrowseList();
@@ -578,7 +574,7 @@ class Browse
 
             BrowseItem item = new BrowseItem(sort_key, heading);
 
-            populateItem(item, extras);
+            populateItem(item, fields);
 
             result.items.add(item);
         }
@@ -737,12 +733,18 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
         String sourceName = p.get("source");
         String from = p.get("from");
-        String extras = p.get("extras");
-
-        // extras needs to be a non-null string
-        if (extras == null) {
-            extras = "";
+        String fields = p.get("fields");
+        
+        // If fields parameter is not provided, construct from extras parameter
+        // NOTE: As implemented, fields will always contain ids.
+        //       Should think whether to do this the other way around, check 
+        //       extras first, and how transition will work.
+        if (fields == null) {
+            String extras = p.get("extras");
+            fields = extras != null || extras.length() == 0 ?
+                    ("ids:" + extras) : "ids";
         }
+
 
         int rowid = 1;
         if (p.get("rowid") != null) {
@@ -802,7 +804,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
             Log.info("Browsing from: " + rowid);
 
-            BrowseList list = browse.getList(rowid, offset, rows, extras);
+            BrowseList list = browse.getList(rowid, offset, rows, fields);
 
             Map<String,Object> result = new HashMap<>();
 
