@@ -5,6 +5,7 @@
   <property name="testdir" value="${builddir}/tests"/>
   <property name="testoutputdir" value="${testdir}/output"/>
   <property name="vufind.dir" value="/usr/local/vufind"/>
+  <property name="solr.solr.home" value="${vufind.dir}/solr/vufind"/>
   <property name="java.compat.version" value="1.7"/>
   <property name="ant.build.javac.source" value="1.7"/>
   <property name="ant.build.javac.target" value="1.7"/>
@@ -13,10 +14,14 @@
     <pathelement location="${builddir}/common"/>
     <fileset dir="${builddir}/deps/"><include name="**/*.jar"/></fileset>
     <fileset dir="libs"><include name="**/*.jar"/></fileset>
-    <fileset erroronmissingdir="false" dir="${solr.dir}"><include name="**/*.jar"/></fileset>
+    <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/contrib/analysis-extras">
+      <include name="**/*.jar"/>
+    </fileset>
     <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/dist"><include name="**/*.jar"/></fileset>
     <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/server/solr-webapp/webapp/WEB-INF/lib"><include name="**/*.jar"/></fileset>
   </path>
+  <!-- Can be useful for debugging -->
+  <pathconvert property="classpathProp" refid="classpath"/>
 
   <target name="setup">
     <mkdir dir="${builddir}"/>
@@ -35,6 +40,8 @@
   </target>
 
   <target name="build" depends="clean, setup, build-common, build-handler, build-indexing">
+    <!-- Can be useful for debugging -->
+    <!-- <echo>Classpath: ${classpathProp}</echo> -->
   </target>
 
   <target name="build-common">
@@ -55,6 +62,7 @@
     <javac debug="on" srcdir="browse-handler/java" destdir="${builddir}/browse-handler">
       <classpath refid="classpath"/>
       <compilerarg value="-Xlint"/>
+      <compilerarg value="-Xdiags:verbose"/>
     </javac>
   </target>
 
@@ -99,15 +107,17 @@
   </target>
 
   <target name="test" depends="build">
-      <mkdir dir="${testdir}"/>
-      <mkdir dir="${testoutputdir}"/>
-      <mkdir dir="${testdir}/report"/>
+    <mkdir dir="${testdir}"/>
+    <mkdir dir="${testoutputdir}"/>
+    <mkdir dir="${testdir}/report"/>
     <javac fork="true" debug="on" srcdir="tests/" destdir="${testdir}"
            classpath="tests/lib/*:${toString:classpath}:${builddir}/browse-handler">
       <compilerarg line="-encoding UTF-8" />
     </javac>
 
     <junit showoutput="yes" fork="true">
+      <sysproperty key="vufind.dir" value="${vufind.dir}" />
+      <sysproperty key="solr.solr.home" value="${solr.solr.home}" />
       <jvmarg value="-Dfile.encoding=UTF-8" />
       <classpath>
         <pathelement location="tests/lib/junit-4.11.jar"/>
