@@ -26,6 +26,7 @@ before_script:
   - VUFIND_HOME=$(pwd) ./index-alphabetic-browse.sh
   - ./solr.sh stop
   - cd ..
+  - mkdir -p build/deps # for some reason the setup ant task fails to create this directory
 
 script:
   - ant test -Dvufind.dir=vufind-4.0
