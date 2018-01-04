@@ -21,7 +21,7 @@ before_script:
   - cd vufind-4.0
   - ./solr.sh start
   - VUFIND_HOME=$(pwd) ./import-marc-auth.sh tests/data/authority/authorityauth.mrc marc_auth_ils.properties
-  - VUFIND_HOME=$(pwd) ./import-marc-auth.sh ../tests/data/auth.xml marc_auth_ils.properties
+  - VUFIND_HOME=$(pwd) ./import-marc-auth.sh ../tests/data/test-authorities.xml marc_auth_ils.properties
   - VUFIND_HOME=$(pwd) ./import-marc.sh tests/data/authoritybibs.mrc
   - VUFIND_HOME=$(pwd) ./index-alphabetic-browse.sh
   - ./solr.sh stop
