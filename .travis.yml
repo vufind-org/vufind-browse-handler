@@ -16,8 +16,8 @@ addons:
 # set up a small VuFind and load some record
 before_script:
   - if [ ! -d downloads ]; then mkdir downloads; fi;
-  - if [ ! -f downloads/vufind-4.0.zip ]; then wget http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
-  - unzip downloads/vufind-4.0.zip
+  - if [ ! -f downloads/vufind-4.0.zip ]; then wget -nv http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
+  - unzip -q downloads/vufind-4.0.zip
   - cd vufind-4.0
   - ./solr.sh start
   - VUFIND_HOME=$(pwd) ./import-marc-auth.sh tests/data/authority/authorityauth.mrc marc_auth_ils.properties
