@@ -13,7 +13,7 @@ addons:
       - ant
       - ant-optional
 
-# set up a small VuFind and load some record
+# set up a small VuFind and load some records
 before_script:
   - if [ ! -d downloads ]; then mkdir downloads; fi;
   - if [ ! -f downloads/vufind-4.0.zip ]; then wget -nv http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
