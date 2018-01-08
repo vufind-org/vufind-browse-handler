@@ -19,11 +19,12 @@ before_script:
   - if [ ! -f downloads/vufind-4.0.zip ]; then wget -nv http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
   - unzip -q downloads/vufind-4.0.zip
   - cd vufind-4.0
+  - VUFIND_HOME=$(pwd)
   - ./solr.sh start
-  - VUFIND_HOME=$(pwd) ./import-marc-auth.sh tests/data/authority/authorityauth.mrc marc_auth_ils.properties
-  - VUFIND_HOME=$(pwd) ./import-marc-auth.sh ../tests/data/test-authorities.xml marc_auth_ils.properties
-  - VUFIND_HOME=$(pwd) ./import-marc.sh tests/data/authoritybibs.mrc
-  - VUFIND_HOME=$(pwd) ./index-alphabetic-browse.sh
+  -  ./import-marc-auth.sh tests/data/authority/authorityauth.mrc marc_auth_ils.properties
+  - ./import-marc-auth.sh ../tests/data/test-authorities.xml marc_auth_ils.properties
+  - ./import-marc.sh tests/data/authoritybibs.mrc
+  - ./index-alphabetic-browse.sh
   - ./solr.sh stop
   - cd ..
   - mkdir -p build/deps # for some reason the setup ant task fails to create this directory
