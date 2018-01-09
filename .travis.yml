@@ -19,7 +19,7 @@ before_script:
   - if [ ! -f downloads/vufind-4.0.zip ]; then wget -nv http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
   - unzip -q downloads/vufind-4.0.zip
   - cd vufind-4.0
-  - VUFIND_HOME=$(pwd)
+  - export VUFIND_HOME=$(pwd)
   - ./solr.sh start
   - ./import-marc-auth.sh tests/data/authority/authorityauth.mrc marc_auth_ils.properties
   - ./import-marc-auth.sh ../tests/data/test-authorities.xml marc_auth_ils.properties
