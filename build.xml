@@ -28,8 +28,6 @@
       <include name="**/*.jar"/>
     </fileset>
   </path>
-  <!-- Can be useful for debugging -->
-  <pathconvert property="classpathProp" refid="classpath"/>
 
   <target name="setup">
     <mkdir dir="${builddir}"/>
@@ -49,6 +47,7 @@
 
   <target name="build" depends="clean, setup, build-common, build-handler, build-indexing">
     <!-- Can be useful for debugging -->
+    <!-- <pathconvert property="classpathProp" refid="classpath"/> -->
     <!-- <echo>Classpath: ${classpathProp}</echo> -->
   </target>
 
