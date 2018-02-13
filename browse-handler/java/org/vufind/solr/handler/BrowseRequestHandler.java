@@ -873,7 +873,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
         SolrCore core = req.getCore();
         CoreDescriptor cd = core.getCoreDescriptor();
-        CoreContainer cc = cd.getCoreContainer();
+        CoreContainer cc = core.getCoreContainer();
         SolrCore authCore = cc.getCore(authCoreName);
         //Must decrement RefCounted when finished!
         RefCounted<SolrIndexSearcher> authSearcherRef = authCore.getSearcher();
