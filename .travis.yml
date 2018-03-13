@@ -15,10 +15,11 @@ addons:
 
 # set up a small VuFind and load some records
 before_script:
-  - if [ ! -d downloads ]; then mkdir downloads; fi;
-  - if [ ! -f downloads/vufind-4.0.zip ]; then wget -nv http://downloads.sourceforge.net/vufind/vufind-4.0.zip?use_mirror=osdn -O downloads/vufind-4.0.zip; fi;
-  - unzip -q downloads/vufind-4.0.zip
-  - cd vufind-4.0
+  - if [ ! -d vufind/.git ]; then git clone https://github.com/vufind-org/vufind.git; fi;
+  - cd vufind
+  - git pull
+  - phpenv global 7.1
+  - composer install
   - export VUFIND_HOME=$(pwd)
   - ./solr.sh start
   - ./import-marc-auth.sh tests/data/authority/authorityauth.mrc marc_auth_ils.properties
@@ -28,8 +29,9 @@ before_script:
   - cd ..
 
 script:
-  - ant test -Dvufind.dir=vufind-4.0
+  - ant test -Dvufind.dir=vufind
+  - cd $VUFIND_HOME ; rm -rf solr/vufind ; rm import/*.log ; git reset --hard
 
 cache:
   directories:
-    - downloads
+    - vufind
