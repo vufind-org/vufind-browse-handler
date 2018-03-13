@@ -30,6 +30,7 @@ before_script:
   - ./import-marc.sh tests/data/authoritybibs.mrc
   - ./index-alphabetic-browse.sh
   - ./solr.sh stop
+  - rm -rf solr/vufind ; git reset --hard
   - cd ..
 
 script:
