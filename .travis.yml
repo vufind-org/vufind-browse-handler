@@ -30,7 +30,7 @@ before_script:
 
 script:
   - ant test -Dvufind.dir=vufind
-  - cd $VUFIND_HOME ; rm -rf solr/vufind ; git reset --hard
+  - cd $VUFIND_HOME ; rm -rf solr/vufind ; rm import/*.log ; git reset --hard
 
 cache:
   directories:
