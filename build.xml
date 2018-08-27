@@ -6,9 +6,9 @@
   <property name="testoutputdir" value="${testdir}/output"/>
   <property name="vufind.dir" value="/usr/local/vufind"/>
   <property name="solr.solr.home" value="${vufind.dir}/solr/vufind"/>
-  <property name="java.compat.version" value="1.7"/>
-  <property name="ant.build.javac.source" value="1.7"/>
-  <property name="ant.build.javac.target" value="1.7"/>
+  <property name="java.compat.version" value="1.8"/>
+  <property name="ant.build.javac.source" value="1.8"/>
+  <property name="ant.build.javac.target" value="1.8"/>
 
   <path id="classpath">
     <pathelement location="${builddir}/common"/>
