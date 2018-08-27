@@ -27,6 +27,10 @@
     <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/server/solr-webapp/webapp/WEB-INF/lib">
       <include name="**/*.jar"/>
     </fileset>
+    <!-- Needed for building tests that invoke Solr -->
+    <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/server/lib">
+      <include name="**/*.jar"/>
+    </fileset>
   </path>
 
   <target name="setup">
