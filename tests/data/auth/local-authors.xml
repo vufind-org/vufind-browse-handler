@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Sample test authority records
+    Convert to MARC binary with something like:
+    yaz-marcdump -i marcxml -o marc auth.xml > auth.mrc
+-->
+<collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://www.loc.gov/MARC21/slim">
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vbh0001</controlfield>
+        <controlfield tag="005">20180104</controlfield>
+        <datafield tag="010" ind1=" " ind2=" ">
+            <subfield code="a">vbh0001</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Triggs, Mark</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vbh0002</controlfield>
+        <controlfield tag="005">20180104</controlfield>
+        <datafield tag="010" ind1=" " ind2=" ">
+            <subfield code="a">vbh0002</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Olson, Tod</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vbh0003</controlfield>
+        <controlfield tag="005">20180104</controlfield>
+        <datafield tag="010" ind1=" " ind2=" ">
+            <subfield code="a">vbh0003</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Katz, Demian</subfield>
+        </datafield>
+    </record>
+</collection>

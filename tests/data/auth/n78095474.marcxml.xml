@@ -1,0 +1,121 @@
+<marcxml:record xmlns:marcxml="http://www.loc.gov/MARC21/slim" xmlns:idx="info:lc/xq-modules/lcindex" xmlns:madsrdf="http://www.loc.gov/mads/rdf/v1#" xmlns:ri="http://id.loc.gov/ontologies/RecordInfo#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:mets="http://www.loc.gov/METS/" xmlns:semtriples="http://marklogic.com/semantic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:streams="info:lc/streams#">
+            <marcxml:leader>01823cz  a2200433n  4500</marcxml:leader>
+            <marcxml:controlfield tag="001">n78095474</marcxml:controlfield>
+            <marcxml:controlfield tag="003">DLC</marcxml:controlfield>
+            <marcxml:controlfield tag="005">20180202073422.0</marcxml:controlfield>
+            <marcxml:controlfield tag="008">790105n| azannaabn          |a aaa      </marcxml:controlfield>
+            <marcxml:datafield tag="010" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">n  78095474 </marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="024" ind1="7" ind2=" ">
+              <marcxml:subfield code="a">0000000121457729</marcxml:subfield>
+              <marcxml:subfield code="2">isni</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="035" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">(OCoLC)oca00230551</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="040" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">DLC</marcxml:subfield>
+              <marcxml:subfield code="b">eng</marcxml:subfield>
+              <marcxml:subfield code="e">rda</marcxml:subfield>
+              <marcxml:subfield code="c">DLC</marcxml:subfield>
+              <marcxml:subfield code="d">DLC</marcxml:subfield>
+              <marcxml:subfield code="d">OCoLC</marcxml:subfield>
+              <marcxml:subfield code="d">PPi-MA</marcxml:subfield>
+              <marcxml:subfield code="d">OCoLC</marcxml:subfield>
+              <marcxml:subfield code="d">DLC</marcxml:subfield>
+              <marcxml:subfield code="d">Uk</marcxml:subfield>
+              <marcxml:subfield code="d">UPB</marcxml:subfield>
+              <marcxml:subfield code="d">OrAhW</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="046" ind1=" " ind2=" ">
+              <marcxml:subfield code="f">19291021</marcxml:subfield>
+              <marcxml:subfield code="g">20180122</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="053" ind1=" " ind2="0">
+              <marcxml:subfield code="a">PS3562.E42</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="100" ind1="1" ind2=" ">
+              <marcxml:subfield code="a">Le Guin, Ursula K.,</marcxml:subfield>
+              <marcxml:subfield code="d">1929-2018</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="370" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Berkeley (Calif.)</marcxml:subfield>
+              <marcxml:subfield code="2">naf</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="370" ind1=" " ind2=" ">
+              <marcxml:subfield code="b">Portland (Or.)</marcxml:subfield>
+              <marcxml:subfield code="2">naf</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="372" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Science fiction</marcxml:subfield>
+              <marcxml:subfield code="a">Fantasy fiction</marcxml:subfield>
+              <marcxml:subfield code="2">lcsh</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="374" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Authors</marcxml:subfield>
+              <marcxml:subfield code="2">lcsh</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="375" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">female</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="377" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">eng</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="378" ind1=" " ind2=" ">
+              <marcxml:subfield code="q">Ursula Kroeber</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="400" ind1="1" ind2=" ">
+              <marcxml:subfield code="a">LeGuin, Ursula,</marcxml:subfield>
+              <marcxml:subfield code="d">1929-2018</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="400" ind1="1" ind2=" ">
+              <marcxml:subfield code="a">Le Guin, Ursula,</marcxml:subfield>
+              <marcxml:subfield code="d">1929-2018</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="400" ind1="1" ind2=" ">
+              <marcxml:subfield code="a">Guin, Ursula K. Le,</marcxml:subfield>
+              <marcxml:subfield code="d">1929-2018</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="400" ind1="1" ind2=" ">
+              <marcxml:subfield code="a">Kroeber, Ursula,</marcxml:subfield>
+              <marcxml:subfield code="d">1929-2018</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="400" ind1="1" ind2=" ">
+              <marcxml:subfield code="a">Ле Гуин, Урсула,</marcxml:subfield>
+              <marcxml:subfield code="d">1929-2018</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="400" ind1="1" ind2=" ">
+              <marcxml:subfield code="a">גווין, אורסולה ק׳,</marcxml:subfield>
+              <marcxml:subfield code="d">1929-2018-</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="667" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Machine-derived non-Latin script reference project.</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="667" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Non-Latin script references not evaluated.</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="670" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Her A wizard of earthsea, c1968.</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="670" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Schwantner, J. Wild angels of the open hills, c1978:</marcxml:subfield>
+              <marcxml:subfield code="b">1st p. of music (Ursula Le Guin)</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="670" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Her The eye of the heron, 1983? c1978:</marcxml:subfield>
+              <marcxml:subfield code="b">t.p. (Ursula LeGuin)</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="670" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Contemporary authors. New revision series:</marcxml:subfield>
+              <marcxml:subfield code="b">v. 74 (Le Guin, Ursula K(roeber); b. Oct. 21, 1929, Berkeley, CA; writer)</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="670" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">Internet speculative fiction database, 3 June 2014</marcxml:subfield>
+              <marcxml:subfield code="b">(Ursula K. Le Guin; Legal Name: Le Guin, Ursula Kroeber ; Birthplace: Berkeley, California, USA; Birthdate: 21 October 1929)</marcxml:subfield>
+            </marcxml:datafield>
+            <marcxml:datafield tag="670" ind1=" " ind2=" ">
+              <marcxml:subfield code="a">New York Times website, viewed Jan. 30, 2018</marcxml:subfield>
+              <marcxml:subfield code="b">(Ursula K. Le Guin died on Jan. 22, 2018, at her home in Portland, Ore.)</marcxml:subfield>
+            </marcxml:datafield>
+          </marcxml:record>
