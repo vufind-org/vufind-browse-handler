@@ -4,6 +4,9 @@
   <property name="build.sysclasspath" value="last"/>
   <property name="testdir" value="${builddir}/tests"/>
   <property name="testoutputdir" value="${testdir}/output"/>
+  <property name="testdata.dir" value="tests/data"/>
+  <property name="authdata.dir" value="${testdata.dir}/auth"/>
+  <property name="bibdata.dir" value="${testdata.dir}/bib"/>
   <property name="vufind.dir" value="/usr/local/vufind"/>
   <property name="solr.solr.home" value="${vufind.dir}/solr/vufind"/>
   <property name="java.compat.version" value="1.8"/>
@@ -118,44 +121,96 @@
     </jar>
   </target>
 
-  <target name="test" depends="build">
-    <mkdir dir="${testdir}"/>
-    <mkdir dir="${testoutputdir}"/>
-    <mkdir dir="${testdir}/report"/>
-    <javac fork="true" debug="on" srcdir="tests/" destdir="${testdir}"
-           classpath="tests/lib/*:${toString:classpath}:${builddir}/browse-handler">
-      <compilerarg line="-encoding UTF-8" />
-    </javac>
+    <!-- =================================
+          target: setup-test-cores
 
-    <junit showoutput="yes" fork="true">
-      <sysproperty key="vufind.dir" value="${vufind.dir}" />
-      <sysproperty key="solr.solr.home" value="${solr.solr.home}" />
-      <jvmarg value="-Dfile.encoding=UTF-8" />
-      <classpath>
-        <pathelement location="tests/lib/junit-4.11.jar"/>
-        <pathelement location="tests/lib/*"/>
-        <pathelement location="${testdir}"/>
-        <pathelement location="${builddir}/browse-handler"/>
-        <pathelement path="${toString:classpath}"/>
-      </classpath>
-      <!-- formatter type="plain" usefile="false"/-->
-      <batchtest todir="${testoutputdir}">
-        <fileset dir="tests">
-          <include name="**/*.java"/>
+          Put known test data into Solr cores:
+          start Solr,
+          add authority and biblographic data,
+          generate alphabetical indexes,
+          stop Solr
+         ================================= -->
+    <!-- Currently working only for UNIX flavors -->
+    <target name="setup-test-cores"
+    description="Set up test Solr cores with some known test data">
+      <exec executable="${vufind.dir}/solr.sh">
+        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+        <arg value="start"/>
+      </exec>
+      <!-- Alternately, could exec ${vufind.dir}/harvest/batch-import-marc-auth.sh -->
+      <apply executable="${vufind.dir}/import-marc-auth.sh">
+        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+        <fileset dir="${authdata.dir}">
+          <include name="**/*.xml"/>
         </fileset>
-        <formatter type="xml" usefile="yes"/>
-        <formatter type="plain" usefile="yes"/>
-        <formatter type="brief" usefile="no"/>
-      </batchtest>
-    </junit>
+        <!--
+            Would like to also use authority test records under the VuFind
+            test data, but they are missing the expected id fields.
+          -->
+        <!--
+        <fileset dir="${vufind.dir}/tests/data/authority">
+          <include name="**/*.mrc"/>
+        </fileset>
+        -->
+      </apply>
+      <apply executable="${vufind.dir}/import-marc.sh">
+        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+        <fileset dir="${bibdata.dir}">
+          <include name="**/*.xml"/>
+        </fileset>
+        <fileset dir="${vufind.dir}/tests/data">
+          <include name="**/*.mrc"/>
+        </fileset>
+      </apply>
+      <exec executable="${vufind.dir}/index-alphabetic-browse.sh">
+        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+      </exec>
+      <!-- Stop Solr so that cores unlock and unit tests can access directly -->
+      <exec executable="${vufind.dir}/solr.sh">
+        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+        <arg value="stop"/>
+      </exec>
+    </target>
 
-    <junitreport todir="${testdir}/report">
-      <fileset dir="${testoutputdir}">
-        <include name="TEST-*.xml"/>
-      </fileset>
-      <report format="frames" todir="${testdir}/report"/>
-    </junitreport>
-    <echo message="JUnit reports available in ${testdir}/report"></echo>
+    <target name="test" depends="build">
+      <mkdir dir="${testdir}"/>
+      <mkdir dir="${testoutputdir}"/>
+      <mkdir dir="${testdir}/report"/>
+      <javac fork="true" debug="on" srcdir="tests/" destdir="${testdir}"
+           classpath="tests/lib/*:${toString:classpath}:${builddir}/browse-handler">
+        <compilerarg line="-encoding UTF-8" />
+      </javac>
 
-  </target>
-</project>
+      <junit showoutput="yes" fork="true">
+        <sysproperty key="vufind.dir" value="${vufind.dir}" />
+        <sysproperty key="solr.solr.home" value="${solr.solr.home}" />
+        <jvmarg value="-Dfile.encoding=UTF-8" />
+        <classpath>
+          <pathelement location="tests/lib/junit-4.11.jar"/>
+          <pathelement location="tests/lib/*"/>
+          <pathelement location="${testdir}"/>
+          <pathelement location="${builddir}/browse-handler"/>
+          <pathelement path="${toString:classpath}"/>
+        </classpath>
+        <!-- formatter type="plain" usefile="false"/-->
+        <batchtest todir="${testoutputdir}">
+          <fileset dir="tests">
+            <include name="**/*.java"/>
+          </fileset>
+          <formatter type="xml" usefile="yes"/>
+          <formatter type="plain" usefile="yes"/>
+          <formatter type="brief" usefile="no"/>
+        </batchtest>
+      </junit>
+
+      <junitreport todir="${testdir}/report">
+        <fileset dir="${testoutputdir}">
+          <include name="TEST-*.xml"/>
+        </fileset>
+        <report format="frames" todir="${testdir}/report"/>
+      </junitreport>
+      <echo message="JUnit reports available in ${testdir}/report">
+      </echo>
+
+    </target>
+  </project>
