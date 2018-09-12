@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><record xmlns="http://www.loc.gov/MARC21/slim" xmlns:cinclude="http://apache.org/cocoon/include/1.0" xmlns:zs="http://www.loc.gov/zing/srw/">
+  <leader>01350cam a22003373a 4500</leader>
+  <controlfield tag="001">13753901</controlfield>
+  <controlfield tag="005">20180212085614.0</controlfield>
+  <controlfield tag="008">041018t20041968nyuab         000 1 eng d</controlfield>
+  <datafield tag="906" ind1=" " ind2=" ">
+    <subfield code="a">7</subfield>
+    <subfield code="b">cbc</subfield>
+    <subfield code="c">copycat</subfield>
+    <subfield code="d">4</subfield>
+    <subfield code="e">ncip</subfield>
+    <subfield code="f">20</subfield>
+    <subfield code="g">y-gencatlg</subfield>
+  </datafield>
+  <datafield tag="925" ind1="0" ind2=" ">
+    <subfield code="a">acquire</subfield>
+    <subfield code="b">1 shelf copy</subfield>
+    <subfield code="x">policy default</subfield>
+  </datafield>
+  <datafield tag="955" ind1=" " ind2=" ">
+    <subfield code="a">pv19 2004-10-18 z-processor to HLCD</subfield>
+    <subfield code="a">lc03 2006-08-30 z-processor</subfield>
+    <subfield code="a">lk13 2006-09-21 to Ft. Meade UNASSESSED</subfield>
+  </datafield>
+  <datafield tag="010" ind1=" " ind2=" ">
+    <subfield code="a">  2004558962</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">0553383043 (pbk.)</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">(OCoLC)ocm56770836</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="a">IMF</subfield>
+    <subfield code="c">IMF</subfield>
+    <subfield code="d">EUF</subfield>
+    <subfield code="d">BAKER</subfield>
+    <subfield code="d">DLC</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+    <subfield code="a">MLCS 2006/42547 (P)</subfield>
+  </datafield>
+  <datafield tag="097" ind1="1" ind2="4">
+    <subfield code="a">PZ7.L5215</subfield>
+    <subfield code="b">Wi 2004</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+    <subfield code="a">Le Guin, Ursula K.,</subfield>
+    <subfield code="d">1929-2018.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="2">
+    <subfield code="a">A wizard of Earthsea /</subfield>
+    <subfield code="c">Ursula K. Le Guin ; illustrated by Ruth Robbins.</subfield>
+  </datafield>
+  <datafield tag="250" ind1=" " ind2=" ">
+    <subfield code="a">Bantam trade pbk. ed.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">New York :</subfield>
+    <subfield code="b">Bantam Books,</subfield>
+    <subfield code="c">2004, c1968.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">182 p. :</subfield>
+    <subfield code="b">ill., maps ;</subfield>
+    <subfield code="c">21 cm.</subfield>
+  </datafield>
+  <datafield tag="440" ind1=" " ind2="0">
+    <subfield code="a">Earthsea ;</subfield>
+    <subfield code="v">bk. 1</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Fantasy.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Science fiction.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Magic</subfield>
+    <subfield code="v">Fiction.</subfield>
+  </datafield>
+  <datafield tag="700" ind1="1" ind2=" ">
+    <subfield code="a">Robbins, Ruth,</subfield>
+    <subfield code="e">ill.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="2">
+    <subfield code="3">Contributor biographical information</subfield>
+    <subfield code="u">http://www.loc.gov/catdir/enhancements/fy0702/2004558962-b.html</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="2">
+    <subfield code="3">Publisher description</subfield>
+    <subfield code="u">http://www.loc.gov/catdir/enhancements/fy0702/2004558962-d.html</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="3">Sample text</subfield>
+    <subfield code="u">http://www.loc.gov/catdir/enhancements/fy0702/2004558962-s.html</subfield>
+  </datafield>
+  <datafield tag="985" ind1=" " ind2=" ">
+    <subfield code="e">Reorg P</subfield>
+  </datafield>
+</record>

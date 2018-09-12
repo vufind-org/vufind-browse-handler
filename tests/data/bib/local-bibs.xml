@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Sample test bibliographic records
+    Convert to MARC binary with something like:
+    yaz-marcdump -i marcxml -o marc local-bibs.xml > local-bibs.mrc
+-->
+<collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.loc.gov/MARC21/slim">
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vf0001</controlfield>
+        <controlfield tag="005">20180831</controlfield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Triggs, Mark</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">Anthology of test records</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">A test record for browses</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vf0002</controlfield>
+        <controlfield tag="005">20180831</controlfield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Olson, Tod</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="3">
+            <subfield code="a">An unauthorized anthology of test records</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">A test record for browses</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">20180831</controlfield>
+        <controlfield tag="005">20180104</controlfield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Katz, Demian</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="2">
+            <subfield code="a">A critical anthology of test records</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">A test record for browses</subfield>
+        </datafield>
+    </record>
+</collection>

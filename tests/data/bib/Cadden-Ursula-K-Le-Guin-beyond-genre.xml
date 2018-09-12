@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><record xmlns="http://www.loc.gov/MARC21/slim" xmlns:cinclude="http://apache.org/cocoon/include/1.0" xmlns:zs="http://www.loc.gov/zing/srw/">
+  <leader>01982cam a2200349 a 4500</leader>
+  <controlfield tag="001">13633335</controlfield>
+  <controlfield tag="005">20180212085719.0</controlfield>
+  <controlfield tag="008">040622s2005    nyu      b    001 0 eng  </controlfield>
+  <datafield tag="906" ind1=" " ind2=" ">
+    <subfield code="a">7</subfield>
+    <subfield code="b">cbc</subfield>
+    <subfield code="c">orignew</subfield>
+    <subfield code="d">1</subfield>
+    <subfield code="e">ecip</subfield>
+    <subfield code="f">20</subfield>
+    <subfield code="g">y-gencatlg</subfield>
+  </datafield>
+  <datafield tag="925" ind1="0" ind2=" ">
+    <subfield code="a">acquire</subfield>
+    <subfield code="b">1 shelf copy</subfield>
+    <subfield code="x">policy default</subfield>
+  </datafield>
+  <datafield tag="925" ind1="1" ind2=" ">
+    <subfield code="a">acquire</subfield>
+    <subfield code="b">2 shelf copies</subfield>
+    <subfield code="x">policy default</subfield>
+  </datafield>
+  <datafield tag="955" ind1=" " ind2=" ">
+    <subfield code="a">lh08 2004-06-22</subfield>
+    <subfield code="c">lh08 2004-06-22 to subj.</subfield>
+    <subfield code="d">lh06 2004-06-23</subfield>
+    <subfield code="e">lk53 2004-06-24 to Dewey;</subfield>
+    <subfield code="a">aa11 2004-06-24</subfield>
+    <subfield code="a">ps07 2005-04-29 1 copy rec'd., to CIP ver.</subfield>
+    <subfield code="f">lh46 2005-08-05</subfield>
+    <subfield code="g">lh46 2005-08-05; to BCCD</subfield>
+    <subfield code="a">lk53 2006-06-19 copy 2 added</subfield>
+  </datafield>
+  <datafield tag="010" ind1=" " ind2=" ">
+    <subfield code="a">  2004014416</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">0415972183 (alk. paper)</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="a">DLC</subfield>
+    <subfield code="c">DLC</subfield>
+    <subfield code="d">DLC</subfield>
+  </datafield>
+  <datafield tag="043" ind1=" " ind2=" ">
+    <subfield code="a">n-us---</subfield>
+  </datafield>
+  <datafield tag="050" ind1="0" ind2="0">
+    <subfield code="a">PS3562.E42</subfield>
+    <subfield code="b">Z615 2004</subfield>
+  </datafield>
+  <datafield tag="082" ind1="0" ind2="0">
+    <subfield code="a">813/.54</subfield>
+    <subfield code="2">22</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2=" ">
+    <subfield code="a">Cadden, Michael.</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+    <subfield code="a">Ursula K. Le Guin beyond genre :</subfield>
+    <subfield code="b">fiction for children and adults /</subfield>
+    <subfield code="c">Mike Cadden.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">New York :</subfield>
+    <subfield code="b">Routledge,</subfield>
+    <subfield code="c">2005.</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">xvi, 203 p. ;</subfield>
+    <subfield code="c">24 cm.</subfield>
+  </datafield>
+  <datafield tag="490" ind1="1" ind2=" ">
+    <subfield code="a">Children's literature and culture ;</subfield>
+    <subfield code="v">v. 33</subfield>
+  </datafield>
+  <datafield tag="504" ind1=" " ind2=" ">
+    <subfield code="a">Includes bibliographical references (p. 188-196) and index.</subfield>
+  </datafield>
+  <datafield tag="505" ind1="0" ind2=" ">
+    <subfield code="a">Le Guin's continuum of anthropomorphism -- Connecting characters on the continuum of viewpoint -- Home as travel through time and place -- Earthsea : crossover series of multiple continua -- Always coming home : childhood, children's stories, and the child reader -- Ethics and the continuum of hope : genre and audience -- An interview with Ursula K. Le Guin.</subfield>
+  </datafield>
+  <datafield tag="600" ind1="1" ind2="0">
+    <subfield code="a">Le Guin, Ursula K.,</subfield>
+    <subfield code="d">1929-2018</subfield>
+    <subfield code="x">Criticism and interpretation.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Children's stories, American</subfield>
+    <subfield code="x">History and criticism.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Science fiction, American</subfield>
+    <subfield code="x">History and criticism.</subfield>
+  </datafield>
+  <datafield tag="650" ind1=" " ind2="0">
+    <subfield code="a">Fantasy fiction, American</subfield>
+    <subfield code="x">History and criticism.</subfield>
+  </datafield>
+  <datafield tag="830" ind1=" " ind2="0">
+    <subfield code="a">Children's literature and culture ;</subfield>
+    <subfield code="v">33.</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="1">
+    <subfield code="3">Table of contents only</subfield>
+    <subfield code="u">http://www.loc.gov/catdir/toc/ecip0419/2004014416.html</subfield>
+  </datafield>
+  <datafield tag="856" ind1="4" ind2="2">
+    <subfield code="3">Publisher description</subfield>
+    <subfield code="u">http://www.loc.gov/catdir/enhancements/fy0647/2004014416-d.html</subfield>
+  </datafield>
+</record>
