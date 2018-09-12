@@ -132,7 +132,7 @@
          ================================= -->
     <!-- Currently working only for UNIX flavors -->
     <target name="setup-test-cores"
-    description="Set up test Solr cores with some known test data">
+         description="Set up test Solr cores with some known test data">
       <exec executable="${vufind.dir}/solr.sh">
         <env key="VUFIND_HOME" value="${vufind.dir}"/>
         <arg value="start"/>
