@@ -76,6 +76,7 @@
     <javac debug="on" srcdir="browse-handler/java" destdir="${builddir}/browse-handler">
       <classpath refid="classpath"/>
       <compilerarg value="-Xlint"/>
+      <compilerarg value="-Xlint:unchecked"/>
       <!-- sometimes useful for library or refective programming failures -->
       <!-- <compilerarg value="-Xdiags:verbose"/> -->
     </javac>
@@ -172,7 +173,7 @@
       </exec>
     </target>
 
-    <target name="test" depends="build">
+    <target name="test" depends="build, setup-test-cores">
       <mkdir dir="${testdir}"/>
       <mkdir dir="${testoutputdir}"/>
       <mkdir dir="${testdir}/report"/>
