@@ -123,7 +123,7 @@ class HeadingsDB
     {
         try {
             this.path = path;
-            normalizer = NormalizerFactory.getNormalizer ();
+            normalizer = NormalizerFactory.getNormalizer();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -223,8 +223,8 @@ class HeadingsDB
 
 
     public synchronized HeadingSlice getHeadings(int rowid,
-                                                 int rows)
-        throws Exception
+            int rows)
+    throws Exception
     {
         HeadingSlice result = new HeadingSlice();
 
@@ -433,12 +433,12 @@ class BibDB
     {
         TermQuery q = new TermQuery(new Term(field, heading));
 
-	// bibinfo values are List<Collection> because some extra fields 
-	// may be multi-valued.
-	// Note: it may be time for bibinfo to become a class...
+        // bibinfo values are List<Collection> because some extra fields
+        // may be multi-valued.
+        // Note: it may be time for bibinfo to become a class...
         final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
-        bibinfo.put ("ids", new ArrayList<Collection<String>> ());
-        final String[] bibExtras = extras.split (":");
+        bibinfo.put("ids", new ArrayList<Collection<String>> ());
+        final String[] bibExtras = extras.split(":");
         for (String bibField : bibExtras) {
             bibinfo.put(bibField, new ArrayList<Collection<String>> ());
         }
@@ -665,9 +665,10 @@ class BrowseSource
 
     // Get a HeadingsDB instance.  Caller is expected to call `queryFinished` on
     // this when done with the instance.
-    public synchronized HeadingsDB getHeadingsDB() {
+    public synchronized HeadingsDB getHeadingsDB()
+    {
         if (headingsDB == null) {
-            headingsDB = new HeadingsDB (this.DBpath, this.normalizer);
+            headingsDB = new HeadingsDB(this.DBpath, this.normalizer);
         }
 
         // If no queries are running, it's a safepoint to reopen the browse index.
@@ -681,106 +682,12 @@ class BrowseSource
         return headingsDB;
     }
 
-    public synchronized void returnHeadingsDB(HeadingsDB headingsDB) {
+    public synchronized void returnHeadingsDB(HeadingsDB headingsDB)
+    {
         loanCount -= 1;
     }
 }
 
-
-class MatchTypeResponse
-{
-    private String from;
-    private BrowseList results;
-    private int rows, offset, rowid;
-    private Normalizer normalizer;
-
-    public MatchTypeResponse(String from, BrowseList results, int rowid, int rows, int offset, Normalizer normalizer)
-    {
-        this.from = from;
-        this.results = results;
-        this.rows = rows;
-        this.rowid = rowid;
-        this.offset = offset;
-        this.normalizer = normalizer;
-    }
-
-
-    public enum MatchType {
-        EXACT,
-        HEAD_OF_STRING,
-        NONE
-    };
-
-
-    private MatchType calculateMatchType(String heading, String query)
-    {
-        byte[] normalizedQuery = normalizer.normalize(query);
-        byte[] normalizedHeading = normalizer.normalize(heading);
-
-        if (Arrays.equals(normalizedQuery, normalizedHeading)) {
-            return MatchType.EXACT;
-        }
-
-        if (heading.length() > 0) {
-            for (int i = 1; i < heading.length(); i++) {
-                byte[] normalizedHeadingPrefix = normalizer.normalize(heading.substring(0, i));
-                if (Arrays.equals(normalizedQuery, normalizedHeadingPrefix)) {
-                    return MatchType.HEAD_OF_STRING;
-                }
-            }
-        }
-
-        return MatchType.NONE;
-    }
-
-
-    public void addTo(Map<String,Object> solrResponse)
-    {
-
-        // Assume no match
-        solrResponse.put("matchType", MatchType.NONE.toString());
-
-        if (rows == 0) {
-            return;
-        }
-
-        int adjustedOffset = offset;
-
-        if ((rowid + offset) < 1) {
-            // Our (negative) offset points before the beginning of the browse
-            // list.  Set it to point to the beginning of the browse list.
-            int distanceToStartOfBrowseList = rowid - 1;
-            adjustedOffset = Math.max(adjustedOffset, -distanceToStartOfBrowseList);
-        }
-
-        if (from == null || "".equals(from)) {
-            return;
-        }
-
-        if (adjustedOffset < 0 && (adjustedOffset + rows) <= 0) {
-            // We're on a page before our matched heading
-            return;
-        }
-
-        if (adjustedOffset > 0) {
-            // We're on a page after our matched heading
-            return;
-        }
-
-        if (results.items.isEmpty()) {
-            // No results
-            return;
-        }
-
-        int matched_item_index = Math.min(Math.abs(adjustedOffset),
-                                          results.items.size() - 1);
-
-
-        BrowseItem matched_item = results.items.get(matched_item_index);
-        String matched_heading = matched_item.sort_key;
-        solrResponse.put("matchType", calculateMatchType(matched_heading, from).toString());
-    }
-}
 
 
 /**
@@ -842,6 +749,15 @@ public class BrowseRequestHandler extends RequestHandlerBase
             return 0;
         }
     }
+
+    /*
+     *  TODO: Research question:
+     *  Convert result from HashMap to either
+     *  org.apache.solr.common.util.NamedList or
+     *  org.apache.solr.common.util.SimpleOrderedMap?
+     *  Same question for BrowseList and other resturned object.
+     *  Is it work porting to the Solr classes used for results?
+     */
 
 
     @Override
