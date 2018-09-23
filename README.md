@@ -155,3 +155,8 @@ simple:
 Running the unit tests:
 
     ant test -Dvufind.dir=/usr/local/vufind
+
+Coding style is One True Brace style. In astyle:
+
+    astyle --mode=java --style=1tbs -U -H -I -R 'browse-handler/*' 'browse-indexing/*' 'common/*' 'tests/org/*'
+
