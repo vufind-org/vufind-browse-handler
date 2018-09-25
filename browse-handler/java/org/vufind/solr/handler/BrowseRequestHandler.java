@@ -752,11 +752,14 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
     /*
      *  TODO: Research question:
-     *  Convert result from HashMap to either
+     *  Should we convert result from HashMap to Solr util classes
      *  org.apache.solr.common.util.NamedList or
      *  org.apache.solr.common.util.SimpleOrderedMap?
-     *  Same question for BrowseList and other resturned object.
-     *  Is it work porting to the Solr classes used for results?
+     *  Same question for BrowseList and other returned object.
+     *  
+     *  Is it worth porting to the Solr classes used for results?
+     *  The javadoc for NamedList says it gives better access by index while
+     *  preserving the order of elements, not so for HashMap.
      */
 
 
