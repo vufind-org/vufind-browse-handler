@@ -8,7 +8,8 @@
   <property name="authdata.dir" value="${testdata.dir}/auth"/>
   <property name="bibdata.dir" value="${testdata.dir}/bib"/>
   <property name="vufind.dir" value="/usr/local/vufind"/>
-  <property name="solr.solr.home" value="${vufind.dir}/solr/vufind"/>
+  <property name="absolute.vufind.dir" location="${vufind.dir}"/>
+  <property name="solr.solr.home" value="${absolute.vufind.dir}/solr/vufind"/>
   <property name="java.compat.version" value="1.8"/>
   <property name="ant.build.javac.source" value="1.8"/>
   <property name="ant.build.javac.target" value="1.8"/>
@@ -21,17 +22,17 @@
     <fileset dir="libs">
       <include name="**/*.jar"/>
     </fileset>
-    <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/contrib/analysis-extras">
+    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/contrib/analysis-extras">
       <include name="**/*.jar"/>
     </fileset>
-    <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/dist">
+    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/dist">
       <include name="**/*.jar"/>
     </fileset>
-    <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/server/solr-webapp/webapp/WEB-INF/lib">
+    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/server/solr-webapp/webapp/WEB-INF/lib">
       <include name="**/*.jar"/>
     </fileset>
     <!-- Needed for building tests that invoke Solr -->
-    <fileset erroronmissingdir="false" dir="${vufind.dir}/solr/vendor/server/lib">
+    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/server/lib">
       <include name="**/*.jar"/>
     </fileset>
   </path>
@@ -44,12 +45,12 @@
   </target>
 
   <target name="setup-solr-deps">
-    <available file="${vufind.dir}/solr/jetty/webapps/solr.war" property="solr.war.present"/>
+    <available file="${absolute.vufind.dir}/solr/jetty/webapps/solr.war" property="solr.war.present"/>
     <antcall target="unpack-solr-war"/>
   </target>
 
   <target name="unpack-solr-war" if="solr.war.present">
-    <unwar src="${vufind.dir}/solr/jetty/webapps/solr.war" dest="${builddir}/deps/"/>
+    <unwar src="${absolute.vufind.dir}/solr/jetty/webapps/solr.war" dest="${builddir}/deps/"/>
   </target>
 
   <target name="build" depends="clean, setup, build-common, build-handler, build-indexing">
@@ -134,13 +135,13 @@
     <!-- Currently working only for UNIX flavors -->
     <target name="setup-test-cores"
          description="Set up test Solr cores with some known test data">
-      <exec executable="${vufind.dir}/solr.sh">
-        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+      <exec executable="${absolute.vufind.dir}/solr.sh">
+        <env key="VUFIND_HOME" value="${absolute.vufind.dir}"/>
         <arg value="start"/>
       </exec>
-      <!-- Alternately, could exec ${vufind.dir}/harvest/batch-import-marc-auth.sh -->
-      <apply executable="${vufind.dir}/import-marc-auth.sh">
-        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+      <!-- Alternately, could exec ${absolute.vufind.dir}/harvest/batch-import-marc-auth.sh -->
+      <apply executable="${absolute.vufind.dir}/import-marc-auth.sh">
+        <env key="VUFIND_HOME" value="${absolute.vufind.dir}"/>
         <fileset dir="${authdata.dir}">
           <include name="**/*.xml"/>
         </fileset>
@@ -149,26 +150,26 @@
             test data, but they are missing the expected id fields.
           -->
         <!--
-        <fileset dir="${vufind.dir}/tests/data/authority">
+        <fileset dir="${absolute.vufind.dir}/tests/data/authority">
           <include name="**/*.mrc"/>
         </fileset>
         -->
       </apply>
-      <apply executable="${vufind.dir}/import-marc.sh">
-        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+      <apply executable="${absolute.vufind.dir}/import-marc.sh">
+        <env key="VUFIND_HOME" value="${absolute.vufind.dir}"/>
         <fileset dir="${bibdata.dir}">
           <include name="**/*.xml"/>
         </fileset>
-        <fileset dir="${vufind.dir}/tests/data">
+        <fileset dir="${absolute.vufind.dir}/tests/data">
           <include name="**/*.mrc"/>
         </fileset>
       </apply>
-      <exec executable="${vufind.dir}/index-alphabetic-browse.sh">
-        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+      <exec executable="${absolute.vufind.dir}/index-alphabetic-browse.sh">
+        <env key="VUFIND_HOME" value="${absolute.vufind.dir}"/>
       </exec>
       <!-- Stop Solr so that cores unlock and unit tests can access directly -->
-      <exec executable="${vufind.dir}/solr.sh">
-        <env key="VUFIND_HOME" value="${vufind.dir}"/>
+      <exec executable="${absolute.vufind.dir}/solr.sh">
+        <env key="VUFIND_HOME" value="${absolute.vufind.dir}"/>
         <arg value="stop"/>
       </exec>
     </target>
@@ -183,7 +184,7 @@
       </javac>
 
       <junit showoutput="yes" fork="true">
-        <sysproperty key="vufind.dir" value="${vufind.dir}" />
+        <sysproperty key="absolute.vufind.dir" value="${absolute.vufind.dir}" />
         <sysproperty key="solr.solr.home" value="${solr.solr.home}" />
         <jvmarg value="-Dfile.encoding=UTF-8" />
         <classpath>
