@@ -4,6 +4,15 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.common.params.SolrParams;
 
+/**
+ * Client class for sending queries to {@link BrowseRequestHandler}.
+ *
+ * This is a SolrJ class for ease of querying the BrowseRequestHandler.
+ * Currently used only for testing, but possibly of more general use.
+ *
+ * @author tod
+ *
+ */
 public class BrowseRequest extends SolrRequest<BrowseResponse>
 {
 
