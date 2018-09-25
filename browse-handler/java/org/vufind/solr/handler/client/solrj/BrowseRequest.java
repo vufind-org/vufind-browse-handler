@@ -44,10 +44,4 @@ public class BrowseRequest extends SolrRequest<BrowseResponse>
         return new BrowseResponse(client);
     }
 
-    public static void main(String[] args)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
 }
