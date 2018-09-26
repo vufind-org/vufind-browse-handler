@@ -186,4 +186,38 @@ public class BrowseHandlerTest
         }
     }
 
+    @Test
+    public void testBrowseHandler_ExactMatch()
+    {
+        ModifiableSolrParams params = new ModifiableSolrParams();
+        params.add("source", "author").add("from","Triggs, Mark").add("rows","1");
+        try {
+            BrowseRequest req = new BrowseRequest(params);
+            BrowseResponse res = req.process(bibClient);
+            NamedList<Object> response = res.getResponse();
+            logger.info("Response: " + response.toString());
+            assertEquals(res.getMatchType(), MatchType.EXACT.toString());
+        } catch (SolrServerException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testBrowseHandler_NoMatch()
+    {
+        ModifiableSolrParams params = new ModifiableSolrParams();
+        params.add("source", "title").add("from","AAZZXX").add("rows","1");
+        try {
+            BrowseRequest req = new BrowseRequest(params);
+            BrowseResponse res = req.process(bibClient);
+            NamedList<Object> response = res.getResponse();
+            logger.info("Response: " + response.toString());
+            assertEquals(res.getMatchType(), MatchType.NONE.toString());
+        } catch (SolrServerException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 }
