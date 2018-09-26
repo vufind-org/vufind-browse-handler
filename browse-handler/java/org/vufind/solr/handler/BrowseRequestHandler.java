@@ -689,7 +689,9 @@ class BrowseSource
 }
 
 
-
+/*
+ * TODO: Update JavaDoc to document browse query parameters.
+ */
 /**
  * Handles the browse request: looks up the heading, consults the biblio core number of hits
  * and the authority core for cross references.
@@ -788,10 +790,16 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
         int offset = (p.get("offset") != null) ? asInt(p.get("offset")) : 0;
 
+        /*
+         * TODO: invalid row parameter should return a 400 error
+         */
         if (rows < 0) {
             throw new Exception("Invalid value for parameter: rows");
         }
-
+        
+        /*
+         * TODO: invalid or missing source parameter should return a 400 error
+         */
         if (sourceName == null || !sources.containsKey(sourceName)) {
             throw new Exception("Need a (valid) source parameter.");
         }
