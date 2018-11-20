@@ -741,8 +741,8 @@ public class BrowseRequestHandler extends RequestHandlerBase
         //       extras first, and how transition will work.
         if (fields == null) {
             String extras = p.get("extras");
-            fields = extras != null || extras.length() == 0 ?
-                    ("ids:" + extras) : "ids";
+            fields = extras == null || extras.length() == 0 ?
+                    "ids" : ("ids:" + extras);
         }
 
 
