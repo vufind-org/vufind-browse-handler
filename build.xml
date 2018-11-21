@@ -37,7 +37,8 @@
     </fileset>
   </path>
   <!-- Can be useful for debugging -->
-  <pathconvert property="classpathProp" refid="classpath"/>
+  <!-- Must comment out before pushing, as CI environment will not have run setup before all paths are referenced -->
+  <!-- <pathconvert property="classpathProp" refid="classpath"/> -->
 
   <target name="setup">
     <mkdir dir="${builddir}"/>
