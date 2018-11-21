@@ -26,6 +26,35 @@ public class BrowseResponse extends SolrResponseBase
 
     // utility variable used for automatic binding -- it should not be serialized
     private transient final SolrClient solrClient;
+
+    /**
+     * Casts an object to a NamedList of Strings.
+     *
+     * The only reason this method exists is to isolate the SupressWarnings decoration.
+     *
+     * @param o
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    static protected NamedList<String> castToNamedListOfString(Object o)
+    {
+        return (NamedList<String>) o;
+    }
+
+    /**
+     * Casts an object to a Map of String, Object.
+     *
+     * The only reason this method exists is to isolate the SupressWarnings decoration.
+     *
+     * @param o
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    static protected Map<String,Object> castToMapOfStringObject(Object o)
+    {
+        return (Map<String,Object>) o;
+    }
+
     /**
      * Utility constructor to set the solrServer and namedList
      */
@@ -49,9 +78,9 @@ public class BrowseResponse extends SolrResponseBase
         for (int i=0; i<res.size(); i++) {
             String n = res.getName(i);
             if ("responseHeader".equals(n)) {
-                _header = (NamedList<String>) res.getVal(i);
+                _header = castToNamedListOfString(res.getVal(i));
             } else if ("Browse".equals(n)) {
-                _browse = (Map<String,Object>) res.getVal(i);
+                _browse = castToMapOfStringObject(res.getVal(i));
             }
         }
         _matchType = (String) _browse.get("matchType");
