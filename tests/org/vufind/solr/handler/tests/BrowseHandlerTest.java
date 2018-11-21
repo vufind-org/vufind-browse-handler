@@ -120,7 +120,6 @@ public class BrowseHandlerTest
     /**
      * Test the search component here or just trigger it to debug
      */
-    @Ignore
     @Test
     public void testBrowseHandler()
     {
@@ -137,19 +136,27 @@ public class BrowseHandlerTest
         /* Example param string:
          * json.nl=arrarr&offset=0&extras=author:format:publishDate&from=abu+nazzarah&source=title&rows=60&wt=json
          */
-        //SolrRequestHandler browseHandler = bibCore.getRequestHandler(browseHandlerName);
-        SolrQueryResponse response = new SolrQueryResponse();
-        NamedList params = new NamedList();
-        params.add("json.nl", "arrarr");
-        params.add("wt","json");
-        params.add("offset","0");
-        params.add("rows","5");
-        params.add("source","title");
-        params.add("from","a");
-        params.add("extras","author:format:publishDate");
+        NamedList<String> paramList = new NamedList<String>();
+        paramList.add("json.nl", "arrarr");
+        paramList.add("wt","json");
+        paramList.add("offset","0");
+        paramList.add("rows","5");
+        paramList.add("source","title");
+        paramList.add("from","a");
+        paramList.add("extras","author:format:publishDate");
+        SolrParams params = SolrParams.toSolrParams(paramList);
 
         /* RUN */
         // do something with your search component
+        try {
+            BrowseRequest req = new BrowseRequest(params);
+            BrowseResponse res = req.process(bibClient);
+            NamedList<Object> response = res.getResponse();
+            logger.info("Response: " + response.toString());
+        } catch (SolrServerException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 /*        try (LocalSolrQueryRequest request =
                         new LocalSolrQueryRequest(bibCore,params);
                     PrintWriter outWriter = new PrintWriter(System.out)
