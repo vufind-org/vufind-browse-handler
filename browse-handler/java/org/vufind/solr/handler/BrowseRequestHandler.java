@@ -417,7 +417,7 @@ class BibDB
 
     /**
      *
-     * Function to retireve the doc ids when there is a building limit
+     * Function to retrieve the doc ids when there is a building limit
      * This retrieves the doc ids for an individual heading
      *
      * Need to add a filter query to limit the results from Solr
@@ -428,7 +428,7 @@ class BibDB
      * @param heading        string of the heading to use for finding matching
      * @param fields         docs colon-separated string of Solr fields
      *                       to return for use in the browse display
-     * @param retrieveBibId  do or do not retrive bib IDs that match the heading
+     * @param retrieveBibId  do or do not retrieve bib IDs that match the heading
      * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
      */
@@ -620,7 +620,7 @@ class BrowseSource
             headingsDB = new HeadingsDB(this.DBpath, this.normalizer);
         }
 
-        // If no queries are running, it's a safepoint to reopen the browse index.
+        // If no queries are running, it's a safe point to reopen the browse index.
         if (loanCount <= 0) {
             headingsDB.reopenIfUpdated();
             loanCount = 0;
