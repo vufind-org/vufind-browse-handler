@@ -428,13 +428,11 @@ class BibDB
      * @param heading        string of the heading to use for finding matching
      * @param fields         docs colon-separated string of Solr fields
      *                       to return for use in the browse display
-     * @param retrieveBibId  do or do not retrieve bib IDs that match the heading
      * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
      */
     public Map<String, List<Collection<String>>> matchingIDs(String heading, 
                                                              String fields,
-                                                             boolean retrieveBibId,
                                                              int maxBibListSize)
     throws Exception
     {
@@ -447,7 +445,6 @@ class BibDB
         // Forcing "ids" into list of bib fields is a transition to requiring
         // that "ids" be listed explicitly in the extras string
         final String[] bibFieldList = fields.split(":");
-        final boolean getBibIds = retrieveBibId;
         for (String bibField : bibFieldList) {
             bibinfo.put(bibField, new ArrayList<Collection<String>> ());
         }
@@ -507,7 +504,6 @@ class Browse
     private HeadingsDB headingsDB;
     private AuthDB authDB;
     private BibDB bibDB;
-    private boolean retrieveBibId;
     private int maxBibListSize;
 
     public Browse(HeadingsDB headings, BibDB bibdb, AuthDB auth, boolean retrieveBibId, int maxBibListSize)
@@ -515,7 +511,6 @@ class Browse
         this.headingsDB = headings;
         this.authDB = auth;
         this.bibDB = bibdb;
-        this.retrieveBibId = retrieveBibId;
         this.maxBibListSize = maxBibListSize;
     }
 
@@ -523,7 +518,7 @@ class Browse
     {
         if (this.maxBibListSize != 0) { //TODO: implement full maxBibListSize semantics
             Map<String, List<Collection<String>>> bibinfo = 
-                    bibDB.matchingIDs(item.heading, fields, retrieveBibId, maxBibListSize);
+                    bibDB.matchingIDs(item.heading, fields, maxBibListSize);
             //item.ids = bibinfo.get ("ids");
             item.setIds(bibinfo.get("ids"));
             bibinfo.remove("ids");
