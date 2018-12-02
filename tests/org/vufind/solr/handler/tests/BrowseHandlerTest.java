@@ -9,17 +9,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.System;
 import java.util.logging.Logger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -27,13 +20,6 @@ import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.CoreContainer;
 import org.apache.solr.core.SolrCore;
-import org.apache.solr.handler.component.SearchComponent;
-import org.apache.solr.request.LocalSolrQueryRequest;
-import org.apache.solr.request.SolrQueryRequest;
-import org.apache.solr.request.SolrRequestHandler;
-import org.apache.solr.response.QueryResponseWriter;
-import org.apache.solr.response.SolrQueryResponse;
-import org.apache.solr.response.XMLResponseWriter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -124,6 +110,7 @@ public class BrowseHandlerTest
     public void testBrowseHandler()
     {
         /* EXPLORE */
+        /*
         org.apache.solr.core.PluginBag<SolrRequestHandler> handlerBag = bibCore.getRequestHandlers();
         Map<String,org.apache.solr.core.PluginBag.PluginHolder<SolrRequestHandler>> registry = handlerBag.getRegistry();
         Set<String> keys = registry.keySet();
@@ -131,6 +118,7 @@ public class BrowseHandlerTest
         for (String k : keys) {
             logger.info("key: " + k);
         }
+        */
 
         /* PREPARE */
         /* Example param string:
@@ -157,21 +145,7 @@ public class BrowseHandlerTest
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-/*        try (LocalSolrQueryRequest request =
-                        new LocalSolrQueryRequest(bibCore,params);
-                    PrintWriter outWriter = new PrintWriter(System.out)
-                ) {
-            browseHandler.handleRequest(request,response);
-            QueryResponseWriter responseWriter = bibCore.getQueryResponseWriter(request);
-            try {
-                outWriter.write("Request response:\n");
-                responseWriter.write(outWriter, request, response);
-            } catch (java.io.IOException e) {
-                logger.info("ERROR writing response: Cause: " + e.getCause() +
-                            "; Message:" + e.getMessage());
-            }
-        }
-*/
+
         /* CHECK */
         // check results with asserts :)
     }

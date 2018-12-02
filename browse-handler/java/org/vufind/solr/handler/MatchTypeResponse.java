@@ -2,6 +2,7 @@ package org.vufind.solr.handler;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.vufind.solr.handler.MatchTypeResponse.MatchType;
 import org.vufind.util.Normalizer;
@@ -96,7 +97,7 @@ public class MatchTypeResponse
 
 
         BrowseItem matched_item = results.items.get(matched_item_index);
-        String matched_heading = matched_item.sort_key;
+        String matched_heading = matched_item.getSortKey();
         solrResponse.put("matchType", calculateMatchType(matched_heading, from).toString());
     }
 }

@@ -518,31 +518,37 @@ class Browse
     {
         if (this.maxBibListSize != 0) { //TODO: implement full maxBibListSize semantics
             Map<String, List<Collection<String>>> bibinfo = 
-                    bibDB.matchingIDs(item.heading, fields, maxBibListSize);
+                    bibDB.matchingIDs(item.getHeading(), fields, maxBibListSize);
             //item.ids = bibinfo.get ("ids");
             item.setIds(bibinfo.get("ids"));
             bibinfo.remove("ids");
-            item.count = item.ids.size();
+            //item.count = item.ids.size();
+            item.setCount(item.getIds().size());
     
-            item.fields = bibinfo;
+            //item.fields = bibinfo;
+            item.setFields(bibinfo);
         }
 
-        Map<String, List<String>> authFields = authDB.getFields(item.heading);
+        Map<String, List<String>> authFields = authDB.getFields(item.getHeading());
 
+        List<String> seeAlsoList = new ArrayList<String>();
         for (String value : authFields.get("seeAlso")) {
             if (bibDB.recordCount(value) > 0) {
-                item.seeAlso.add(value);
+                seeAlsoList.add(value);
             }
         }
+        item.setSeeAlso(seeAlsoList);
 
+        List<String> useInsteadList = new ArrayList<String>();
         for (String value : authFields.get("useInstead")) {
             if (bibDB.recordCount(value) > 0) {
-                item.useInstead.add(value);
+                useInsteadList.add(value);
             }
         }
+        item.setUseInstead(useInsteadList);
 
         for (String value : authFields.get("note")) {
-            item.note = value;
+            item.setNote(value);
         }
     }
 
