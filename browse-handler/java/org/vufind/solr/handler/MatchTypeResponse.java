@@ -87,16 +87,16 @@ public class MatchTypeResponse
             return;
         }
 
-        if (results.items.isEmpty()) {
+        if (results.isEmpty()) {
             // No results
             return;
         }
 
         int matched_item_index = Math.min(Math.abs(adjustedOffset),
-                                          results.items.size() - 1);
+                                          results.size() - 1);
 
 
-        BrowseItem matched_item = results.items.get(matched_item_index);
+        BrowseItem matched_item = results.get(matched_item_index);
         String matched_heading = matched_item.getSortKey();
         solrResponse.put("matchType", calculateMatchType(matched_heading, from).toString());
     }

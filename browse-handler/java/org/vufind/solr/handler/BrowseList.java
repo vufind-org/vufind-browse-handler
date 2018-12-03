@@ -3,16 +3,19 @@ package org.vufind.solr.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseList
+public class BrowseList extends ArrayList<BrowseItem>
 {
     public int totalCount;
-    public List<BrowseItem> items = new ArrayList<> ();
+    // public List<BrowseItem> items = new ArrayList<> ();
 
+    /*
     public List<BrowseItem> asMap() {
         return this.items;
     }
+    */
 
     // Hopefully this is temporary and can make BrowseList extend something sensible
+    /*
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -27,4 +30,5 @@ public class BrowseList
 
         return sb.toString();
       }
+      */
 }

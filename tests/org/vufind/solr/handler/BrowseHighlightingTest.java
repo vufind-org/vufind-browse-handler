@@ -137,9 +137,9 @@ public class BrowseHighlightingTest
     }
 
 
-    private List<BrowseItem> fakeBrowseItems(String[] headings)
+    private BrowseList fakeBrowseItems(String[] headings)
     {
-        List<BrowseItem> result = new ArrayList<BrowseItem>();
+        BrowseList result = new BrowseList();
 
         for (String heading : headings) {
             result.add(new BrowseItem(heading, heading));
@@ -152,7 +152,7 @@ public class BrowseHighlightingTest
     private BrowseList fakeBrowseResults(String ... headings)
     {
         BrowseList result = new BrowseList();
-        result.items = fakeBrowseItems(headings);
+        result = fakeBrowseItems(headings);
         return result;
     }
 

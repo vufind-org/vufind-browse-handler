@@ -577,7 +577,7 @@ class Browse
 
             populateItem(item, fields);
 
-            result.items.add(item);
+            result.add(item);
         }
 
         return result;
@@ -810,7 +810,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
             Map<String,Object> result = new HashMap<>();
 
             result.put("totalCount", list.totalCount);
-            result.put("items", list.asMap());
+            result.put("items", list);
             result.put("startRow", rowid);
             result.put("offset", offset);
 
