@@ -30,7 +30,7 @@ public class BrowseResponse extends SolrResponseBase
     /**
      * Casts an object to a NamedList of Strings.
      *
-     * The only reason this method exists is to isolate the SupressWarnings decoration.
+     * The only reason this method exists is to isolate the SuppressWarnings decoration.
      *
      * @param o
      * @return
@@ -44,7 +44,7 @@ public class BrowseResponse extends SolrResponseBase
     /**
      * Casts an object to a Map of String, Object.
      *
-     * The only reason this method exists is to isolate the SupressWarnings decoration.
+     * The only reason this method exists is to isolate the SuppressWarnings decoration.
      *
      * @param o
      * @return
