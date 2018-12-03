@@ -198,22 +198,6 @@ public class BrowseItem extends HashMap<String, Object>
         return this.getCount().intValue();
     }
 
-    /**
-     * Put a new key / value pair, admitting only a restricted set of keys.
-     * <p>
-     * Will get rid of this if working entirely thought the set/get
-     * methods looks good.
-     */
-    public Object put(String key, Object value)
-    {
-        if (!(key == "sort_key" || key == "heading" || key == "seeAlso" ||
-                key == "useInstead" || key == "note" || key == "count" ||
-                key == "ids" || key == "fields")) {
-            throw new java.lang.IllegalArgumentException("Illegal key: " + key);
-        }
-        return super.put(key, value);
-    }
-
     // These are helper methods because we're not modeled for Optional
     // TODO: Move these to a utility class for reuse elsewhere
 
