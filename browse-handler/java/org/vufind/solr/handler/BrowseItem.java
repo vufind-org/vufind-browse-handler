@@ -11,7 +11,7 @@ import java.util.Map;
  * Container class for data in a single browse entry.
  * <p>
  * This container class is implemented as a {@code Map}, so we can easily
- * add it to the Solr respone object, and interact with it again as a member
+ * add it to the Solr response object, and interact with it again as a member
  * of the {@link BrowseResponse} object.
  * <p>
  * Only a fixed set of keys are valid, as they must be predictable for the
@@ -19,7 +19,7 @@ import java.util.Map;
  * of values, there are get and set methods for each key/value pair.
  *
  * <table>
- * <caption>Valied keys for BrowseItem</caption>
+ * <caption>Valid keys for BrowseItem</caption>
  * <tr>
  * <th>Key</th>
  * <th>Type</th>
