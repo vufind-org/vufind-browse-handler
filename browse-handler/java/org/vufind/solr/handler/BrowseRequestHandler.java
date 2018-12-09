@@ -27,6 +27,7 @@ import org.apache.solr.core.CoreDescriptor;
 import org.apache.solr.core.SolrCore;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.Integer;
 import java.util.*;
@@ -394,13 +395,19 @@ class BibDB
 
     public BibDB(IndexSearcher searcher, String field) throws Exception
     {
-        db = searcher;
+        this.db = searcher;
         this.field = field;
     }
 
-
+    /**
+     * Returns the number of bib records that match an authority heading.
+     * 
+     * @param heading
+     * @return	number of matching bib records
+     * @throws Exception
+     */
     public int recordCount(String heading)
-    throws Exception
+    throws IOException
     {
         TermQuery q = new TermQuery(new Term(field, heading));
 
@@ -497,8 +504,10 @@ class BibDB
 }
 
 
-
-
+/**
+ * Class that performs the alphabetical browse of an index and produces a {@code BrowseList} object. 
+ *
+ */
 class Browse
 {
     private HeadingsDB headingsDB;
@@ -519,16 +528,13 @@ class Browse
         if (this.maxBibListSize != 0) { //TODO: implement full maxBibListSize semantics
             Map<String, List<Collection<String>>> bibinfo = 
                     bibDB.matchingIDs(item.getHeading(), fields, maxBibListSize);
-            //item.ids = bibinfo.get ("ids");
             item.setIds(bibinfo.get("ids"));
             bibinfo.remove("ids");
-            //item.count = item.ids.size();
-            item.setCount(item.getIds().size());
-    
-            //item.fields = bibinfo;
             item.setFields(bibinfo);
         }
 
+        item.setCount(bibDB.recordCount(item.getHeading()));
+       
         Map<String, List<String>> authFields = authDB.getFields(item.getHeading());
 
         List<String> seeAlsoList = new ArrayList<String>();
