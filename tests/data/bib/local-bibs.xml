@@ -36,7 +36,7 @@
     </record>
     <record>
         <leader>00000cz  a2200000n  4500</leader>
-        <controlfield tag="001">20180831</controlfield>
+        <controlfield tag="001">vf0003</controlfield>
         <controlfield tag="005">20180104</controlfield>
         <datafield tag="100" ind1="1" ind2=" ">
             <subfield code="a">Katz, Demian</subfield>
@@ -46,6 +46,69 @@
         </datafield>
         <datafield tag="500" ind1=" " ind2=" ">
             <subfield code="a">A test record for browses</subfield>
+        </datafield>
+    </record>
+    <!--  -->
+    <!-- Test records for multiple occurrences of a single title -->
+    <!--  -->
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vf0004</controlfield>
+        <controlfield tag="005">20180104</controlfield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Triggs, Mark</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="2">
+            <subfield code="a">A common title</subfield>
+        </datafield>
+        <datafield tag="250" ind1=" " ind2=" ">
+            <subfield code="a">First edition</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">A test record for browses</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Test data for multiple records with the same title</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vf0005</controlfield>
+        <controlfield tag="005">20180104</controlfield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Katz, Demian</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="2">
+            <subfield code="a">A common title</subfield>
+        </datafield>
+        <datafield tag="250" ind1=" " ind2=" ">
+            <subfield code="a">Second edition</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">A test record for browses</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Test data for multiple records with the same title</subfield>
+        </datafield>
+    </record>
+    <record>
+        <leader>00000cz  a2200000n  4500</leader>
+        <controlfield tag="001">vf0006</controlfield>
+        <controlfield tag="005">20180104</controlfield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">Olson, Tod</subfield>
+        </datafield>
+        <datafield tag="245" ind1="0" ind2="2">
+            <subfield code="a">A common title</subfield>
+        </datafield>
+        <datafield tag="250" ind1=" " ind2=" ">
+            <subfield code="a">Third edition</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">A test record for browses</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Test data for multiple records with the same title</subfield>
         </datafield>
     </record>
 </collection>
