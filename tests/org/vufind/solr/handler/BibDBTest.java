@@ -108,11 +108,11 @@ public class BibDBTest {
 	 */
 	@Test
 	public void testRecordCount() {
-		String title = "A common title".toLowerCase();
+		String title = "A common title";
 		int titleCount = 3;
         RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
         IndexSearcher searcher = searcherRef.get();
-        BibDB bibDbForTitle = new BibDB(searcher, "title");
+        BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
         try {
 			assertEquals(titleCount, bibDbForTitle.recordCount(title));
 		} catch (IOException e) {
@@ -128,12 +128,12 @@ public class BibDBTest {
 	 */
 	@Test
 	public void testMatchingIDs() {
-		String title = "A common title".toLowerCase();
+		String title = "A common title";
 		int idCount = 3;
         RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
         IndexSearcher searcher = searcherRef.get();
 		try {
-			BibDB bibDbForTitle = new BibDB(searcher, "title");
+			BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
 			assertEquals(idCount, bibDbForTitle.matchingIDs(title, "id", 10).size());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
