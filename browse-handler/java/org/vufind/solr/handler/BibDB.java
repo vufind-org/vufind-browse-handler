@@ -27,7 +27,7 @@ public class BibDB
     private IndexSearcher db;
     private String field;
 
-    public BibDB(IndexSearcher searcher, String field) throws Exception
+    public BibDB(IndexSearcher searcher, String field)
     {
         this.db = searcher;
         this.field = field;
@@ -45,7 +45,7 @@ public class BibDB
     {
         TermQuery q = new TermQuery(new Term(field, heading));
 
-        Log.info("Searching '" + field + "' for '" + "'" + heading + "'");
+        Log.info("Searching '" + field + "' for '" + heading + "'");
 
         TotalHitCountCollector counter = new TotalHitCountCollector();
         db.search(q, counter);

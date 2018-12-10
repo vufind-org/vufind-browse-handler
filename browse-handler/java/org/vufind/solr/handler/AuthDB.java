@@ -32,7 +32,6 @@ public class AuthDB
                   String useInsteadField,
                   String seeAlsoField,
                   String noteField)
-    throws Exception
     {
         searcher = authSearcher;
         preferredHeadingField = preferredField;
