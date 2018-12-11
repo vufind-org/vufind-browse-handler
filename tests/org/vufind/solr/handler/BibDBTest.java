@@ -90,7 +90,7 @@ public class BibDBTest {
         IndexSearcher searcher = searcherRef.get();
 		try {
 			// just a smoke test, confirm that constructor succeeds
-			BibDB bibDb = new BibDB(searcher, "title");
+			BibDB bibDb = new BibDB(searcher, "title_fullStr");
 			assertNotNull(bibDb);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
