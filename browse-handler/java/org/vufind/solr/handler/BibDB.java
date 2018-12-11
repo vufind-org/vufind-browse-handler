@@ -19,7 +19,10 @@ import org.apache.lucene.search.TotalHitCountCollector;
 
 /**
  *
- * Interface to the Solr biblio db
+ * Interface to the Solr biblio db.
+ * <p>
+ * This class provides a way to look up headings in one single field of the
+ * bibilio core, specified in the constructor.
  *
  */
 public class BibDB
@@ -27,6 +30,10 @@ public class BibDB
     private IndexSearcher db;
     private String field;
 
+    /**
+     * @param searcher an index searcher connected to the bibilio core.
+     * @param field    the field that will be searched for matching headings.
+     */
     public BibDB(IndexSearcher searcher, String field)
     {
         this.db = searcher;
@@ -35,7 +42,7 @@ public class BibDB
 
     /**
      * Returns the number of bib records that match an authority heading.
-     * 
+     *
      * @param heading
      * @return	number of matching bib records
      * @throws Exception
@@ -55,7 +62,6 @@ public class BibDB
         return counter.getTotalHits();
     }
 
-
     /**
      *
      * Function to retrieve the doc ids when there is a building limit
@@ -72,9 +78,9 @@ public class BibDB
      * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
      */
-    public Map<String, List<Collection<String>>> matchingIDs(String heading, 
-                                                             String fields,
-                                                             int maxBibListSize)
+    public Map<String, List<Collection<String>>> matchingIDs(String heading,
+            String fields,
+            int maxBibListSize)
     throws Exception
     {
         TermQuery q = new TermQuery(new Term(field, heading));
@@ -98,7 +104,7 @@ public class BibDB
 
             // Will only be used by other classes
             @SuppressWarnings("unused")
-			public boolean acceptsDocsOutOfOrder() {
+            public boolean acceptsDocsOutOfOrder() {
                 return true;
             }
 
