@@ -28,7 +28,6 @@ import org.apache.solr.core.SolrCore;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.Integer;
 import java.util.*;
 import java.net.URL;
@@ -50,60 +49,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.vufind.util.*;
 import org.apache.lucene.search.SimpleCollector;
 import org.apache.lucene.document.Document;
-
-import java.util.logging.Logger;
-
 import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
 import org.vufind.util.BrowseEntry;
-
-class Log
-{
-    private static Logger log()
-    {
-        // Caller's class
-        return Logger.getLogger
-               (new Throwable().getStackTrace()[2].getClassName());
-    }
-
-
-    public static String formatBytes(byte[] bytes)
-    {
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0; i < bytes.length; i++) {
-            if (i > 0) {
-                result.append(", ");
-            }
-            result.append("0x");
-            result.append(Integer.toHexString(bytes[i]));
-        }
-
-        return result.toString();
-    }
-
-
-    public static String formatBytes(String s)
-    {
-        try {
-            return formatBytes(s.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void info(String s)
-    {
-        log().info(s);
-    }
-
-    public static void info(String fmt, String s)
-    {
-        log().info(String.format(fmt, s));
-    }
-}
-
-
 
 class HeadingSlice
 {
