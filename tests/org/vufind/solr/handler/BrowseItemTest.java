@@ -77,8 +77,11 @@ public class BrowseItemTest
     {
         Collection<String> ids1 = new ArrayList<String>();
         ids1.add("id-1");
-        Collection<String> ids2 = new ArrayList<String>();
         ids1.add("id-2");
+
+        Collection<String> ids2 = new ArrayList<String>();
+        ids2.add("id-3");
+
         // This is what we expect to store, a list containing all IDs
         List<String> allIds = new ArrayList<String>();
         allIds.addAll(ids1);
