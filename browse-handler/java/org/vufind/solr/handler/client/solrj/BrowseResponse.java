@@ -16,6 +16,7 @@ import org.vufind.solr.handler.MatchTypeResponse.MatchType;
  * @author tod
  *
  */
+@SuppressWarnings("serial")
 public class BrowseResponse extends SolrResponseBase
 {
     // Direct pointers to known types

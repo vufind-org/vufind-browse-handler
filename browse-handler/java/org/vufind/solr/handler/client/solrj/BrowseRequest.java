@@ -13,6 +13,7 @@ import org.apache.solr.common.params.SolrParams;
  * @author tod
  *
  */
+@SuppressWarnings("serial")
 public class BrowseRequest extends SolrRequest<BrowseResponse>
 {
 

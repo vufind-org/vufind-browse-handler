@@ -3,6 +3,7 @@ package org.vufind.solr.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class BrowseList extends ArrayList<BrowseItem>
 {
     public int totalCount;
