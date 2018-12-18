@@ -56,9 +56,14 @@ import java.util.Map;
  * <td></td>
  * </tr>
  * <tr>
- * <td>{@code fields}</td>
+ * <td>{@code extras}</td>
  * <td>{@code Map<String, List<Collection<String>>>}</td>
  * <td></td>
+ * </tr>
+ * <tr>
+ * <td>{@code fields}</td>
+ * <td>{@code Map<String, List<String>>}</td>
+ * <td>For future API changes.</td>
  * </tr>
  * <tr>
  * <td>{@code count}</td>
@@ -120,6 +125,11 @@ public class BrowseItem extends HashMap<String, Object>
         this.put("ids", ids);
     }
 
+    public void setExtras(Map<String, List<Collection<String>>> extras)
+    {
+        this.put("extras", extras);
+    }
+
     public void setFields(Map<String, List<Collection<String>>> fields)
     {
         this.put("fields", fields);
@@ -169,12 +179,21 @@ public class BrowseItem extends HashMap<String, Object>
     }
 
     @SuppressWarnings("unchecked")
-    public Map<String, List<Collection<String>>> getFields()
+    public Map<String, List<Collection<String>>> getExtras()
     {
         // The things we do when we're not set up for Optional...
-        Map<String, List<Collection<String>>> fields = (Map<String, List<Collection<String>>>) this.get("fields");
+        Map<String, List<Collection<String>>> extras = (Map<String, List<Collection<String>>>) this.get("extras");
 
-        return (fields != null ? fields : new HashMap<String, List<Collection<String>>>());
+        return (extras != null ? extras : new HashMap<String, List<Collection<String>>>());
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, List<String>> getFields()
+    {
+        // The things we do when we're not set up for Optional...
+        Map<String, List<String>> fields = (Map<String, List<String>>) this.get("fields");
+
+        return (fields != null ? fields : new HashMap<String, List<String>>());
     }
 
     /**

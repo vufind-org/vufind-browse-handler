@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +53,8 @@ public class BibDB
     {
         TermQuery q = new TermQuery(new Term(field, heading));
 
-        Log.info("Searching '" + field + "' for '" + heading + "'");
-
         TotalHitCountCollector counter = new TotalHitCountCollector();
         db.search(q, counter);
-
-        Log.info("Hits: " + counter.getTotalHits());
 
         return counter.getTotalHits();
     }
@@ -73,13 +70,13 @@ public class BibDB
      * like titles for call numbers, possibly ISBNs
      *
      * @param heading        string of the heading to use for finding matching
-     * @param fields         docs colon-separated string of Solr fields
+     * @param extras         docs colon-separated string of Solr fields
      *                       to return for use in the browse display
      * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
      */
     public Map<String, List<Collection<String>>> matchingIDs(String heading,
-            String fields,
+            String extras,
             int maxBibListSize)
     throws Exception
     {
@@ -89,10 +86,9 @@ public class BibDB
         // may be multi-valued.
         // Note: it may be time for bibinfo to become a class...
         final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
-        // Forcing "ids" into list of bib fields is a transition to requiring
-        // that "ids" be listed explicitly in the extras string
-        final String[] bibFieldList = fields.split(":");
-        for (String bibField : bibFieldList) {
+        bibinfo.put("ids", new ArrayList<Collection<String>> ());
+        final String[] bibExtras = extras.split(":");
+        for (String bibField : bibExtras) {
             bibinfo.put(bibField, new ArrayList<Collection<String>> ());
         }
 
@@ -122,6 +118,21 @@ public class BibDB
                 try {
                     Document doc = db.getIndexReader().document(docid);
 
+                    String[] vals = doc.getValues("id");
+                    Collection<String> id = new HashSet<> ();
+                    id.add(vals[0]);
+                    bibinfo.get("ids").add(id);
+                    for (String bibField : bibExtras) {
+                        vals = doc.getValues(bibField);
+                        if (vals.length > 0) {
+                            Collection<String> valSet = new LinkedHashSet<> ();
+                            for (String val : vals) {
+                                valSet.add(val);
+                            }
+                            bibinfo.get(bibField).add(valSet);
+                        }
+                    }
+                    /*
                     for (String bibField : bibFieldList) {
                         String[] vals = doc.getValues(bibField);
                         if (vals.length > 0) {
@@ -132,6 +143,7 @@ public class BibDB
                             bibinfo.get(bibField).add(valSet);
                         }
                     }
+                    */
                 } catch (org.apache.lucene.index.CorruptIndexException e) {
                     Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
                 } catch (Exception e) {

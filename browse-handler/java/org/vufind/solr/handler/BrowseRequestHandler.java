@@ -244,9 +244,10 @@ class Browse
         if (this.maxBibListSize != 0) { //TODO: implement full maxBibListSize semantics
             Map<String, List<Collection<String>>> bibinfo = 
                     bibDB.matchingIDs(item.getHeading(), fields, maxBibListSize);
+            Log.info("populateItem - bibinfo: " + bibinfo.toString());
             item.setIds(bibinfo.get("ids"));
             bibinfo.remove("ids");
-            item.setFields(bibinfo);
+            item.setExtras(bibinfo);
         }
 
         item.setCount(bibDB.recordCount(item.getHeading()));
