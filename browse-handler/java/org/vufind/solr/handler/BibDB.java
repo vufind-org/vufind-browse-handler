@@ -155,4 +155,105 @@ public class BibDB
 
         return bibinfo;
     }
+
+    /**
+     *
+     * Function to retrieve the extra fields needed for building the browse display.
+     *
+     * This retrieves fields from all docs matching the heading. Will not make query
+     * if {@code extras} is null or empty.
+     *
+     * Need to add a filter query to limit the results from Solr
+     *
+     * @param heading        string of the heading to use for finding matching
+     * @param extras         docs colon-separated string of Solr fields
+     *                       to return for use in the browse display
+     * @param maxBibListSize maximum numbers of records to check for fields (NYI)
+     * @return         return a map of Solr ids and extra bib info
+     */
+    public Map<String, List<Collection<String>>> matchingExtras(String heading,
+            String extras,
+            int maxBibListSize)
+    throws Exception
+    {
+        // short circuit if we don't need to do any work
+        if (extras == null || extras.isEmpty()) {
+            return null;
+        }
+
+        TermQuery q = new TermQuery(new Term(field, heading));
+
+        // bibinfo values are List<Collection> because some extra fields
+        // may be multi-valued.
+        // Note: it may be time for bibinfo to become a class...
+        final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
+        bibinfo.put("ids", new ArrayList<Collection<String>> ());
+        final String[] bibExtras = extras.split(":");
+        for (String bibField : bibExtras) {
+            bibinfo.put(bibField, new ArrayList<Collection<String>> ());
+        }
+
+        db.search(q, new SimpleCollector() {
+            private LeafReaderContext context;
+
+            public void setScorer(Scorer scorer) {
+            }
+
+            // Will only be used by other classes
+            @SuppressWarnings("unused")
+            public boolean acceptsDocsOutOfOrder() {
+                return true;
+            }
+
+            public boolean needsScores() {
+                return false;
+            }
+
+            public void doSetNextReader(LeafReaderContext context) {
+                this.context = context;
+            }
+
+
+            public void collect(int docnum) {
+                int docid = docnum + context.docBase;
+                try {
+                    Document doc = db.getIndexReader().document(docid);
+
+                    String[] vals = doc.getValues("id");
+                    Collection<String> id = new HashSet<> ();
+                    id.add(vals[0]);
+                    bibinfo.get("ids").add(id);
+                    for (String bibField : bibExtras) {
+                        vals = doc.getValues(bibField);
+                        if (vals.length > 0) {
+                            Collection<String> valSet = new LinkedHashSet<> ();
+                            for (String val : vals) {
+                                valSet.add(val);
+                            }
+                            bibinfo.get(bibField).add(valSet);
+                        }
+                    }
+                    /*
+                    for (String bibField : bibFieldList) {
+                        String[] vals = doc.getValues(bibField);
+                        if (vals.length > 0) {
+                            Collection<String> valSet = new LinkedHashSet<> ();
+                            for (String val : vals) {
+                                valSet.add(val);
+                            }
+                            bibinfo.get(bibField).add(valSet);
+                        }
+                    }
+                    */
+                } catch (org.apache.lucene.index.CorruptIndexException e) {
+                    Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
+                } catch (Exception e) {
+                    Log.info("Exception thrown: " + e);
+                }
+
+            }
+        });
+
+        return bibinfo;
+    }
 }

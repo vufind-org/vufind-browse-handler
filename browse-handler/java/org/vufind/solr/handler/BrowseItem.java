@@ -130,7 +130,7 @@ public class BrowseItem extends HashMap<String, Object>
         this.put("extras", extras);
     }
 
-    public void setFields(Map<String, List<Collection<String>>> fields)
+    public void setFields(Map<String, List<String>> fields)
     {
         this.put("fields", fields);
     }
