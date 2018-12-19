@@ -406,7 +406,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
             NamedList<String> entry = (NamedList<String>)args.get(source);
 
             // TODO: what if maxBibListSize is not set?
-            int maxBibListSize = -1;
+            int maxBibListSize = 0;
             try {
                 maxBibListSize = Integer.parseInt(entry.get("maxBibListSize"));
             } catch (NumberFormatException e) {

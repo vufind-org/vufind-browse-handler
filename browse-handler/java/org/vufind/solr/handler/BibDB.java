@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.CollectionTerminatedException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.SimpleCollector;
@@ -75,6 +76,7 @@ public class BibDB
      * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
      */
+    @Deprecated
     public Map<String, List<Collection<String>>> matchingIDs(String heading,
             String extras,
             int maxBibListSize)
@@ -159,16 +161,17 @@ public class BibDB
     /**
      *
      * Function to retrieve the extra fields needed for building the browse display.
-     *
-     * This retrieves fields from all docs matching the heading. Will not make query
+     * <p>
+     * This method retrieves fields from all docs matching the heading. Will not make query
      * if {@code extras} is null or empty.
-     *
-     * Need to add a filter query to limit the results from Solr
+     * <p>
+     * {@code maxBibListSize} puts a limit on how many documents will be consulted.
+     * If {@code maxBibListSize} <= 0, there is no limit.
      *
      * @param heading        string of the heading to use for finding matching
      * @param extras         docs colon-separated string of Solr fields
      *                       to return for use in the browse display
-     * @param maxBibListSize maximum numbers of records to check for fields (NYI)
+     * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
      */
     public Map<String, List<Collection<String>>> matchingExtras(String heading,
@@ -195,6 +198,7 @@ public class BibDB
 
         db.search(q, new SimpleCollector() {
             private LeafReaderContext context;
+            private int docCount = 0;
 
             public void setScorer(Scorer scorer) {
             }
@@ -215,6 +219,13 @@ public class BibDB
 
 
             public void collect(int docnum) {
+                // Terminate collection if exceed maximum bibs
+                if (maxBibListSize > 0 && this.docCount >= maxBibListSize) {
+                    throw new CollectionTerminatedException();
+                } else {
+                    this.docCount++;
+                }
+
                 int docid = docnum + context.docBase;
                 try {
                     Document doc = db.getIndexReader().document(docid);
