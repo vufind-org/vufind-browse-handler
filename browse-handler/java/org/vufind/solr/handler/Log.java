@@ -43,8 +43,14 @@ class Log
         log().info(s);
     }
 
-    public static void info(String fmt, String s)
+    /**
+     *
+     * @param fmt   A format string for the log message
+     * @param args  arguments referenced by the format specifier
+     */
+    public static void info(String fmt, Object... args)
     {
-        log().info(String.format(fmt, s));
+        log().info(String.format(fmt, args));
     }
+
 }
