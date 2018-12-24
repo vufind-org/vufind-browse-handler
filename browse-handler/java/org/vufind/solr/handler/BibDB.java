@@ -184,13 +184,12 @@ public class BibDB
             return null;
         }
 
-        TermQuery q = new TermQuery(new Term(field, heading));
+        TermQuery q = new TermQuery(new Term(this.field, heading));
 
         // bibinfo values are List<Collection> because some extra fields
         // may be multi-valued.
-        // Note: it may be time for bibinfo to become a class...
+        // Note: keeping bibinfo as List<Collection> give us free serializing for the eventual response.
         final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
-        bibinfo.put("ids", new ArrayList<Collection<String>> ());
         final String[] bibExtras = extras.split(":");
         for (String bibField : bibExtras) {
             bibinfo.put(bibField, new ArrayList<Collection<String>> ());
@@ -231,9 +230,6 @@ public class BibDB
                     Document doc = db.getIndexReader().document(docid);
 
                     String[] vals = doc.getValues("id");
-                    Collection<String> id = new HashSet<> ();
-                    id.add(vals[0]);
-                    bibinfo.get("ids").add(id);
                     for (String bibField : bibExtras) {
                         vals = doc.getValues(bibField);
                         if (vals.length > 0) {
