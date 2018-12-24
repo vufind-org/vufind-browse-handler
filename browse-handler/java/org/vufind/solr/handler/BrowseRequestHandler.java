@@ -221,7 +221,7 @@ class HeadingsDB
 
 
 /**
- * Class that performs the alphabetical browse of an index and produces a {@code BrowseList} object. 
+ * Class that performs the alphabetical browse of an index and produces a {@code BrowseList} object.
  *
  */
 class Browse
@@ -241,16 +241,14 @@ class Browse
 
     private void populateItem(BrowseItem item, String fields) throws Exception
     {
-        if (this.maxBibListSize != 0) { //TODO: implement full maxBibListSize semantics
-            Map<String, List<Collection<String>>> bibinfo = 
-                    bibDB.matchingExtras(item.getHeading(), fields, maxBibListSize);
-            item.setIds(bibinfo.get("ids"));
-            bibinfo.remove("ids");
-            item.setExtras(bibinfo);
-        }
+        Map<String, List<Collection<String>>> bibinfo =
+            bibDB.matchingExtras(item.getHeading(), fields, maxBibListSize);
+        Log.info("populateItem: bibinfo = %s", bibinfo);
+        item.setExtras(bibinfo);
+        Log.info("item.getExtras()=%s", item.getExtras());
 
         item.setCount(bibDB.recordCount(item.getHeading()));
-       
+
         Map<String, List<String>> authFields = authDB.getFields(item.getHeading());
 
         List<String> seeAlsoList = new ArrayList<String>();
@@ -272,6 +270,7 @@ class Browse
         for (String value : authFields.get("note")) {
             item.setNote(value);
         }
+        Log.info("populateItem: item = %s'", item);
     }
 
 
@@ -281,7 +280,7 @@ class Browse
     }
 
 
-    public BrowseList getList(int rowid, int offset, int rows, String fields)
+    public BrowseList getList(int rowid, int offset, int rows, String extras)
     throws Exception
     {
         BrowseList result = new BrowseList();
@@ -297,7 +296,7 @@ class Browse
 
             BrowseItem item = new BrowseItem(sort_key, heading);
 
-            populateItem(item, fields);
+            populateItem(item, extras);
 
             result.add(item);
         }
@@ -440,7 +439,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
      *  org.apache.solr.common.util.NamedList or
      *  org.apache.solr.common.util.SimpleOrderedMap?
      *  Same question for BrowseList and other returned object.
-     *  
+     *
      *  Is it worth porting to the Solr classes used for results?
      *  The javadoc for NamedList says it gives better access by index while
      *  preserving the order of elements, not so for HashMap.
@@ -457,15 +456,15 @@ public class BrowseRequestHandler extends RequestHandlerBase
         String sourceName = p.get("source");
         String from = p.get("from");
         String fields = p.get("fields");
-        
+
         // If fields parameter is not provided, construct from extras parameter
         // NOTE: As implemented, fields will always contain ids.
-        //       Should think whether to do this the other way around, check 
+        //       Should think whether to do this the other way around, check
         //       extras first, and how transition will work.
         if (fields == null) {
             String extras = p.get("extras");
             fields = extras == null || extras.length() == 0 ?
-                    "ids" : ("ids:" + extras);
+                     "ids" : ("ids:" + extras);
         }
 
 
@@ -484,7 +483,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
         if (rows < 0) {
             throw new Exception("Invalid value for parameter: rows");
         }
-        
+
         /*
          * TODO: invalid or missing source parameter should return a 400 error
          */
@@ -518,7 +517,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
                                         solrParams.get("scopeNoteField")),
                                        source.retrieveBibId,
                                        source.maxBibListSize);
-           Log.info("new browse source with HeadingsDB (" + source.DBpath + ", " + source.normalizer + ")");
+            Log.info("new browse source with HeadingsDB (" + source.DBpath + ", " + source.normalizer + ")");
 
             if (from != null) {
                 rowid = (browse.getId(from));
