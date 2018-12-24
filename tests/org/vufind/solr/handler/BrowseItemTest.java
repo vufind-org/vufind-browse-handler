@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -97,6 +99,28 @@ public class BrowseItemTest
 
         // IDs are stored as the concatenation of the list of collections
         assertEquals(allIds, item.get("ids"));
+    }
+
+    @Test
+    public void testSetExtras()
+    {
+        Collection<String> format1 = new ArrayList<>();
+        format1.add("Print");
+        Collection<String> format2 = new ArrayList<>();
+        format2.add("e-Resource");
+
+        List<Collection<String>> formatList = new ArrayList<>();
+        formatList.add(format1);
+        formatList.add(format2);
+
+        Map<String, List<Collection<String>>> extras = new HashMap<String, List<Collection<String>>>();
+        extras.put("format", formatList);
+
+        Log.info("testSetExtras: extras = %s", extras);
+
+        BrowseItem item = new BrowseItem("", "");
+        item.setExtras(extras);
+        assertEquals(extras, item.get("extras"));
     }
 
     @Ignore
@@ -195,6 +219,38 @@ public class BrowseItemTest
 
         // IDs are stored as the concatenation of the list of collections
         assertEquals(allIds, item.getIds());
+    }
+
+    @Test
+    public void testGetExtras()
+    {
+        Collection<String> format1 = new ArrayList<>();
+        format1.add("Book");
+        Collection<String> format2 = new ArrayList<>();
+        format2.add("Serial");
+
+        List<Collection<String>> formatList = new ArrayList<>();
+        formatList.add(format1);
+        formatList.add(format2);
+
+        Map<String, List<Collection<String>>> extras = new HashMap<String, List<Collection<String>>>();
+        extras.put("format", formatList);
+
+        BrowseItem item = new BrowseItem("", "");
+        item.setExtras(extras);
+        //Log.info("testGetExtras: %s", item.getExtras());
+        assertEquals(extras, item.getExtras());
+        assertEquals(formatList, extras.get("format"));
+    }
+
+    @Test
+    public void testGetExtras_noExtras()
+    {
+        Map<String, List<Collection<String>>> extras = new HashMap<String, List<Collection<String>>>();
+
+        BrowseItem item = new BrowseItem("", "");
+        //Log.info("testGetExtras_noExtras: ", item.getExtras());
+        assertEquals(extras, item.getExtras());
     }
 
     @Ignore
