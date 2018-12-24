@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.solr.core.CoreContainer;
@@ -32,8 +32,6 @@ public class BibDBTest
     // Must match the name the BrowseRequestHandler uses under the biblio core
     public static String browseHandlerName = "/browse";
 
-    private static final Logger logger = Logger.getGlobal();
-
     /*
      * PREPARE AND TEAR DOWN FOR TESTS
      */
@@ -45,12 +43,12 @@ public class BibDBTest
     public static void setUpBeforeClass() throws Exception
     {
         String solrHomeProp = "solr.solr.home";
-        System.out.println(solrHomeProp + "= " + System.getProperty(solrHomeProp));
+        Log.info("BibDBTest#setUpBeforeClass: %s = %s", solrHomeProp, System.getProperty(solrHomeProp));
         // create the core container from the solr.home system property
-        logger.info("Loading Solr container...");
+        Log.info("Loading Solr container...");
         container = new CoreContainer();
         container.load();
-        logger.info("Solr container loaded!");
+        Log.info("Solr container loaded!");
         bibCore = container.getCore("biblio");
     }
 
@@ -128,7 +126,7 @@ public class BibDBTest
     @Test
     public void testMatchingIDs()
     {
-        Log.info("Entering testMatchingIDs");
+        //Log.info("Entering testMatchingIDs");
         String title = "A common title";
         int idCount = 3;
         RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
@@ -148,4 +146,112 @@ public class BibDBTest
         }
     }
 
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingExtras()
+    {
+        //Log.info("Entering testMatchingExtras");
+        String title = "A common title";
+        String extras = "id:format:author";
+        int idCount = 3;
+        int maxBibs = 10;
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            Map<String, List<Collection<String>>> extrasMap = bibDbForTitle.matchingExtras(title, extras, maxBibs);
+            List<String> ids = extrasMap.get("id")
+                               .stream()
+                               .flatMap(Collection::stream)
+                               .collect(Collectors.toList());
+            //Log.info("extrasMap: %s", extrasMap);
+            //Log.info("ids: %s", ids);
+            assertEquals(idCount, ids.size());
+            for (String f : extras.split(":")) {
+                assertNotNull(String.format("No map entry for extra field ", f),extrasMap.get(f));
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingExtras_noLimit()
+    {
+        //Log.info("Entering testMatchingExtras_noLimit");
+        String title = "A common title";
+        int idCount = 3;
+        int maxBibs = 0; // Read all of the matching records
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            List<String> ids = bibDbForTitle.matchingExtras(title, "id", maxBibs).get("id")
+                               .stream()
+                               .flatMap(Collection::stream)
+                               .collect(Collectors.toList());
+            assertEquals(idCount, ids.size());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingExtras_smallLimit()
+    {
+        //Log.info("Entering testMatchingExtras_smallLimit");
+        String title = "A common title";
+        int maxBibs = 1; // Tiny limit on matching records
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            List<String> ids = bibDbForTitle.matchingExtras(title, "id", maxBibs).get("id")
+                               .stream()
+                               .flatMap(Collection::stream)
+                               .collect(Collectors.toList());
+            assertEquals(maxBibs, ids.size());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingExtras_noExtras()
+    {
+        //Log.info("Entering testMatchingExtras_noExtras");
+        String title = "A common title";
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            assertNull(bibDbForTitle.matchingExtras(title, null, 0));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
 }
