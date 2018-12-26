@@ -81,6 +81,22 @@ public class BrowseItem extends HashMap<String, Object>
         this.setHeading(heading);
     }
 
+    /**
+     * Construct BrowseItem from an existing Map.
+     * <p>
+     * Checks for presence of {@literal sort_key} and {@literal heading}, but does not
+     * place constraints on any other keys.
+     *
+     * @param item
+     */
+    public BrowseItem(Map<String, Object> item)
+    {
+        if (!item.containsKey("sort_key") || !item.containsKey("heading")) {
+            throw new IllegalArgumentException("missing sort_key or heading: " + item.toString());
+        }
+        this.putAll(item);
+    }
+
     public void setSortKey(String sort_key)
     {
         this.put("sort_key", sort_key);

@@ -10,7 +10,15 @@ import org.vufind.solr.handler.MatchTypeResponse.MatchType;
 
 /**
  * Holds the response from BrowseRequest.
- *
+ * <p>
+ * The {@code getResponse()} method returns a {@code NamedList<Object>} of
+ * only two elements: {@code responseHeader} and {@code Browse}.
+ * <p>
+ * {@code Browse} is a {@code Map<String,Object>} with keys
+ * {@literal startRow}, {@literal offset}, {@literal matchType},
+ * {@literal totalCount}, and {@literal items}.
+ * The value of {@literal items} is a {@code BrowseList}.
+ * <p>
  * Based somewhat on {@link QueryResponse}.
  *
  * @author tod

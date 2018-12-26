@@ -25,6 +25,23 @@ public class BrowseItemTest
     }
 
     @Test
+    public void testBrowsItem_MapConstructor()
+    {
+        String sortKey = "hobbit";
+        String heading = "Hobbit";
+        String random = "asdf";
+        Map<String, Object> itemMap = new HashMap<>();
+        itemMap.put("sort_key", sortKey);
+        itemMap.put("heading", heading);
+        itemMap.put("random", random);
+
+        BrowseItem item = new BrowseItem(itemMap);
+        assertEquals(sortKey, item.get("sort_key"));
+        assertEquals(heading, item.get("heading"));
+        assertEquals(random, item.get("random"));
+    }
+
+    @Test
     public void testSetSortKey()
     {
         String heading = "Test Heading";

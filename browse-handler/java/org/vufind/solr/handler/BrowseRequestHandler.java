@@ -243,10 +243,7 @@ class Browse
     {
         Map<String, List<Collection<String>>> bibinfo =
             bibDB.matchingExtras(item.getHeading(), fields, maxBibListSize);
-        Log.info("populateItem: bibinfo = %s", bibinfo);
         item.setExtras(bibinfo);
-        Log.info("item.getExtras()=%s", item.getExtras());
-
         item.setCount(bibDB.recordCount(item.getHeading()));
 
         Map<String, List<String>> authFields = authDB.getFields(item.getHeading());
@@ -270,7 +267,6 @@ class Browse
         for (String value : authFields.get("note")) {
             item.setNote(value);
         }
-        Log.info("populateItem: item = %s'", item);
     }
 
 
