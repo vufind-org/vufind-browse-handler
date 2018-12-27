@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.LeafReaderContext;
@@ -159,7 +160,6 @@ public class BibDB
     }
 
     /**
-     *
      * Function to retrieve the extra fields needed for building the browse display.
      * <p>
      * This method retrieves fields from all docs matching the heading. Will not make query
@@ -167,9 +167,11 @@ public class BibDB
      * <p>
      * {@code maxBibListSize} puts a limit on how many documents will be consulted.
      * If {@code maxBibListSize} <= 0, there is no limit.
+     * <p>
+     * This method will be used for returning the extra fields in VuFind 5.1.
      *
-     * @param heading        string of the heading to use for finding matching
-     * @param extras         docs colon-separated string of Solr fields
+     * @param heading        string of the heading to use for finding matching docs
+     * @param extras         colon-separated string of Solr fields
      *                       to return for use in the browse display
      * @param maxBibListSize maximum numbers of records to check for fields
      * @return         return a map of Solr ids and extra bib info
@@ -188,7 +190,7 @@ public class BibDB
 
         // bibinfo values are List<Collection> because some extra fields
         // may be multi-valued.
-        // Note: keeping bibinfo as List<Collection> give us free serializing for the eventual response.
+        // Note: keeping bibinfo as List<Collection> gives us free serializing for the eventual response.
         final Map<String, List<Collection<String>>> bibinfo = new HashMap<> ();
         final String[] bibExtras = extras.split(":");
         for (String bibField : bibExtras) {
@@ -228,10 +230,8 @@ public class BibDB
                 int docid = docnum + context.docBase;
                 try {
                     Document doc = db.getIndexReader().document(docid);
-
-                    String[] vals = doc.getValues("id");
                     for (String bibField : bibExtras) {
-                        vals = doc.getValues(bibField);
+                        String[] vals = doc.getValues(bibField);
                         if (vals.length > 0) {
                             Collection<String> valSet = new LinkedHashSet<> ();
                             for (String val : vals) {
@@ -252,6 +252,94 @@ public class BibDB
                         }
                     }
                     */
+                } catch (org.apache.lucene.index.CorruptIndexException e) {
+                    Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
+                } catch (Exception e) {
+                    Log.info("Exception thrown: " + e);
+                }
+
+            }
+        });
+
+        return bibinfo;
+    }
+
+    /**
+     * Function to retrieve fields needed for building the browse display, beyond the heading itself.
+     * <p>
+     * This method retrieves fields from all docs matching the heading. Will not make query
+     * if {@code extras} is null or empty.
+     * <p>
+     * {@code maxBibListSize} puts a limit on how many documents will be consulted.
+     * If {@code maxBibListSize} <= 0, there is no limit.
+     * <p>
+     * This method will be used for returning the extra fields as of VuFind 6.0.
+     *
+     * @param heading        string of the heading to use for finding matching docs
+     * @param fields         colon-separated string of Solr fields
+     *                       to return for use in the browse display
+     * @param maxBibListSize maximum numbers of records to check for fields
+     * @return         return a map of Solr ids and extra bib info
+     */
+    public Map<String, Collection<String>> matchingFields(String heading,
+            String fields,
+            int maxBibListSize)
+    throws Exception
+    {
+        // short circuit if we don't need to do any work
+        if (fields == null || fields.isEmpty()) {
+            return null;
+        }
+
+        TermQuery q = new TermQuery(new Term(this.field, heading));
+
+        // bibinfo values are List<Collection> because some extra fields
+        // may be multi-valued.
+        // Note: keeping bibinfo as Collection gives us free serializing for the eventual response.
+        final Map<String, Collection<String>> bibinfo = new HashMap<> ();
+        final String[] bibExtras = fields.split(":");
+        for (String bibField : bibExtras) {
+            bibinfo.put(bibField, new LinkedHashSet<String> ());
+        }
+
+        db.search(q, new SimpleCollector() {
+            private LeafReaderContext context;
+            private int docCount = 0;
+
+            public void setScorer(Scorer scorer) {
+            }
+
+            // Will only be used by other classes
+            @SuppressWarnings("unused")
+            public boolean acceptsDocsOutOfOrder() {
+                return true;
+            }
+
+            public boolean needsScores() {
+                return false;
+            }
+
+            public void doSetNextReader(LeafReaderContext context) {
+                this.context = context;
+            }
+
+
+            public void collect(int docnum) {
+                // Terminate collection if exceed maximum bibs
+                if (maxBibListSize > 0 && this.docCount >= maxBibListSize) {
+                    throw new CollectionTerminatedException();
+                } else {
+                    this.docCount++;
+                }
+
+                int docid = docnum + context.docBase;
+                try {
+                    Document doc = db.getIndexReader().document(docid);
+                    for (String bibField : bibExtras) {
+                        for (String v : doc.getValues(bibField)) {
+                            bibinfo.get(bibField).add(v);
+                        }
+                    }
                 } catch (org.apache.lucene.index.CorruptIndexException e) {
                     Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
                 } catch (Exception e) {

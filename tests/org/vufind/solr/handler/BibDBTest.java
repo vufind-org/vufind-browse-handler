@@ -147,7 +147,7 @@ public class BibDBTest
     }
 
     /**
-     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingExtras(java.lang.String, java.lang.String, int)}.
      */
     @Test
     public void testMatchingExtras()
@@ -180,9 +180,8 @@ public class BibDBTest
         }
     }
 
-
     /**
-     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingExtras(java.lang.String, java.lang.String, int)}.
      */
     @Test
     public void testMatchingExtras_noLimit()
@@ -209,7 +208,7 @@ public class BibDBTest
     }
 
     /**
-     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingExtras(java.lang.String, java.lang.String, int)}.
      */
     @Test
     public void testMatchingExtras_smallLimit()
@@ -235,7 +234,7 @@ public class BibDBTest
     }
 
     /**
-     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingExtras(java.lang.String, java.lang.String, int)}.
      */
     @Test
     public void testMatchingExtras_noExtras()
@@ -247,6 +246,106 @@ public class BibDBTest
         try {
             BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
             assertNull(bibDbForTitle.matchingExtras(title, null, 0));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingFields(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingFields()
+    {
+        //Log.info("Entering testMatchingExtras");
+        String title = "A common title";
+        String extras = "id:format:author";
+        int idCount = 3;
+        int maxBibs = 10;
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            Map<String, Collection<String>> extrasMap = bibDbForTitle.matchingFields(title, extras, maxBibs);
+            Collection<String> ids = extrasMap.get("id");
+            //Log.info("extrasMap: %s", extrasMap);
+            //Log.info("ids: %s", ids);
+            assertEquals(idCount, ids.size());
+            for (String f : extras.split(":")) {
+                assertNotNull(String.format("No map entry for extra field ", f),extrasMap.get(f));
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingFields(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingFields_noLimit()
+    {
+        //Log.info("Entering testMatchingFields_noLimit");
+        String title = "A common title";
+        int idCount = 3;
+        int maxBibs = 0; // Read all of the matching records
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            Collection<String> ids = bibDbForTitle.matchingFields(title, "id", maxBibs).get("id");
+            assertEquals(idCount, ids.size());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingFields(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingFields_smallLimit()
+    {
+        //Log.info("Entering testMatchingFields_smallLimit");
+        String title = "A common title";
+        int maxBibs = 1; // Tiny limit on matching records
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            Collection<String> ids = bibDbForTitle.matchingFields(title, "id", maxBibs).get("id");
+            assertEquals(maxBibs, ids.size());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingFields(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingFields_noFields()
+    {
+        //Log.info("Entering testMatchingFields_noFields");
+        String title = "A common title";
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            assertNull(bibDbForTitle.matchingFields(title, null, 0));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
