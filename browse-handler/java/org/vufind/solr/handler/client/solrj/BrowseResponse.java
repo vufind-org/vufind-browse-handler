@@ -21,7 +21,7 @@ import org.vufind.solr.handler.MatchTypeResponse.MatchType;
  * <p>
  * Based somewhat on {@link QueryResponse}.
  *
- * @author tod
+ * @author Tod Olson <tod@uchicago.edu>
  *
  */
 @SuppressWarnings("serial")
@@ -34,6 +34,7 @@ public class BrowseResponse extends SolrResponseBase
     private String _matchType = null;
 
     // utility variable used for automatic binding -- it should not be serialized
+    @SuppressWarnings("unused")
     private transient final SolrClient solrClient;
 
     /**

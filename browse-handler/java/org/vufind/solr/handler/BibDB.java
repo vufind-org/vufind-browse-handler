@@ -172,7 +172,7 @@ public class BibDB
      * @param extras         colon-separated string of Solr fields
      *                       to return for use in the browse display
      * @param maxBibListSize maximum numbers of records to check for fields
-     * @return         return a map of Solr ids and extra bib info
+     * @return         return a map of extra bib info
      */
     public Map<String, List<Collection<String>>> matchingExtras(String heading,
             String extras,
@@ -238,18 +238,6 @@ public class BibDB
                             bibinfo.get(bibField).add(valSet);
                         }
                     }
-                    /*
-                    for (String bibField : bibFieldList) {
-                        String[] vals = doc.getValues(bibField);
-                        if (vals.length > 0) {
-                            Collection<String> valSet = new LinkedHashSet<> ();
-                            for (String val : vals) {
-                                valSet.add(val);
-                            }
-                            bibinfo.get(bibField).add(valSet);
-                        }
-                    }
-                    */
                 } catch (org.apache.lucene.index.CorruptIndexException e) {
                     Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
                 } catch (Exception e) {
@@ -277,7 +265,7 @@ public class BibDB
      * @param fields         colon-separated string of Solr fields
      *                       to return for use in the browse display
      * @param maxBibListSize maximum numbers of records to check for fields
-     * @return         return a map of Solr ids and extra bib info
+     * @return         return a map of exta bib field info
      */
     public Map<String, Collection<String>> matchingFields(String heading,
             String fields,
