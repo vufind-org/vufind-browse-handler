@@ -2,9 +2,7 @@ package org.vufind.solr.handler;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.logging.Logger;
 
-import org.vufind.solr.handler.MatchTypeResponse.MatchType;
 import org.vufind.util.Normalizer;
 
 public class MatchTypeResponse
