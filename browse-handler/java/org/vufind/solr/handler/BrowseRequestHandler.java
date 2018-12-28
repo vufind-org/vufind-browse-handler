@@ -48,6 +48,7 @@ class HeadingsDB
     Connection db;
     String path;
     long dbVersion;
+    /** The total number of headings in this DB. */
     int totalCount;
     Normalizer normalizer;
 
