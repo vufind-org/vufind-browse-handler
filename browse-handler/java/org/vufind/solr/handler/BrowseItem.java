@@ -132,6 +132,7 @@ public class BrowseItem extends HashMap<String, Object>
      *
      * @param idList List of Collection of bib IDs.
      */
+    @Deprecated
     public void setIds(List<Collection<String>> idList)
     {
         List<String>ids = new ArrayList<String> ();
@@ -188,6 +189,7 @@ public class BrowseItem extends HashMap<String, Object>
         return optString((String) this.get("note"));
     }
 
+    @Deprecated
     @SuppressWarnings("unchecked")
     public List<String> getIds()
     {
