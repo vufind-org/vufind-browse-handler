@@ -433,18 +433,8 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
         String sourceName = p.get("source");
         String from = p.get("from");
-        String fields = p.get("fields");
-
-        // If fields parameter is not provided, construct from extras parameter
-        // NOTE: As implemented, fields will always contain ids.
-        //       Should think whether to do this the other way around, check
-        //       extras first, and how transition will work.
-        if (fields == null) {
-            String extras = p.get("extras");
-            fields = extras == null || extras.length() == 0 ?
-                     "ids" : ("ids:" + extras);
-        }
-
+        // TODO: change parameter name to "fields" for VF 6.0
+        String fields = p.get("extras");
 
         int rowid = 1;
         if (p.get("rowid") != null) {
