@@ -60,7 +60,7 @@ public class AuthDB
                                            heading)),
                                            1));
 
-        if (results.totalHits > 0) {
+        if (results.totalHits.value > 0) {
             return searcher.getIndexReader().document(results.scoreDocs[0].doc);
         } else {
             return null;
@@ -77,7 +77,7 @@ public class AuthDB
 
         List<Document> result = new ArrayList<> ();
 
-        for (int i = 0; i < results.totalHits; i++) {
+        for (int i = 0; i < results.totalHits.value; i++) {
             result.add(searcher.getIndexReader().document(results.scoreDocs[i].doc));
         }
 

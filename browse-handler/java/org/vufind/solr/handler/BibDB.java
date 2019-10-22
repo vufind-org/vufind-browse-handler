@@ -13,6 +13,7 @@ import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.CollectionTerminatedException;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.SimpleCollector;
 import org.apache.lucene.search.TermQuery;
@@ -109,6 +110,10 @@ public class BibDB
                 return false;
             }
 
+            public ScoreMode scoreMode() {
+                return ScoreMode.COMPLETE_NO_SCORES;
+            }
+
             public void doSetNextReader(LeafReaderContext context) {
                 this.context = context;
             }
@@ -198,6 +203,10 @@ public class BibDB
 
             public boolean needsScores() {
                 return false;
+            }
+
+            public ScoreMode scoreMode() {
+                return ScoreMode.COMPLETE_NO_SCORES;
             }
 
             public void doSetNextReader(LeafReaderContext context) {
@@ -291,6 +300,10 @@ public class BibDB
 
             public boolean needsScores() {
                 return false;
+            }
+
+            public ScoreMode scoreMode() {
+                return ScoreMode.COMPLETE_NO_SCORES;
             }
 
             public void doSetNextReader(LeafReaderContext context) {
