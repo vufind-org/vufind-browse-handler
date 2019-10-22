@@ -154,7 +154,7 @@ public class BrowseItem extends HashMap<String, Object>
 
     public void setCount(int count)
     {
-        this.setCount(new Integer(count));
+        this.setCount(Integer.valueOf(count));
     }
 
     public void setCount(Integer count)

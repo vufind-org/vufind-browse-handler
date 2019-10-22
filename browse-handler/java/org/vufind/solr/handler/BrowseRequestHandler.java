@@ -57,7 +57,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
     {
         super.init(args);
 
-        solrParams = SolrParams.toSolrParams(args);
+        solrParams = args.toSolrParams();
 
         authCoreName = solrParams.get("authCoreName", DFLT_AUTH_CORE_NAME);
 
@@ -91,7 +91,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
     {
         int value;
         try {
-            return new Integer(s).intValue();
+            return Integer.valueOf(s).intValue();
         } catch (NumberFormatException e) {
             return 0;
         }
