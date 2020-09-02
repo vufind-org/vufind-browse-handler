@@ -2,7 +2,7 @@ sudo: false
 dist: trusty
 language: java
 jdk:
-  - openjdk8
+  - openjdk11
 
 # addons section is a workaround for a Travis issue with missing JUnit jars:
 addons:
