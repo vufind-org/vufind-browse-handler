@@ -1,5 +1,5 @@
 sudo: false
-dist: trusty
+dist: xenial
 language: java
 jdk:
   - openjdk11
@@ -18,7 +18,7 @@ before_script:
   - if [ ! -d vufind/.git ]; then git clone https://github.com/vufind-org/vufind.git; fi;
   - cd vufind
   - git pull
-  - phpenv global 7.2.33
+  - phpenv global 7.2
   - composer install
   - export VUFIND_HOME=$(pwd)
   - ./solr.sh start
