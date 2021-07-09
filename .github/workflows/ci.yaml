@@ -1,0 +1,58 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  run-tests:
+    name: Tests with Java ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    env:
+      VUFIND_HOME: $GITHUB_WORKSPACE/vufind
+    strategy:
+      matrix:
+        java-version: ['11']
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: intl, xsl
+          tools: composer:2.0.13
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: ${{ matrix.java-version }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download and Setup VuFind
+        run: |
+          if [ ! -d $VUFIND_HOME/.git ]; then git clone https://github.com/vufind-org/vufind.git; fi;
+          cd $VUFIND_HOME
+          git pull
+          composer install
+
+      - name: Create Test Index
+        run: |
+          $VUFIND_HOME/solr.sh start
+          $VUFIND_HOME/import-marc-auth.sh $VUFIND_HOME/tests/data/authority/authorityauth.mrc marc_auth_ils.properties
+          $VUFIND_HOME/import-marc.sh $VUFIND_HOME/tests/data/authoritybibs.mrc
+          $VUFIND_HOME/index-alphabetic-browse.sh
+          $VUFIND_HOME/solr.sh stop
+
+      - name: Run Tests
+        run: ant test -Dvufind.dir=$VUFIND_HOME
+
+      - name: Clean Up
+        run: cd $VUFIND_HOME ; rm -rf solr/vufind ; rm import/*.log ; git reset --hard
+
+      - name: Cache VuFind data
+        uses: actions/cache@v2
+        with:
+          path: $VUFIND_HOME
+          key: "vufind-${{ github.sha }}"
+          restore-keys: "vufind-"
