@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VUFIND_HOME: $GITHUB_WORKSPACE/vufind
+      VUFIND_LOCAL_DIR: $VUFIND_HOME/local
     strategy:
       matrix:
         java-version: ['11']
