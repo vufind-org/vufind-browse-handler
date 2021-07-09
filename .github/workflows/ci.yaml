@@ -6,9 +6,6 @@ jobs:
   run-tests:
     name: Tests with Java ${{ matrix.java-version }}
     runs-on: ubuntu-latest
-    env:
-      VUFIND_HOME: $GITHUB_WORKSPACE/vufind
-      VUFIND_LOCAL_DIR: $VUFIND_HOME/local
     strategy:
       matrix:
         java-version: ['11']
@@ -29,6 +26,11 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Set up VuFind environment
+        run: |
+          echo VUFIND_HOME=$GITHUB_WORKSPACE/vufind >> $GITHUB_ENV
+          echo VUFIND_LOCAL_DIR=$VUFIND_HOME/local >> $GITHUB_ENV
 
       - name: Download and Setup VuFind
         run: |
