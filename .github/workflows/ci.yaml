@@ -39,6 +39,7 @@ jobs:
 
       - name: Create Test Index
         run: |
+          cd $VUFIND_HOME
           $VUFIND_HOME/solr.sh start
           $VUFIND_HOME/import-marc-auth.sh $VUFIND_HOME/tests/data/authority/authorityauth.mrc marc_auth_ils.properties
           $VUFIND_HOME/import-marc.sh $VUFIND_HOME/tests/data/authoritybibs.mrc
