@@ -31,7 +31,7 @@ jobs:
 
       - name: Download and Setup VuFind
         run: |
-          if [ ! -d $VUFIND_HOME/.git ]; then git clone https://github.com/vufind-org/vufind.git; fi;
+          if [ ! -d $VUFIND_HOME/.git ]; then git clone https://github.com/vufind-org/vufind.git $VUFIND_HOME; fi;
           cd $VUFIND_HOME
           git pull
           composer install
