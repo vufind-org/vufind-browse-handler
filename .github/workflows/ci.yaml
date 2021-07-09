@@ -29,7 +29,7 @@ jobs:
 
       - name: Set up VuFind environment
         run: |
-          echo VUFIND_HOME=$GITHUB_WORKSPACE/vufind >> $GITHUB_ENV
+          echo VUFIND_HOME=~/vufind >> $GITHUB_ENV
           echo VUFIND_LOCAL_DIR=$VUFIND_HOME/local >> $GITHUB_ENV
 
       - name: Download and Setup VuFind
@@ -57,6 +57,6 @@ jobs:
       - name: Cache VuFind data
         uses: actions/cache@v2
         with:
-          path: $VUFIND_HOME
+          path: ~/vufind
           key: "vufind-${{ github.sha }}"
           restore-keys: "vufind-"
