@@ -32,6 +32,13 @@ jobs:
           echo VUFIND_HOME=~/vufind >> $GITHUB_ENV
           echo VUFIND_LOCAL_DIR=$VUFIND_HOME/local >> $GITHUB_ENV
 
+      - name: Cache VuFind data
+        uses: actions/cache@v2
+        with:
+          path: ~/vufind
+          key: "vufind-${{ github.sha }}"
+          restore-keys: "vufind-"
+
       - name: Download and Setup VuFind
         run: |
           if [ ! -d $VUFIND_HOME/.git ]; then git clone https://github.com/vufind-org/vufind.git $VUFIND_HOME; fi;
@@ -53,10 +60,3 @@ jobs:
 
       - name: Clean Up
         run: cd $VUFIND_HOME ; rm -rf solr/vufind ; rm import/*.log ; git reset --hard
-
-      - name: Cache VuFind data
-        uses: actions/cache@v2
-        with:
-          path: ~/vufind
-          key: "vufind-${{ github.sha }}"
-          restore-keys: "vufind-"
