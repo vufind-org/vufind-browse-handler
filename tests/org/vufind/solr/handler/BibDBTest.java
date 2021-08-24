@@ -6,9 +6,11 @@ package org.vufind.solr.handler;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.solr.core.CoreContainer;
@@ -46,7 +48,7 @@ public class BibDBTest
         Log.info("BibDBTest#setUpBeforeClass: %s = %s", solrHomeProp, System.getProperty(solrHomeProp));
         // create the core container from the solr.home system property
         Log.info("Loading Solr container...");
-        container = new CoreContainer();
+        container = new CoreContainer(Paths.get(System.getProperty(solrHomeProp)), new Properties());
         container.load();
         Log.info("Solr container loaded!");
         bibCore = container.getCore("biblio");

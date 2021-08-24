@@ -9,9 +9,11 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.lang.System;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.apache.solr.client.solrj.SolrClient;
@@ -60,7 +62,7 @@ public class BrowseHandlerTest
         System.out.println(solrHomeProp + "= " + System.getProperty(solrHomeProp));
         // create the core container from the solr.home system property
         logger.info("Loading Solr container...");
-        container = new CoreContainer();
+        container = new CoreContainer(Paths.get(System.getProperty(solrHomeProp)), new Properties());
         container.load();
         logger.info("Solr container loaded!");
         authCore = container.getCore("authority");
