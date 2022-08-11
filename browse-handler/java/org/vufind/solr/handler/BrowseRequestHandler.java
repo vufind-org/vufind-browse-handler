@@ -9,6 +9,7 @@ package org.vufind.solr.handler;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -152,6 +153,15 @@ public class BrowseRequestHandler extends RequestHandlerBase
         CoreDescriptor cd = core.getCoreDescriptor();
         CoreContainer cc = core.getCoreContainer();
         SolrCore authCore = cc.getCore(authCoreName);
+        if (authCore == null) {
+            Collection<String> names = cc.getAllCoreNames();
+            String name = names.stream().filter(n -> n.startsWith(authCoreName)).findFirst().orElse(null);
+            if (name == null)
+                throw new Exception("Could not find a core with a name starting with " + authCoreName);
+            authCore = cc.getCore(name);
+            if (authCore == null)
+                throw new Exception("Could not get the core with the name " + name);
+        }
         //Must decrement RefCounted when finished!
         RefCounted<SolrIndexSearcher> authSearcherRef = authCore.getSearcher();
 
