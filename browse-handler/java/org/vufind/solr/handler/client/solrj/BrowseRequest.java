@@ -42,6 +42,11 @@ public class BrowseRequest extends SolrRequest<BrowseResponse>
         // TODO Auto-generated constructor stub
     }
 
+    public String getRequestType()
+    {
+        return "VuFindBrowseRequest";
+    }
+
     @Override
     public SolrParams getParams()
     {

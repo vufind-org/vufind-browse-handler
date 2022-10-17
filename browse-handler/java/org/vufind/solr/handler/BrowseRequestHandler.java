@@ -22,6 +22,7 @@ import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.RequestHandlerBase;
 import org.apache.solr.request.SolrRequestHandler;
 import org.apache.solr.search.SolrIndexSearcher;
+import org.apache.solr.security.AuthorizationContext;
 import org.apache.solr.util.RefCounted;
 import org.vufind.util.NormalizerFactory;
 
@@ -238,5 +239,9 @@ public class BrowseRequestHandler extends RequestHandlerBase
     public URL[] getDocs()
     {
         return null;
+    }
+
+    public Name getPermissionName(AuthorizationContext request) {
+        return Name.ALL;
     }
 }
