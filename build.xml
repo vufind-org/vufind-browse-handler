@@ -25,10 +25,16 @@
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/contrib/analysis-extras">
       <include name="**/*.jar"/>
     </fileset>
+    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/module/analysis-extras">
+      <include name="**/*.jar"/>
+    </fileset>
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/dist">
       <include name="**/*.jar"/>
     </fileset>
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/server/solr-webapp/webapp/WEB-INF/lib">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/import/lib">
       <include name="**/*.jar"/>
     </fileset>
     <!-- Needed for building tests that invoke Solr -->
@@ -181,8 +187,8 @@
       </exec>
     </target>
 
-  <!-- ================================= 
-          target: test-main              
+  <!-- =================================
+          target: test-main
          ================================= -->
     <target name="test-main"
       description="Run tests, assumes build is current and test cores are set up">
@@ -227,16 +233,16 @@
 
     </target>
 
-  <!-- ================================= 
-          target: test              
+  <!-- =================================
+          target: test
          ================================= -->
     <target name="test" depends="build, setup-test-cores"
       description="Run tests after build and setting up the test cores">
         <antcall target="test-main"/>
     </target>
 
-  <!-- ================================= 
-          target: test-skip-setup              
+  <!-- =================================
+          target: test-skip-setup
          ================================= -->
     <target name="test-skip-setup" depends="build"
       description="Run tests after build, assumes test cores are already set up">
