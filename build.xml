@@ -25,9 +25,6 @@
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/contrib/analysis-extras">
       <include name="**/*.jar"/>
     </fileset>
-    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/module/analysis-extras">
-      <include name="**/*.jar"/>
-    </fileset>
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/dist">
       <include name="**/*.jar"/>
     </fileset>
