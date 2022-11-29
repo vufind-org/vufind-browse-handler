@@ -1,6 +1,6 @@
 package org.vufind.util;
 
-import org.solrmarc.callnum.DeweyCallNumber;
+import org.marc4j.callnum.DeweyCallNumber;
 import java.util.logging.Logger;
 
 public class DeweyCallNormalizer implements Normalizer

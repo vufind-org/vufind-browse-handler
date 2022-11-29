@@ -1,6 +1,6 @@
 package org.vufind.util;
 
-import org.solrmarc.callnum.LCCallNumber;
+import org.marc4j.callnum.LCCallNumber;
 import java.util.logging.Logger;
 
 public class LCCallNormalizer implements Normalizer
