@@ -22,6 +22,9 @@
     <fileset dir="libs">
       <include name="**/*.jar"/>
     </fileset>
+    <fileset dir="tests/lib">
+      <include name="**/*.jar"/>
+    </fileset>
     <!-- For Solr 8 and below: -->
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/contrib/analysis-extras">
       <include name="**/*.jar"/>
