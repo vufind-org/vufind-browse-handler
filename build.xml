@@ -205,7 +205,7 @@
         <compilerarg line="-encoding UTF-8" />
       </javac>
 
-      <junit showoutput="yes" fork="true">
+      <junit showoutput="yes" fork="true" haltonfailure="on">
         <sysproperty key="absolute.vufind.dir" value="${absolute.vufind.dir}" />
         <sysproperty key="solr.solr.home" value="${solr.solr.home}" />
         <jvmarg value="-Dfile.encoding=UTF-8" />
