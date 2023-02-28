@@ -10,6 +10,8 @@
   <property name="vufind.dir" value="/usr/local/vufind"/>
   <property name="absolute.vufind.dir" location="${vufind.dir}"/>
   <property name="solr.solr.home" value="${absolute.vufind.dir}/solr/vufind"/>
+  <!-- The solr.install.dir property was added to work around an issue in the Solr 9.1 test suite;
+       it can probably be safely removed once VuFind upgrades to Solr 9.2 or higher. -->
   <property name="solr.install.dir" value="${absolute.vufind.dir}/solr/vendor"/>
   <property name="java.compat.version" value="1.8"/>
   <property name="ant.build.javac.source" value="1.8"/>
