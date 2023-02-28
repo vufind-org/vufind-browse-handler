@@ -209,6 +209,7 @@
       <junit showoutput="yes" fork="true" haltonfailure="on">
         <sysproperty key="absolute.vufind.dir" value="${absolute.vufind.dir}" />
         <sysproperty key="solr.solr.home" value="${solr.solr.home}" />
+        <sysproperty key="solr.install.dir" value="${solr.install.dir}" />
         <jvmarg value="-Dfile.encoding=UTF-8" />
         <classpath>
           <pathelement location="tests/lib/junit-4.11.jar"/>
