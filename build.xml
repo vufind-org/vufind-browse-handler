@@ -10,6 +10,7 @@
   <property name="vufind.dir" value="/usr/local/vufind"/>
   <property name="absolute.vufind.dir" location="${vufind.dir}"/>
   <property name="solr.solr.home" value="${absolute.vufind.dir}/solr/vufind"/>
+  <property name="solr.install.dir" value="${absolute.vufind.dir}/solr/vendor"/>
   <property name="java.compat.version" value="1.8"/>
   <property name="ant.build.javac.source" value="1.8"/>
   <property name="ant.build.javac.target" value="1.8"/>
