@@ -45,6 +45,9 @@
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/import/lib">
       <include name="**/*.jar"/>
     </fileset>
+    <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/import">
+      <include name="solrmarc_core_*.jar"/>
+    </fileset>
     <!-- Needed for building tests that invoke Solr -->
     <fileset erroronmissingdir="false" dir="${absolute.vufind.dir}/solr/vendor/server/lib">
       <include name="**/*.jar"/>
