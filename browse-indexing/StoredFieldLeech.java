@@ -47,7 +47,7 @@ public class StoredFieldLeech extends Leech
     private void loadDocument(IndexReader reader, int docid)
     throws Exception
     {
-        Document doc = reader.document(currentDoc, fieldSelection);
+        Document doc = reader.storedFields().document(currentDoc, fieldSelection);
 
         String[] sort_key = doc.getValues(sortField);
         String[] value = doc.getValues(valueField);

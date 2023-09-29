@@ -224,7 +224,7 @@ public class BibDB
 
                 int docid = docnum + context.docBase;
                 try {
-                    Document doc = db.getIndexReader().document(docid);
+                    Document doc = db.getIndexReader().storedFields().document(docid);
                     for (String bibField : bibExtras) {
                         String[] vals = doc.getValues(bibField);
                         if (vals.length > 0) {
@@ -321,7 +321,7 @@ public class BibDB
 
                 int docid = docnum + context.docBase;
                 try {
-                    Document doc = db.getIndexReader().document(docid);
+                    Document doc = db.getIndexReader().storedFields().document(docid);
                     for (String bibField : bibExtras) {
                         for (String v : doc.getValues(bibField)) {
                             bibinfo.get(bibField).add(v);
