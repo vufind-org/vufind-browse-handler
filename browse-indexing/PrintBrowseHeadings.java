@@ -106,8 +106,9 @@ public class PrintBrowseHeadings
             }
         }
 
+        StoredFields storedFields = authSearcher.getIndexReader().storedFields();
         for (int i = 0; i < hits.scoreDocs.length; i++) {
-            Document doc = authSearcher.getIndexReader().storedFields().document(hits.scoreDocs[i].doc);
+            Document doc = storedFields.document(hits.scoreDocs[i].doc);
 
             String[] preferred = doc.getValues(System.getProperty("field.preferred", "preferred"));
             if (preferred.length > 0) {
