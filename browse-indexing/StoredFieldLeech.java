@@ -6,6 +6,7 @@ import java.util.*;
 import org.apache.lucene.store.*;
 import org.apache.lucene.index.*;
 import org.apache.lucene.document.*;
+import org.apache.lucene.util.Bits;
 
 import org.vufind.util.Utils;
 import org.vufind.util.BrowseEntry;
@@ -20,6 +21,7 @@ public class StoredFieldLeech extends Leech
 
     private Set<String> fieldSelection;
 
+    private Bits liveDocsBitSet;
 
     public StoredFieldLeech(String indexPath, String field) throws Exception
     {
@@ -40,6 +42,10 @@ public class StoredFieldLeech extends Leech
         fieldSelection.add("id");   // make Solr id available for error messages
 
         reader = DirectoryReader.open(FSDirectory.open(new File(indexPath).toPath()));
+
+        // Will be null if the index contains no deletes.
+        liveDocsBitSet = MultiBits.getLiveDocs(reader);
+
         buffer = new LinkedList<BrowseEntry> ();
     }
 
@@ -80,7 +86,9 @@ public class StoredFieldLeech extends Leech
     {
         while (buffer.isEmpty()) {
             if (currentDoc < reader.maxDoc()) {
-                loadDocument(reader, currentDoc);
+                if (this.liveDocsBitSet == null || this.liveDocsBitSet.get(currentDoc)) {
+                    loadDocument(reader, currentDoc);
+                }
                 currentDoc++;
             } else {
                 return null;
