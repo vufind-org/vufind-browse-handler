@@ -4,6 +4,8 @@ import org.apache.lucene.search.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.lucene.util.BytesRef;
+
 import org.vufind.util.BrowseEntry;
 import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
@@ -73,36 +75,42 @@ public class Leech
     //
     public BrowseEntry next() throws Exception
     {
-        if (tenum == null) {
-            if (leafReaders.isEmpty()) {
-                // Nothing left to do
-                return null;
+        for (;;) {
+            if (tenum == null) {
+                // Load the next reader in our list and position the term enum.
+
+                if (leafReaders.isEmpty()) {
+                    // Nothing left to do
+                    return null;
+                }
+
+                // Select our next LeafReader to work from
+                LeafReader ir = leafReaders.remove(0).reader();
+                Terms terms = ir.terms(this.field);
+
+                if (terms == null) {
+                    // Try the next reader
+                    continue;
+                }
+
+                tenum = terms.iterator();
             }
 
-            // Select our next LeafReader to work from
-            LeafReader ir = leafReaders.remove(0).reader();
-            Terms terms = ir.terms(this.field);
+            BytesRef nextTerm = tenum.next();
 
-            if (terms == null) {
-                // Try the next reader
-                return next();
+            if (nextTerm == null) {
+                // Exhausted this reader.  Try the next one.
+                tenum = null;
+                continue;
             }
 
-            tenum = terms.iterator();
-        }
-
-        if (tenum.next() != null) {
-            String termText = tenum.term().utf8ToString();
+            String termText = nextTerm.utf8ToString();
 
             if (termExists(termText)) {
-                return new BrowseEntry(buildSortKey(termText), termText, termText) ;
-            } else {
-                return this.next();
+                return new BrowseEntry(buildSortKey(termText), termText, termText);
             }
-        } else {
-            // Exhausted this reader
-            tenum = null;
-            return next();
+
+            // Try the next term
         }
     }
 }
