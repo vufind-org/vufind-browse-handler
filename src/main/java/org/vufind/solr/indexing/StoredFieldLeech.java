@@ -1,3 +1,5 @@
+package org.vufind.solr.indexing;
+
 // Build a browse list by walking the docs in an index and extracting sort key
 // and values from a pair of stored fields.
 

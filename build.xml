@@ -18,11 +18,8 @@
   <property name="ant.build.javac.target" value="1.8"/>
 
   <path id="classpath">
-    <pathelement location="${builddir}/common"/>
+    <pathelement location="${builddir}"/>
     <fileset dir="${builddir}/deps/">
-      <include name="**/*.jar"/>
-    </fileset>
-    <fileset dir="libs">
       <include name="**/*.jar"/>
     </fileset>
     <fileset dir="tests/lib">
@@ -64,7 +61,6 @@
   <target name="setup">
     <mkdir dir="${builddir}"/>
     <mkdir dir="${builddir}/deps"/>
-    <mkdir dir="${builddir}/bundled-deps"/>
     <antcall target="setup-solr-deps"/>
   </target>
 
@@ -77,44 +73,20 @@
     <unwar src="${absolute.vufind.dir}/solr/jetty/webapps/solr.war" dest="${builddir}/deps/"/>
   </target>
 
-  <target name="build" depends="clean, setup, build-common, build-handler, build-indexing">
+  <target name="build" depends="clean, setup">
     <!-- Can be useful for debugging -->
     <!-- <pathconvert property="classpathProp" refid="classpath"/> -->
     <!-- <echo>Classpath: ${classpathProp}</echo> -->
-  </target>
-
-  <target name="build-common">
-    <mkdir dir="${builddir}/common"/>
-    <javac debug="on" srcdir="common/java" destdir="${builddir}/common">
+    <mkdir dir="${builddir}"/>
+    <javac debug="on" srcdir="src/main/java" destdir="${builddir}">
       <classpath refid="classpath"/>
       <compilerarg value="-Xlint"/>
     </javac>
-    <exec executable="sh" output="${builddir}/common/VERSION">
+    <exec executable="sh" output="${builddir}/VERSION">
       <arg value="-c"/>
       <arg value="which git >/dev/null 2>&amp;1 &amp;&amp; git log --oneline -1"/>
     </exec>
   </target>
-
-
-  <target name="build-handler">
-    <mkdir dir="${builddir}/browse-handler"/>
-    <javac debug="on" srcdir="browse-handler/java" destdir="${builddir}/browse-handler">
-      <classpath refid="classpath"/>
-      <compilerarg value="-Xlint"/>
-      <compilerarg value="-Xlint:unchecked"/>
-      <!-- sometimes useful for library or refective programming failures -->
-      <!-- <compilerarg value="-Xdiags:verbose"/> -->
-    </javac>
-  </target>
-
-  <target name="build-indexing">
-    <mkdir dir="${builddir}/browse-indexing"/>
-    <javac debug="on" srcdir="browse-indexing/" destdir="${builddir}/browse-indexing">
-      <classpath refid="classpath"/>
-      <compilerarg value="-Xlint"/>
-    </javac>
-  </target>
-
 
   <target name="clean">
     <delete dir="${builddir}"/>
@@ -122,28 +94,15 @@
     <delete file="browse-indexing.jar"/>
   </target>
 
-  <target name="bundledeps" if="bundle.deps">
-    <copy todir="${builddir}/bundled-deps">
-      <fileset dir="libs">
-        <include name="icu4j-49.1.jar"/>
-        <include name="sqlitejdbc-v053.jar"/>
-      </fileset>
-    </copy>
-  </target>
-
-  <target name="jars" depends="build,bundledeps">
+  <target name="jars" depends="build">
     <jar destfile="browse-handler.jar">
-      <fileset dir="${builddir}/browse-handler/"/>
-      <fileset dir="${builddir}/common/"/>
+      <fileset dir="${builddir}" includes="org/vufind/solr/handler/**/*"/>
+      <fileset dir="${builddir}" includes="org/vufind/util/**/*"/>
     </jar>
     <jar destfile="browse-indexing.jar">
-      <fileset dir="${builddir}/browse-indexing/"/>
-      <fileset dir="${builddir}/common/"/>
+      <fileset dir="${builddir}" includes="org/vufind/solr/indexing/**/*"/>
+      <fileset dir="${builddir}" includes="org/vufind/util/**/*"/>
       <zipgroupfileset dir="${builddir}/deps/" includes="**/lucene-core*.jar"/>
-      <zipgroupfileset dir="libs">
-        <include name="commons-codec-1.5.jar"/>
-      </zipgroupfileset>
-      <zipgroupfileset dir="${builddir}/bundled-deps" includes="*.jar"/>
     </jar>
   </target>
 
@@ -198,18 +157,24 @@
       </exec>
     </target>
 
+    <target name="build-tests"
+            description="Build the test files"
+            depends="build">
+      <mkdir dir="${testdir}"/>
+      <javac fork="true" debug="on" srcdir="tests/" destdir="${testdir}"
+             classpath="tests/lib/*:${toString:classpath}:${builddir}">
+        <compilerarg line="-encoding UTF-8" />
+      </javac>
+    </target>
+
   <!-- =================================
           target: test-main
          ================================= -->
     <target name="test-main"
-      description="Run tests, assumes build is current and test cores are set up">
-      <mkdir dir="${testdir}"/>
+      description="Run tests, assumes build is current and test cores are set up"
+      depends="build-tests">
       <mkdir dir="${testoutputdir}"/>
       <mkdir dir="${testdir}/report"/>
-      <javac fork="true" debug="on" srcdir="tests/" destdir="${testdir}"
-           classpath="tests/lib/*:${toString:classpath}:${builddir}/browse-handler">
-        <compilerarg line="-encoding UTF-8" />
-      </javac>
 
       <junit showoutput="yes" fork="true" haltonfailure="on">
         <sysproperty key="absolute.vufind.dir" value="${absolute.vufind.dir}" />
@@ -220,7 +185,7 @@
           <pathelement location="tests/lib/junit-4.11.jar"/>
           <pathelement location="tests/lib/*"/>
           <pathelement location="${testdir}"/>
-          <pathelement location="${builddir}/browse-handler"/>
+          <pathelement location="${builddir}"/>
           <pathelement path="${toString:classpath}"/>
         </classpath>
         <!-- formatter type="plain" usefile="false"/-->

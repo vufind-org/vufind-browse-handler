@@ -126,13 +126,13 @@ public class BrowseItemTest
         int count = 37;
         BrowseItem item = new BrowseItem("", "");
         item.setCount(count);
-        assertEquals(new Integer(count), item.get("count"));
+        assertEquals(Integer.valueOf(count), item.get("count"));
     }
 
     @Test
     public void testSetCountInteger()
     {
-        Integer count = new Integer(87);
+        Integer count = Integer.valueOf(87);
         BrowseItem item = new BrowseItem("", "");
         item.setCount(count);
         assertEquals(count, item.get("count"));
@@ -229,7 +229,7 @@ public class BrowseItemTest
     @Test
     public void testGetCount()
     {
-        Integer count = new Integer(87);
+        Integer count = Integer.valueOf(87);
         BrowseItem item = new BrowseItem("", "");
         item.setCount(count);
         assertEquals(count, item.getCount());

@@ -1,3 +1,5 @@
+package org.vufind.solr.indexing;
+
 //
 // Author: Mark Triggs <mark@dishevelled.net>
 //
@@ -136,7 +138,7 @@ public class PrintBrowseHeadings
     private Leech getBibLeech(String bibPath, String luceneField)
     throws Exception
     {
-        String leechClass = "Leech";
+        String leechClass = "org.vufind.solr.indexing.Leech";
 
         if (getEnvironment("BIBLEECH") != null) {
             leechClass = getEnvironment("BIBLEECH");
