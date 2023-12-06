@@ -1,3 +1,5 @@
+package org.vufind.solr.indexing;
+
 import org.apache.lucene.store.*;
 import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;
