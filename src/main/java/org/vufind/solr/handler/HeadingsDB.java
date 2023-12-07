@@ -60,16 +60,11 @@ class HeadingsDB
         db.setAutoCommit(false);
         dbVersion = currentVersion();
 
-        PreparedStatement countStmnt = db.prepareStatement(
-                                           "select count(1) as count from headings");
-
-        ResultSet rs = countStmnt.executeQuery();
-        rs.next();
-
-        totalCount = rs.getInt("count");
-
-        rs.close();
-        countStmnt.close();
+        try (PreparedStatement countStmnt = db.prepareStatement("select count(1) as count from headings");
+             ResultSet rs = countStmnt.executeQuery()) {
+            rs.next();
+            totalCount = rs.getInt("count");
+        }
     }
 
 
@@ -134,39 +129,41 @@ class HeadingsDB
     {
         HeadingSlice result = new HeadingSlice();
 
-        PreparedStatement rowStmnt = db.prepareStatement(
+        try (PreparedStatement rowStmnt = db.prepareStatement(
                                          String.format("select * from headings " +
                                                  "where rowid >= ? " +
                                                  "order by rowid " +
                                                  "limit %d ",
                                                  rows)
-                                     );
+                                                              )) {
+            rowStmnt.setInt(1, rowid);
 
-        rowStmnt.setInt(1, rowid);
+            ResultSet rs = null;
 
-        ResultSet rs = null;
+            for (int attempt = 0; attempt < 3; attempt++) {
+                try {
+                    rs = rowStmnt.executeQuery();
+                    break;
+                } catch (SQLException e) {
+                    Log.info("Retry number " + attempt + "...");
+                    Thread.sleep(50);
+                }
+            }
 
-        for (int attempt = 0; attempt < 3; attempt++) {
+            if (rs == null) {
+                return result;
+            }
+
             try {
-                rs = rowStmnt.executeQuery();
-                break;
-            } catch (SQLException e) {
-                Log.info("Retry number " + attempt + "...");
-                Thread.sleep(50);
+                while (rs.next()) {
+                    result.sort_keys.add(rs.getString("key_text"));
+                    result.headings.add(rs.getString("heading"));
+                }
+
+            } finally {
+                rs.close();
             }
         }
-
-        if (rs == null) {
-            return result;
-        }
-
-        while (rs.next()) {
-            result.sort_keys.add(rs.getString("key_text"));
-            result.headings.add(rs.getString("heading"));
-        }
-
-        rs.close();
-        rowStmnt.close();
 
         result.total = Math.max(0, (totalCount - rowid) + 1);
 

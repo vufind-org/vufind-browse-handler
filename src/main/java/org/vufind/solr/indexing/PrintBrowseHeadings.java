@@ -28,7 +28,6 @@ import org.vufind.util.BrowseEntry;
 
 public class PrintBrowseHeadings
 {
-    private SolrFieldIterator bibFieldIterator;
     private SolrFieldIterator nonprefAuthFieldIterator;
 
     IndexSearcher bibSearcher;
@@ -197,53 +196,50 @@ public class PrintBrowseHeadings
                        String outFile)
     throws Exception
     {
-        bibFieldIterator = getBibIterator(bibPath, luceneField);
-        this.luceneField = luceneField;
+        try (SolrFieldIterator bibFieldIterator = getBibIterator(bibPath, luceneField)) {
+            this.luceneField = luceneField;
 
-        IndexReader bibReader = DirectoryReader.open(FSDirectory.open(new File(bibPath).toPath()));
-        bibSearcher = new IndexSearcher(bibReader);
+            IndexReader bibReader = DirectoryReader.open(FSDirectory.open(new File(bibPath).toPath()));
+            bibSearcher = new IndexSearcher(bibReader);
 
-        PrintWriter out = new PrintWriter(new FileWriter(outFile));
+            try (PrintWriter out = new PrintWriter(new FileWriter(outFile))) {
+                if (authPath != null) {
+                    try {
+                        nonprefAuthFieldIterator = new SolrFieldIterator(authPath,
+                                                                         System.getProperty("field.insteadof",
+                                                                                            "insteadOf"));
+                    } catch (IndexNotFoundException e) {
+                        // If no data has been written to the index yet, this exception
+                        // might get thrown; in that case, we should skip loading authority
+                        // data rather than breaking the whole indexing process.
+                        nonprefAuthFieldIterator = null;
+                    }
 
-        if (authPath != null) {
-            try {
-                nonprefAuthFieldIterator = new SolrFieldIterator(authPath,
-                                             System.getProperty("field.insteadof",
-                                                     "insteadOf"));
-            } catch (IndexNotFoundException e) {
-                // If no data has been written to the index yet, this exception
-                // might get thrown; in that case, we should skip loading authority
-                // data rather than breaking the whole indexing process.
-                nonprefAuthFieldIterator = null;
-            }
+                    if (nonprefAuthFieldIterator != null) {
+                        IndexReader authReader = DirectoryReader.open(FSDirectory.open(new File(authPath).toPath()));
+                        authSearcher = new IndexSearcher(authReader);
 
-            if (nonprefAuthFieldIterator != null) {
-                IndexReader authReader = DirectoryReader.open(FSDirectory.open(new File(authPath).toPath()));
-                authSearcher = new IndexSearcher(authReader);
+                        loadHeadings(nonprefAuthFieldIterator, out,
+                                     new Predicate() {
+                                         public boolean isSatisfiedBy(Object obj) {
+                                             String heading = (String) obj;
 
-                loadHeadings(nonprefAuthFieldIterator, out,
-                new Predicate() {
-                    public boolean isSatisfiedBy(Object obj) {
-                        String heading = (String) obj;
+                                             try {
+                                                 return isLinkedFromBibData(heading);
+                                             } catch (IOException e) {
+                                                 return true;
+                                             }
+                                         }
+                                     }
+                                     );
 
-                        try {
-                            return isLinkedFromBibData(heading);
-                        } catch (IOException e) {
-                            return true;
-                        }
+                        nonprefAuthFieldIterator.close();
                     }
                 }
-                            );
 
-                nonprefAuthFieldIterator.close();
+                loadHeadings(bibFieldIterator, out, null);
             }
         }
-
-        loadHeadings(bibFieldIterator, out, null);
-
-        bibFieldIterator.close();
-
-        out.close();
     }
 
 
