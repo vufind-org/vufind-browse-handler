@@ -28,7 +28,7 @@ should give you the two required jar files:
     browse-handler.jar
     browse-indexing.jar
 
-  
+
 
 2.  Creating your browse indexes
 --------------------------------
@@ -49,8 +49,8 @@ file with lines of the form:
 
 Running it:
 
-    java -cp browse-indexing.jar PrintBrowseHeadings /path/to/your/bib/data/index subject-browse authority.index subjects.tmp
-    java -cp browse-indexing.jar PrintBrowseHeadings /path/to/your/bib/data/index author-browse authority.index names.tmp
+    java -cp browse-indexing.jar org.vufind.solr.indexing.PrintBrowseHeadings /path/to/your/bib/data/index subject-browse authority.index subjects.tmp
+    java -cp browse-indexing.jar org.vufind.solr.indexing.PrintBrowseHeadings /path/to/your/bib/data/index author-browse authority.index names.tmp
 
 By default this assumes you're using my default field names in your authority index, which are:
 
@@ -78,8 +78,8 @@ The last step is to load all the headings into an SQLite database
 (which acts as the browse index, effectively).  CreateBrowseSQLite
 does this:
 
-    java -cp browse-indexing.jar CreateBrowseSQLite sorted-names.tmp namesbrowse.db
-    java -cp browse-indexing.jar CreateBrowseSQLite sorted-subjects.tmp subjectsbrowse.db
+    java -cp browse-indexing.jar org.vufind.solr.indexing.CreateBrowseSQLite sorted-names.tmp namesbrowse.db
+    java -cp browse-indexing.jar org.vufind.solr.indexing.CreateBrowseSQLite sorted-subjects.tmp subjectsbrowse.db
 
 
 And that's the indexing process.  At the end of this you should have
@@ -160,3 +160,16 @@ Coding style is One True Brace style. In astyle:
 
     astyle --mode=java --style=1tbs -U -H -I -R 'browse-handler/*' 'browse-indexing/*' 'common/*' 'tests/org/*'
 
+
+6.  Migration from earlier releases
+-----------------------------------
+
+Earlier versions of the browse handler used different names for
+certain components.  The table below summarizes the changes:
+
+  | Former name                     | Current name                                 |
+  | ------------------------------- | -------------------------------------------- |
+  | BIBLEECH (environment variable) | BIB_FIELD_ITERATOR                           |
+  | bibleech (Java System property) | bib_field_iterator                           |
+  | PrintBrowseHeadings (Class)     | org.vufind.solr.indexing.PrintBrowseHeadings |
+  | CreateBrowseSQLite (Class)      | org.vufind.solr.indexing.CreateBrowseSQLite  |
