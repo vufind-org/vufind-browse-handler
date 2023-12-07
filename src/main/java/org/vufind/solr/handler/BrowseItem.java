@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.vufind.solr.handler.client.solrj.BrowseResponse;
+
 
 /**
  * Container class for data in a single browse entry.

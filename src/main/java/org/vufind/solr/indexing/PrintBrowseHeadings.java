@@ -3,19 +3,27 @@ package org.vufind.solr.indexing;
 //
 // Author: Mark Triggs <mark@dishevelled.net>
 //
-
-import java.io.*;
-import java.nio.charset.*;
-
-import org.apache.lucene.store.*;
-import org.apache.lucene.search.*;
-import org.apache.lucene.index.*;
-import org.apache.lucene.document.*;
-
-import org.vufind.util.BrowseEntry;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 
 // Note that this version is coming from Solr!
 import org.apache.commons.codec.binary.Base64;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexNotFoundException;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.StoredFields;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.ConstantScoreQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TotalHitCountCollector;
+import org.apache.lucene.store.FSDirectory;
+import org.vufind.util.BrowseEntry;
 
 
 public class PrintBrowseHeadings

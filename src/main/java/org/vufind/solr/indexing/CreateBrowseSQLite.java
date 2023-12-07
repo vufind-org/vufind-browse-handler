@@ -3,10 +3,13 @@ package org.vufind.solr.indexing;
 //
 // Author: Mark Triggs <mark@dishevelled.net>
 //
-
-import java.io.*;
-
-import java.sql.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 // Note that this version is coming from Solr!
 import org.apache.commons.codec.binary.Base64;

@@ -2,16 +2,20 @@ package org.vufind.solr.indexing;
 
 // Build a browse list by walking the docs in an index and extracting sort key
 // and values from a pair of stored fields.
+import java.io.File;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
-import java.io.*;
-import java.util.*;
-import org.apache.lucene.store.*;
-import org.apache.lucene.index.*;
-import org.apache.lucene.document.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.index.MultiBits;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Bits;
-
-import org.vufind.util.Utils;
 import org.vufind.util.BrowseEntry;
+import org.vufind.util.Utils;
 
 public class StoredFieldIterator extends SolrFieldIterator
 {

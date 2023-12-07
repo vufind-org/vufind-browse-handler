@@ -1,13 +1,22 @@
 package org.vufind.solr.indexing;
 
-import org.apache.lucene.store.*;
-import org.apache.lucene.index.*;
-import org.apache.lucene.search.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.lucene.index.CompositeReader;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.LeafReader;
+import org.apache.lucene.index.LeafReaderContext;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
+import org.apache.lucene.search.ConstantScoreQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
-
 import org.vufind.util.BrowseEntry;
 import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
