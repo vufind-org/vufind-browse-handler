@@ -20,8 +20,8 @@ import org.apache.commons.codec.binary.Base64;
 
 public class PrintBrowseHeadings
 {
-    private Leech bibLeech;
-    private Leech nonprefAuthLeech;
+    private SolrFieldIterator bibFieldIterator;
+    private SolrFieldIterator nonprefAuthFieldIterator;
 
     IndexSearcher bibSearcher;
     IndexSearcher authSearcher;
@@ -34,17 +34,17 @@ public class PrintBrowseHeadings
     /**
      * Load headings from the index into a file.
      *
-     * @param leech     Leech for pulling in headings
-     * @param out       Output target
+     * @param fieldIterator      Leech for pulling in headings
+     * @param out                Output target
      * @param predicate Optional Predicate for filtering headings
      */
-    private void loadHeadings(Leech leech,
+    private void loadHeadings(SolrFieldIterator fieldIterator,
                               PrintWriter out,
                               Predicate predicate)
     throws Exception
     {
         BrowseEntry h;
-        while ((h = leech.next()) != null) {
+        while ((h = fieldIterator.next()) != null) {
             // We use a byte array for the sort key instead of a string to ensure
             // consistent sorting even if the index tool and browse handler are running
             // with different locale settings. Using strings results in less predictable
@@ -135,16 +135,16 @@ public class PrintBrowseHeadings
     }
 
 
-    private Leech getBibLeech(String bibPath, String luceneField)
-    throws Exception
+    private SolrFieldIterator getBibIterator(String bibPath, String luceneField)
+        throws Exception
     {
-        String leechClass = "org.vufind.solr.indexing.Leech";
+        String fieldIteratorClass = "org.vufind.solr.indexing.SolrFieldIterator";
 
-        if (getEnvironment("BIBLEECH") != null) {
-            leechClass = getEnvironment("BIBLEECH");
+        if (getEnvironment("BIB_FIELD_ITERATOR") != null) {
+            fieldIteratorClass = getEnvironment("BIB_FIELD_ITERATOR");
         }
 
-        return (Leech)(Class.forName(leechClass)
+        return (SolrFieldIterator)(Class.forName(fieldIteratorClass)
                        .getConstructor(String.class, String.class)
                        .newInstance(bibPath, luceneField));
     }
@@ -156,7 +156,7 @@ public class PrintBrowseHeadings
                        String outFile)
     throws Exception
     {
-        bibLeech = getBibLeech(bibPath, luceneField);
+        bibFieldIterator = getBibIterator(bibPath, luceneField);
         this.luceneField = luceneField;
 
         IndexReader bibReader = DirectoryReader.open(FSDirectory.open(new File(bibPath).toPath()));
@@ -166,21 +166,21 @@ public class PrintBrowseHeadings
 
         if (authPath != null) {
             try {
-                nonprefAuthLeech = new Leech(authPath,
+                nonprefAuthFieldIterator = new SolrFieldIterator(authPath,
                                              System.getProperty("field.insteadof",
                                                      "insteadOf"));
             } catch (IndexNotFoundException e) {
                 // If no data has been written to the index yet, this exception
                 // might get thrown; in that case, we should skip loading authority
                 // data rather than breaking the whole indexing process.
-                nonprefAuthLeech = null;
+                nonprefAuthFieldIterator = null;
             }
 
-            if (nonprefAuthLeech != null) {
+            if (nonprefAuthFieldIterator != null) {
                 IndexReader authReader = DirectoryReader.open(FSDirectory.open(new File(authPath).toPath()));
                 authSearcher = new IndexSearcher(authReader);
 
-                loadHeadings(nonprefAuthLeech, out,
+                loadHeadings(nonprefAuthFieldIterator, out,
                 new Predicate() {
                     public boolean isSatisfiedBy(Object obj) {
                         String heading = (String) obj;
@@ -194,13 +194,13 @@ public class PrintBrowseHeadings
                 }
                             );
 
-                nonprefAuthLeech.dropOff();
+                nonprefAuthFieldIterator.close();
             }
         }
 
-        loadHeadings(bibLeech, out, null);
+        loadHeadings(bibFieldIterator, out, null);
 
-        bibLeech.dropOff();
+        bibFieldIterator.close();
 
         out.close();
     }
