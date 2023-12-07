@@ -3,10 +3,9 @@ package org.vufind.solr.handler.client.solrj;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SolrResponseBase;
-import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.util.NamedList;
-import org.vufind.solr.handler.MatchTypeResponse.MatchType;
 
 /**
  * Holds the response from BrowseRequest.

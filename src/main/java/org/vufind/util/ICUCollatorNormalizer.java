@@ -1,9 +1,8 @@
 package org.vufind.util;
 
-import java.util.regex.*;
-
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
+import java.util.regex.Pattern;
 
 /**
  * Normalizer class which uses the ICU <code>Collator<code> class to produce collation byte arrays.
