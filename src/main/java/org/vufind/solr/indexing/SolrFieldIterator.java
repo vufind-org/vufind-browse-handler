@@ -13,7 +13,7 @@ import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
 
 
-public class Leech
+public class SolrFieldIterator implements AutoCloseable
 {
     protected CompositeReader reader;
     protected IndexSearcher searcher;
@@ -26,8 +26,7 @@ public class Leech
     TermsEnum tenum = null;
 
 
-    public Leech(String indexPath,
-                 String field) throws Exception
+    public SolrFieldIterator(String indexPath, String field) throws Exception
     {
         // Open our composite reader (a top-level DirectoryReader that
         // contains one reader per segment in our index).
@@ -54,7 +53,7 @@ public class Leech
     }
 
 
-    public void dropOff() throws IOException
+    public void close() throws IOException
     {
         reader.close();
     }

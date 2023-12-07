@@ -13,7 +13,7 @@ import org.apache.lucene.util.Bits;
 import org.vufind.util.Utils;
 import org.vufind.util.BrowseEntry;
 
-public class StoredFieldLeech extends Leech
+public class StoredFieldIterator extends SolrFieldIterator
 {
     int currentDoc = 0;
     LinkedList<BrowseEntry> buffer;
@@ -25,7 +25,7 @@ public class StoredFieldLeech extends Leech
 
     private Bits liveDocsBitSet;
 
-    public StoredFieldLeech(String indexPath, String field) throws Exception
+    public StoredFieldIterator(String indexPath, String field) throws Exception
     {
         super(indexPath, field);
 
