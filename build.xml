@@ -102,6 +102,8 @@
     <jar destfile="browse-indexing.jar">
       <fileset dir="${builddir}" includes="org/vufind/solr/indexing/**/*"/>
       <fileset dir="${builddir}" includes="org/vufind/util/**/*"/>
+      <!-- These files added for backwards compatibility -->
+      <fileset dir="${builddir}" includes="*.class"/>
       <zipgroupfileset dir="${builddir}/deps/" includes="**/lucene-core*.jar"/>
     </jar>
   </target>
