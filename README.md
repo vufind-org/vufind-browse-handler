@@ -164,8 +164,9 @@ Coding style is One True Brace style. In astyle:
 6.  Migration from earlier releases
 -----------------------------------
 
-Earlier versions of the browse handler used different names for
-certain components.  The table below summarizes the changes:
+Versions of the browse handler included in VuFind® 9.x and earlier
+used different names for certain components.  The table below
+summarizes the changes:
 
   | Former name                     | Current name                                 |
   | ------------------------------- | -------------------------------------------- |
