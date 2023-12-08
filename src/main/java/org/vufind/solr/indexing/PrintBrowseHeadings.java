@@ -143,21 +143,16 @@ public class PrintBrowseHeadings
 
         if (Utils.getEnvironment("BIBLEECH") != null) {
             if (System.getenv("BIBLEECH") != null) {
-                System.err.print("\n\n\n" +
-                                 "************************************************************\n" +
-                                 "DEPRECATION WARNING: You are using the 'BIBLEECH' environment variable.\n" +
-                                 "This still works, but it has been renamed to 'BIB_FIELD_ITERATOR'.\n" +
-                                 "You should switch to avoid breakage in future versions.\n" +
-                                 "************************************************************\n\n\n");
+                Utils.printDeprecationWarning("You are using the 'BIBLEECH' environment variable.",
+                                              "This still works, but it has been renamed to 'BIB_FIELD_ITERATOR'",
+                                              "You should switch to avoid breakage in future versions.");
             }
 
             if (System.getProperty("bibleech") != null) {
-                System.err.print("\n\n\n" +
-                                 "************************************************************\n" +
-                                 "DEPRECATION WARNING: You are using the 'bibleech' system property.\n" +
-                                 "This still works, but it has been renamed to 'bib_field_iterator'.\n" +
-                                 "You should switch to avoid breakage in future versions.\n" +
-                                 "************************************************************\n\n\n");
+                Utils.printDeprecationWarning("You are using the 'bibleech' system property.",
+                                              "This still works, but it has been renamed to 'bib_field_iterator'",
+                                              "You should switch to avoid breakage in future versions.");
+
             }
 
             fieldIteratorClass = Utils.getEnvironment("BIBLEECH");
@@ -169,12 +164,9 @@ public class PrintBrowseHeadings
         }
 
         if ("StoredFieldLeech".equals(fieldIteratorClass)) {
-            System.err.print("\n\n\n" +
-                             "************************************************************\n" +
-                             "DEPRECATION WARNING: You are using the 'StoredFieldLeech' class.\n" +
-                             "This still works, but it has been renamed to 'org.vufind.solr.indexing.StoredFieldIterator'.\n" +
-                             "You should switch to avoid breakage in future versions.\n" +
-                             "************************************************************\n\n\n");
+            Utils.printDeprecationWarning("You are using the 'StoredFieldLeech' class.",
+                                          "This still works, but it has been renamed to 'org.vufind.solr.indexing.StoredFieldIterator'",
+                                          "You should switch to avoid breakage in future versions.");
             fieldIteratorClass = "org.vufind.solr.indexing.StoredFieldIterator";
         }
 
