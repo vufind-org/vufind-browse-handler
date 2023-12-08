@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * The use of <code>Collator<code> takes into account diacritics and other Unicode features.
  * This normalizer should be suitable for most text fields.
  *
- * @author Mark Triggs <mark@dishevelled.net>
+ * @author Mark Triggs <mark@teaspoon-consulting.com>
  * @author Tod Olson <tod@uchicago.edu>
  *
  */
