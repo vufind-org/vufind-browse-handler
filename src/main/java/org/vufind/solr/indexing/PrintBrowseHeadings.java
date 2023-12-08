@@ -24,6 +24,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.store.FSDirectory;
 import org.vufind.util.BrowseEntry;
+import org.vufind.util.Utils;
 
 
 public class PrintBrowseHeadings
@@ -135,19 +136,12 @@ public class PrintBrowseHeadings
     }
 
 
-    private String getEnvironment(String var)
-    {
-        return (System.getenv(var) != null) ?
-               System.getenv(var) : System.getProperty(var.toLowerCase());
-    }
-
-
     private SolrFieldIterator getBibIterator(String bibPath, String luceneField)
         throws Exception
     {
         String fieldIteratorClass = "org.vufind.solr.indexing.SolrFieldIterator";
 
-        if (getEnvironment("BIBLEECH") != null) {
+        if (Utils.getEnvironment("BIBLEECH") != null) {
             if (System.getenv("BIBLEECH") != null) {
                 System.err.print("\n\n\n" +
                                  "************************************************************\n" +
@@ -166,12 +160,12 @@ public class PrintBrowseHeadings
                                  "************************************************************\n\n\n");
             }
 
-            fieldIteratorClass = getEnvironment("BIBLEECH");
+            fieldIteratorClass = Utils.getEnvironment("BIBLEECH");
         }
 
 
-        if (getEnvironment("BIB_FIELD_ITERATOR") != null) {
-            fieldIteratorClass = getEnvironment("BIB_FIELD_ITERATOR");
+        if (Utils.getEnvironment("BIB_FIELD_ITERATOR") != null) {
+            fieldIteratorClass = Utils.getEnvironment("BIB_FIELD_ITERATOR");
         }
 
         if ("StoredFieldLeech".equals(fieldIteratorClass)) {
