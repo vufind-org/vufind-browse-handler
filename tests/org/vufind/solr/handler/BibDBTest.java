@@ -123,32 +123,6 @@ public class BibDBTest
     }
 
     /**
-     * Test method for {@link org.vufind.solr.handler.BibDB#matchingIDs(java.lang.String, java.lang.String, int)}.
-     */
-    @Test
-    public void testMatchingIDs()
-    {
-        //Log.info("Entering testMatchingIDs");
-        String title = "A common title";
-        int idCount = 3;
-        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
-        IndexSearcher searcher = searcherRef.get();
-        try {
-            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
-            List<String> ids = bibDbForTitle.matchingIDs(title, "id", 10).get("id")
-                               .stream()
-                               .flatMap(Collection::stream)
-                               .collect(Collectors.toList());
-            assertEquals(idCount, ids.size());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            searcherRef.decref();
-        }
-    }
-
-    /**
      * Test method for {@link org.vufind.solr.handler.BibDB#matchingExtras(java.lang.String, java.lang.String, int)}.
      */
     @Test

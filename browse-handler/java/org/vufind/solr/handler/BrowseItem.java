@@ -121,27 +121,6 @@ public class BrowseItem extends HashMap<String, Object>
         this.put("note", note);
     }
 
-    /**
-     * Set the list of IDs of bibs that match this heading.
-     * <p>
-     * Bib IDs are gathered into {@code List<Collection<String>>}.
-     * That is, IDs are passed in as a List of Collections, but stored
-     * as on flat List of IDs.
-     * <p> see bibinfo in
-     * BibDB.matchingIDs() and populateItem().
-     *
-     * @param idList List of Collection of bib IDs.
-     */
-    @Deprecated
-    public void setIds(List<Collection<String>> idList)
-    {
-        List<String>ids = new ArrayList<String> ();
-        for (Collection<String> idCol : idList) {
-            ids.addAll(idCol);
-        }
-        this.put("ids", ids);
-    }
-
     public void setExtras(Map<String, List<Collection<String>>> extras)
     {
         this.put("extras", extras);
@@ -187,13 +166,6 @@ public class BrowseItem extends HashMap<String, Object>
     public String getNote()
     {
         return optString((String) this.get("note"));
-    }
-
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public List<String> getIds()
-    {
-        return optListString((List<String>) this.get("ids"));
     }
 
     @SuppressWarnings("unchecked")
