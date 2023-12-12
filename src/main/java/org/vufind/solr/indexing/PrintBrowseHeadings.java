@@ -42,7 +42,7 @@ public class PrintBrowseHeadings
     /**
      * Load headings from the index into a file.
      *
-     * @param fieldIterator      Leech for pulling in headings
+     * @param fieldIterator      SolrFieldIterator source for headings
      * @param out                Output target
      * @param predicate Optional Predicate for filtering headings
      */
