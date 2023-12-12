@@ -3,7 +3,9 @@ package org.vufind.solr.indexing;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.lucene.index.CompositeReader;
 import org.apache.lucene.index.DirectoryReader;
@@ -22,7 +24,7 @@ import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
 
 
-public class SolrFieldIterator implements AutoCloseable
+public class SolrFieldIterator implements AutoCloseable, Iterator<BrowseEntry>, Iterable<BrowseEntry>
 {
     protected CompositeReader reader;
     protected IndexSearcher searcher;
@@ -34,6 +36,8 @@ public class SolrFieldIterator implements AutoCloseable
 
     TermsEnum tenum = null;
 
+    private BrowseEntry nextEntry = null;
+    private boolean exhausted = false;
 
     public SolrFieldIterator(String indexPath, String field) throws Exception
     {
@@ -83,7 +87,7 @@ public class SolrFieldIterator implements AutoCloseable
     //
     // If there's no currently selected TermEnum, create one from the reader.
     //
-    public BrowseEntry next() throws Exception
+    protected BrowseEntry readNext() throws IOException
     {
         for (;;) {
             if (tenum == null) {
@@ -122,5 +126,53 @@ public class SolrFieldIterator implements AutoCloseable
 
             // Try the next term
         }
+    }
+
+
+    public void tryReadNext() {
+        if (nextEntry != null) {
+            // Already have one
+            return;
+        }
+
+        if (exhausted) {
+            // Nothing more to read
+        }
+
+        try {
+            nextEntry = readNext();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (nextEntry == null) {
+            exhausted = true;
+        }
+    }
+
+    @Override
+    public BrowseEntry next() {
+        tryReadNext();
+
+        if (nextEntry == null) {
+            throw new NoSuchElementException();
+        }
+
+        BrowseEntry result = nextEntry;
+        nextEntry = null;
+
+        return result;
+    }
+
+    @Override
+    public boolean hasNext() {
+        tryReadNext();
+
+        return nextEntry != null;
+    }
+
+    @Override
+    public Iterator<BrowseEntry> iterator() {
+        return this;
     }
 }
