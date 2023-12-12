@@ -51,8 +51,7 @@ public class PrintBrowseHeadings
                               Predicate predicate)
     throws Exception
     {
-        BrowseEntry h;
-        while ((h = fieldIterator.next()) != null) {
+        for (BrowseEntry h : fieldIterator) {
             // We use a byte array for the sort key instead of a string to ensure
             // consistent sorting even if the index tool and browse handler are running
             // with different locale settings. Using strings results in less predictable

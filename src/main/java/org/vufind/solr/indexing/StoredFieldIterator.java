@@ -3,6 +3,7 @@ package org.vufind.solr.indexing;
 // Build a browse list by walking the docs in an index and extracting sort key
 // and values from a pair of stored fields.
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -56,8 +57,7 @@ public class StoredFieldIterator extends SolrFieldIterator
     }
 
 
-    private void loadDocument(IndexReader reader, int docid)
-    throws Exception
+    private void loadDocument(IndexReader reader, int docid) throws IOException
     {
         Document doc = reader.storedFields().document(currentDoc, fieldSelection);
 
@@ -88,7 +88,7 @@ public class StoredFieldIterator extends SolrFieldIterator
     }
 
 
-    public BrowseEntry next() throws Exception
+    protected BrowseEntry readNext() throws IOException
     {
         while (buffer.isEmpty()) {
             if (currentDoc < reader.maxDoc()) {
