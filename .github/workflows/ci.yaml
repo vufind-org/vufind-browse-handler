@@ -14,18 +14,18 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.3'
           extensions: intl, xsl
           tools: composer:2
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: adopt
           java-version: ${{ matrix.java-version }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up VuFind environment
         run: |
@@ -33,7 +33,7 @@ jobs:
           echo VUFIND_LOCAL_DIR=$VUFIND_HOME/local >> $GITHUB_ENV
 
       - name: Cache VuFind data
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/vufind
           key: "vufind-${{ github.sha }}"
