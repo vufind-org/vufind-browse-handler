@@ -24,6 +24,7 @@ import org.apache.solr.request.SolrRequestHandler;
 import org.apache.solr.search.SolrIndexSearcher;
 import org.apache.solr.security.AuthorizationContext;
 import org.apache.solr.util.RefCounted;
+import org.vufind.util.Normalizer;
 import org.vufind.util.NormalizerFactory;
 
 /*
@@ -191,7 +192,9 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
             Log.info("Browsing from: " + rowid);
 
-            BrowseList list = browse.getList(rowid, offset, rows, fields);
+            Normalizer normalizer = NormalizerFactory.getNormalizer(source.normalizer);
+
+            BrowseList list = browse.getList(rowid, offset, rows, fields, normalizer);
 
             Map<String,Object> result = new HashMap<>();
 
@@ -200,7 +203,7 @@ public class BrowseRequestHandler extends RequestHandlerBase
             result.put("startRow", rowid);
             result.put("offset", offset);
 
-            new MatchTypeResponse(from, list, rowid, rows, offset, NormalizerFactory.getNormalizer(source.normalizer)).addTo(result);
+            new MatchTypeResponse(from, list, rowid, rows, offset, normalizer).addTo(result);
 
             rsp.add("Browse", result);
         } finally {
