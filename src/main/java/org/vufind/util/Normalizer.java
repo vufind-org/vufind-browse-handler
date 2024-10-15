@@ -23,4 +23,7 @@ public interface Normalizer
      */
     public byte[] normalize(String s);
 
+    default public String headingForAuthQuery(String heading) {
+        return heading;
+    }
 }
