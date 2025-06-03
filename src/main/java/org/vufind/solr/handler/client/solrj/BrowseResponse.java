@@ -24,7 +24,7 @@ import org.apache.solr.common.util.NamedList;
  *
  */
 @SuppressWarnings("serial")
-public class BrowseResponse extends SolrResponseBase
+final public class BrowseResponse extends SolrResponseBase
 {
     // Direct pointers to known types
     private NamedList<String> _header = null;

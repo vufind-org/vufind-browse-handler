@@ -75,7 +75,7 @@ import org.vufind.solr.handler.client.solrj.BrowseResponse;
  * </table>
  */
 @SuppressWarnings("serial")
-public class BrowseItem extends HashMap<String, Object>
+final public class BrowseItem extends HashMap<String, Object>
 {
     public BrowseItem(String sort_key, String heading)
     {
