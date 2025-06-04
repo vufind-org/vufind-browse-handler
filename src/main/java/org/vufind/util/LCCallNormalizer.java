@@ -1,7 +1,7 @@
 package org.vufind.util;
 
 import org.marc4j.callnum.LCCallNumber;
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
 
 public class LCCallNormalizer implements Normalizer
 {
@@ -17,5 +17,5 @@ public class LCCallNormalizer implements Normalizer
         return key;
     }
 
-    private static final Logger log = Logger.getLogger(LCCallNormalizer.class.getName());
+    // private static final Logger log = Logger.getLogger(LCCallNormalizer.class.getName());
 }

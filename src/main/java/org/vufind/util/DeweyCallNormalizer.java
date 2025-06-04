@@ -1,7 +1,7 @@
 package org.vufind.util;
 
 import org.marc4j.callnum.DeweyCallNumber;
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
 
 public class DeweyCallNormalizer implements Normalizer
 {
@@ -17,5 +17,5 @@ public class DeweyCallNormalizer implements Normalizer
         return key;
     }
 
-    private static final Logger log = Logger.getLogger(DeweyCallNormalizer.class.getName());
+    // private static final Logger log = Logger.getLogger(DeweyCallNormalizer.class.getName());
 }

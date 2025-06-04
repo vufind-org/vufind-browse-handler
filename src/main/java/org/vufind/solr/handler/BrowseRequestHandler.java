@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.CoreContainer;
-import org.apache.solr.core.CoreDescriptor;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.RequestHandlerBase;
 import org.apache.solr.request.SolrRequestHandler;
@@ -92,7 +91,6 @@ public class BrowseRequestHandler extends RequestHandlerBase
 
     private int asInt(String s)
     {
-        int value;
         try {
             return Integer.valueOf(s).intValue();
         } catch (NumberFormatException e) {
@@ -152,7 +150,6 @@ public class BrowseRequestHandler extends RequestHandlerBase
         BrowseSource source = sources.get(sourceName);
 
         SolrCore core = req.getCore();
-        CoreDescriptor cd = core.getCoreDescriptor();
         CoreContainer cc = core.getCoreContainer();
         SolrCore authCore = cc.getCore(authCoreName);
         if (authCore == null) {
