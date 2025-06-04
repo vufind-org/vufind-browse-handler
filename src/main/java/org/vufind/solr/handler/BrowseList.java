@@ -9,7 +9,7 @@ import java.util.Map;
  * browse is positioned from the end of the index.
  */
 @SuppressWarnings("serial")
-public class BrowseList extends ArrayList<BrowseItem>
+final public class BrowseList extends ArrayList<BrowseItem>
 {
     /**
      * The remaining number of headings in the index after the current point in the
