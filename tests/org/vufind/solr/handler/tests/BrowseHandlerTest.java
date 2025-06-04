@@ -147,7 +147,7 @@ public class BrowseHandlerTest
         paramList.add("source","title");
         paramList.add("from","a");
         paramList.add("extras", extras);
-        SolrParams params = SolrParams.toSolrParams(paramList);
+        SolrParams params = paramList.toSolrParams();
 
         /* RUN */
         // do something with your search component

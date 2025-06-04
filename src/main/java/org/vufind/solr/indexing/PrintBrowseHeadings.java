@@ -21,7 +21,6 @@ import org.apache.lucene.search.ConstantScoreQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.store.FSDirectory;
 import org.vufind.util.BrowseEntry;
 import org.vufind.util.Utils;
@@ -82,12 +81,7 @@ public class PrintBrowseHeadings
 
     private int bibCount(String heading) throws IOException
     {
-        TotalHitCountCollector counter = new TotalHitCountCollector();
-
-        bibSearcher.search(new ConstantScoreQuery(new TermQuery(new Term(luceneField, heading))),
-                           counter);
-
-        return counter.getTotalHits();
+        return bibSearcher.count(new ConstantScoreQuery(new TermQuery(new Term(luceneField, heading))));
     }
 
 
