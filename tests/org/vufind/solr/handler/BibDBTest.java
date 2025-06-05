@@ -329,4 +329,45 @@ public class BibDBTest
             searcherRef.decref();
         }
     }
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingFields(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingFields_noMatchFound()
+    {
+        String title = "This title does not exist in our test data";
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            assertEquals(bibDbForTitle.matchingFields(title, "id", 0).get("id").size(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Caught exception with unmatched title: " + e.getMessage());
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
+    /**
+     * Test method for {@link org.vufind.solr.handler.BibDB#matchingExtras(java.lang.String, java.lang.String, int)}.
+     */
+    @Test
+    public void testMatchingExtras_noMatchFound()
+    {
+        String title = "This title does not exist in our test data";
+        RefCounted<SolrIndexSearcher> searcherRef = bibCore.getSearcher();
+        IndexSearcher searcher = searcherRef.get();
+        try {
+            BibDB bibDbForTitle = new BibDB(searcher, "title_fullStr");
+            assertEquals(bibDbForTitle.matchingExtras(title, "id", 0).get("id").size(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Caught exception with unmatched title: " + e.getMessage());
+        } finally {
+            searcherRef.decref();
+        }
+    }
+
 }

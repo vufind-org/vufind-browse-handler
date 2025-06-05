@@ -90,26 +90,28 @@ public class BibDB
         }
 
         int maxHits = (maxBibListSize > 0) ? maxBibListSize : db.count(q);
-        TopDocs docs = db.search(q, maxHits);
+        if (maxHits > 0) {
+            TopDocs docs = db.search(q, maxHits);
 
-        try {
-            for (ScoreDoc sd : docs.scoreDocs) {
-                Document doc = db.getIndexReader().storedFields().document(sd.doc);
-                for (String bibField : bibExtras) {
-                    String[] vals = doc.getValues(bibField);
-                    if (vals.length > 0) {
-                        Collection<String> valSet = new LinkedHashSet<> ();
-                        for (String val : vals) {
-                            valSet.add(val);
+            try {
+                for (ScoreDoc sd : docs.scoreDocs) {
+                    Document doc = db.getIndexReader().storedFields().document(sd.doc);
+                    for (String bibField : bibExtras) {
+                        String[] vals = doc.getValues(bibField);
+                        if (vals.length > 0) {
+                            Collection<String> valSet = new LinkedHashSet<> ();
+                            for (String val : vals) {
+                                valSet.add(val);
+                            }
+                            bibinfo.get(bibField).add(valSet);
                         }
-                        bibinfo.get(bibField).add(valSet);
                     }
                 }
+            } catch (org.apache.lucene.index.CorruptIndexException e) {
+                Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
+            } catch (Exception e) {
+                Log.info("Exception thrown: " + e);
             }
-        } catch (org.apache.lucene.index.CorruptIndexException e) {
-            Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
-        } catch (Exception e) {
-            Log.info("Exception thrown: " + e);
         }
 
         return bibinfo;
@@ -154,20 +156,22 @@ public class BibDB
         }
 
         int maxHits = (maxBibListSize > 0) ? maxBibListSize : db.count(q);
-        TopDocs docs = db.search(q, maxHits);
+        if (maxHits > 0) {
+            TopDocs docs = db.search(q, maxHits);
 
-        for (ScoreDoc sd : docs.scoreDocs) {
-            try {
-                Document doc = db.getIndexReader().storedFields().document(sd.doc);
-                for (String bibField : bibExtras) {
-                    for (String v : doc.getValues(bibField)) {
-                        bibinfo.get(bibField).add(v);
+            for (ScoreDoc sd : docs.scoreDocs) {
+                try {
+                    Document doc = db.getIndexReader().storedFields().document(sd.doc);
+                    for (String bibField : bibExtras) {
+                        for (String v : doc.getValues(bibField)) {
+                            bibinfo.get(bibField).add(v);
+                        }
                     }
+                } catch (org.apache.lucene.index.CorruptIndexException e) {
+                    Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
+                } catch (Exception e) {
+                    Log.info("Exception thrown: " + e);
                 }
-            } catch (org.apache.lucene.index.CorruptIndexException e) {
-                Log.info("CORRUPT INDEX EXCEPTION.  EEK! - " + e);
-            } catch (Exception e) {
-                Log.info("Exception thrown: " + e);
             }
         }
 
