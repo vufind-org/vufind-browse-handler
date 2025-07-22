@@ -80,6 +80,7 @@
     <javac debug="on" srcdir="src/main/java" destdir="${builddir}">
       <classpath refid="classpath"/>
       <compilerarg value="-Xlint"/>
+      <compilerarg value="-proc:none"/>
     </javac>
     <exec executable="sh" output="${builddir}/VERSION">
       <arg value="-c"/>
