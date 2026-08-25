@@ -1,8 +1,9 @@
 package org.vufind.solr.handler.client.solrj;
 
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrRequest.SolrRequestType;
 import org.apache.solr.common.params.SolrParams;
+import org.apache.solr.common.util.NamedList;
 
 /**
  * Client class for sending queries to {@link BrowseRequestHandler}.
@@ -26,25 +27,26 @@ public class BrowseRequest extends SolrRequest<BrowseResponse>
 
     public BrowseRequest()
     {
-        super(METHOD.GET, path);
+        super(METHOD.GET, path, SolrRequestType.QUERY);
     }
 
     public BrowseRequest(SolrParams q)
     {
-        super(METHOD.GET, path);
+        super(METHOD.GET, path, SolrRequestType.QUERY);
         query = q;
     }
 
 
     public BrowseRequest(METHOD m, String path)
     {
-        super(m, path);
+        super(m, path, SolrRequestType.QUERY);
         // TODO Auto-generated constructor stub
     }
 
-    public String getRequestType()
+    @Override
+    public SolrRequestType getRequestType()
     {
-        return "VuFindBrowseRequest";
+        return SolrRequestType.QUERY;
     }
 
     @Override
@@ -54,9 +56,9 @@ public class BrowseRequest extends SolrRequest<BrowseResponse>
     }
 
     @Override
-    protected BrowseResponse createResponse(SolrClient client)
+    protected BrowseResponse createResponse(NamedList<Object> res)
     {
-        return new BrowseResponse(client);
+        return new BrowseResponse(res);
     }
 
 }
