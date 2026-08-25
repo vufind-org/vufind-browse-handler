@@ -8,7 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: ['17']
+        # Solr 10 requires Java 21 or later.
+        java-version: ['21']
+
+    env:
+      # Until the Solr 10 upgrade is merged into vufind-org/vufind's dev branch,
+      # build and test against the corresponding pull request branch.
+      VUFIND_GIT_URL: https://github.com/stweil/vufind.git
+      VUFIND_BRANCH: update_solr_10
 
     steps:
       - name: Setup PHP
@@ -41,9 +48,10 @@ jobs:
 
       - name: Download and Setup VuFind
         run: |
-          if [ ! -d $VUFIND_HOME/.git ]; then git clone https://github.com/vufind-org/vufind.git $VUFIND_HOME; fi;
+          if [ ! -d $VUFIND_HOME/.git ]; then git clone $VUFIND_GIT_URL $VUFIND_HOME; fi
           cd $VUFIND_HOME
-          git pull
+          git fetch $VUFIND_GIT_URL $VUFIND_BRANCH
+          git checkout -B $VUFIND_BRANCH FETCH_HEAD
           composer install
 
       - name: Create Test Index
