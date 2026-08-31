@@ -4,6 +4,7 @@ package org.vufind.solr.indexing;
 // and values from a pair of stored fields.
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -26,6 +27,13 @@ public class StoredFieldIterator extends SolrFieldIterator
     String sortField;
     String valueField;
 
+    /**
+     * Use this environment variable to specify a boolean field that
+     * is true if the record should be skipped when generating the
+     * browse index, i.e. present in Solr but suppressed for discovery.
+    */
+    String skipField;
+
     private Set<String> fieldSelection;
 
     private Bits liveDocsBitSet;
@@ -36,6 +44,7 @@ public class StoredFieldIterator extends SolrFieldIterator
 
         sortField = Utils.getEnvironment("SORTFIELD");
         valueField = Utils.getEnvironment("VALUEFIELD");
+        skipField = Utils.getEnvironment("SKIPFIELD");
 
         if (sortField == null || valueField == null) {
             throw new IllegalArgumentException("Both SORTFIELD and " +
@@ -47,6 +56,9 @@ public class StoredFieldIterator extends SolrFieldIterator
         fieldSelection.add(sortField);
         fieldSelection.add(valueField);
         fieldSelection.add("id");   // make Solr id available for error messages
+        if (skipField != null) {
+            fieldSelection.add(skipField);
+        }
 
         reader = DirectoryReader.open(FSDirectory.open(new File(indexPath).toPath()));
 
@@ -64,7 +76,15 @@ public class StoredFieldIterator extends SolrFieldIterator
         String[] sort_key = doc.getValues(sortField);
         String[] value = doc.getValues(valueField);
 
-        if (sort_key.length == value.length) {
+        boolean skipDocument = false;
+        if (skipField != null) {
+            String[] skip = doc.getValues(skipField);
+            skipDocument = Arrays.asList(skip).contains("T");
+        }
+
+        if (skipDocument) {
+            // Skip this document
+        } else if (sort_key.length == value.length) {
             for (int i = 0; i < value.length; i++) {
                 buffer.add(new BrowseEntry(buildSortKey(sort_key[i]),
                                            sort_key[i],
