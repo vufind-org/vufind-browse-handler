@@ -33,7 +33,7 @@ jobs:
           echo VUFIND_LOCAL_DIR=$VUFIND_HOME/local >> $GITHUB_ENV
 
       - name: Cache VuFind data
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/vufind
           key: "vufind-${{ github.sha }}"
