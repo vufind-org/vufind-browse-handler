@@ -19,7 +19,7 @@ jobs:
           tools: composer:2
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: adopt
           java-version: ${{ matrix.java-version }}
