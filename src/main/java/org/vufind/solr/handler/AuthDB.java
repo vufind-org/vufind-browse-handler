@@ -61,7 +61,7 @@ public class AuthDB
                                            heading)),
                                            1));
 
-        if (results.totalHits.value > 0) {
+        if (results.totalHits.value() > 0) {
             return searcher.getIndexReader().storedFields().document(results.scoreDocs[0].doc);
         } else {
             return null;
@@ -79,7 +79,7 @@ public class AuthDB
         List<Document> result = new ArrayList<> ();
 
         StoredFields storedFields = searcher.getIndexReader().storedFields();
-        for (int i = 0; i < results.totalHits.value; i++) {
+        for (int i = 0; i < results.totalHits.value(); i++) {
             result.add(storedFields.document(results.scoreDocs[i].doc));
         }
 

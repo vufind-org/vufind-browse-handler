@@ -65,6 +65,14 @@ final public class BrowseResponse extends SolrResponseBase
     }
 
     /**
+     * Utility constructor to set the namedList
+     */
+    public BrowseResponse(NamedList<Object> res)
+    {
+        this(res, null);
+    }
+
+    /**
      * Utility constructor to set the solrServer and namedList
      */
     public BrowseResponse(NamedList<Object> res, SolrClient solrClient)

@@ -76,7 +76,7 @@ public class SolrFieldIterator implements AutoCloseable, Iterator<BrowseEntry>, 
     {
         try {
             return (this.searcher.search(new ConstantScoreQuery(new TermQuery(new Term(this.field, t))),
-                                         1).totalHits.value > 0);
+                                          1).totalHits.value() > 0);
         } catch (IOException e) {
             return false;
         }
